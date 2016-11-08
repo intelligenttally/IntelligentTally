@@ -3,6 +3,7 @@
     package="com.port.shenh.intelligenttally" >
 
     <application
+        android:name=".util.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -17,6 +18,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.MainActivity"/>
+        <activity android:name=".activity.LoginActivity"/>
+
     </application>
 
 </manifest>

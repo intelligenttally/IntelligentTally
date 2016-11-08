@@ -18,7 +18,6 @@ import org.mobile.library.common.function.AutoLogin;
 import org.mobile.library.global.ApplicationAttribute;
 import org.mobile.library.global.ApplicationStaticValue;
 import org.mobile.library.global.Global;
-import org.mobile.library.global.GlobalApplication;
 
 /**
  * 启动页
@@ -64,23 +63,9 @@ public class SplashActivity extends Activity {
         // 注册广播接收者
         registerReceivers();
 
-        // 配置系统参数
-        systemConfig();
-
         // 自动登录
         autoLogin();
     }
-
-    /**
-     * 配置系统参数
-     */
-    private void systemConfig() {
-
-        ApplicationAttribute.create().appCode(StaticValue.APP_CODE);
-        ApplicationAttribute.create().appToken(StaticValue.APP_TOKEN);
-//        ApplicationAttribute.create().loginUrl(StaticValue.Url.HTTP_LOGIN_URL);
-    }
-
 
 
     /**

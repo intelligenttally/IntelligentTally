@@ -5,9 +5,7 @@ package com.port.shenh.intelligenttally.activity;
 
 
 import android.content.Intent;
-
 import com.port.shenh.intelligenttally.R;
-
 import org.mobile.library.model.activity.BaseLoginActivity;
 
 /**
@@ -27,8 +25,8 @@ public class LoginActivity extends BaseLoginActivity {
     }
 
     @Override
-    protected boolean onSetCenterTitle() {
-        return true;
+    protected void initToolbar() {
+
     }
 
     @Override
