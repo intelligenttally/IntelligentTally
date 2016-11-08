@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="grid_item_function_name_list">
+        <item>航次</item>
+        <item>贝位图</item>
+        <item>个统计</item>
+        <item>全统计</item>
+    </string-array>
+
+    <array name="grid_item_function_image_list">
+        <item>@mipmap/work_bill_icon</item>
+        <item>@mipmap/work_bill_icon</item>
+        <item>@mipmap/work_bill_icon</item>
+        <item>@mipmap/work_bill_icon</item>
+    </array>
+
+</resources>
