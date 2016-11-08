@@ -5,14 +5,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-
+import android.view.Menu;
+import android.view.MenuItem;
 import com.port.shenh.intelligenttally.R;
 import com.port.shenh.intelligenttally.adapter.MainFunctionRecyclerViewAdapter;
 import com.port.shenh.intelligenttally.holder.MainFunctionItemViewHolder;
+import org.mobile.library.common.function.CheckUpdate;
 import org.mobile.library.common.function.ToolbarInitialize;
 import org.mobile.library.global.Global;
 import org.mobile.library.model.operate.OnItemClickListenerForRecyclerViewItem;
-
 import static com.port.shenh.intelligenttally.adapter.FunctionIndex.toFunction;
 
 /**
@@ -47,9 +48,21 @@ public class MainActivity extends AppCompatActivity {
 
         // 初始化功能布局
         initGridView();
-//
-//        // 执行检查更新
-//        checkUpdate();
+
+        // 执行检查更新
+        checkUpdate();
+
+    }
+
+
+    /**
+     * 检查新版本
+     */
+    private void checkUpdate() {
+        // 新建版本检查工具
+        CheckUpdate checkUpdate = new CheckUpdate(this);
+        // 执行检查
+        checkUpdate.checkInBackground();
     }
 
     /**
@@ -104,5 +117,43 @@ public class MainActivity extends AppCompatActivity {
 
         // 跳转到功能
         toFunction(this, position);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.menu_logout:
+                // 退出操作
+                doLogout();
+                break;
+            case  R.id.menu_clear_cache:
+                //清楚缓存
+                doClearCache();
+                break;
+        }
+        return true;
+    }
+
+    /**
+     * 退出操作
+     */
+    private void doLogout() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    /**
+     * 清除缓存
+     */
+    private void doClearCache() {
+
     }
 }
