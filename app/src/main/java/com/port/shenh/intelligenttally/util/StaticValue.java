@@ -41,9 +41,7 @@ public interface StaticValue {
         /**
          * 登录
          */
-        String HTTP_LOGIN_URL = "M_ZNLH/Entrance/Login.aspx";
-
-
+        String HTTP_LOGIN_URL = HTTP_IP_URL + "M_Znlh/Entrance/Login.aspx";
     }
 
 }

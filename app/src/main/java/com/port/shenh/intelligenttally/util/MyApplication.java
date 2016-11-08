@@ -18,6 +18,6 @@ public class MyApplication extends Application {
         Global.init(this);
 
         //配置系统参数
-        ApplicationAttribute.create().appCode(StaticValue.APP_CODE).appToken(StaticValue.APP_TOKEN);
+        ApplicationAttribute.create().requestSign(true).appCode(StaticValue.APP_CODE).appToken(StaticValue.APP_TOKEN).loginUrl(StaticValue.Url.HTTP_LOGIN_URL);
     }
 }

@@ -5,6 +5,10 @@ package com.port.shenh.intelligenttally.activity;
 
 
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
+import android.text.TextUtils;
+import android.widget.Toast;
+
 import com.port.shenh.intelligenttally.R;
 import org.mobile.library.model.activity.BaseLoginActivity;
 
@@ -27,6 +31,20 @@ public class LoginActivity extends BaseLoginActivity {
     @Override
     protected void initToolbar() {
 
+    }
+
+    @Override
+    protected boolean checkPassword(String password) {
+
+        if (passwordTextInputLayout != null) {
+
+            if (TextUtils.isEmpty(password)) {
+                passwordTextInputLayout.setError(getString(org.mobile.library.R.string.prompt_password_null_error));
+                return false;
+            }
+        }
+
+        return true;
     }
 
     @Override
