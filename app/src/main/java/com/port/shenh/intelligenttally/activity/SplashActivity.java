@@ -1,6 +1,6 @@
 package com.port.shenh.intelligenttally.activity;
 /**
- * Created by 超悟空 on 2015/6/23.
+ * Created by sh on 2016/11/8.
  */
 
 import android.app.Activity;
@@ -12,10 +12,7 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import com.port.shenh.intelligenttally.R;
-import com.port.shenh.intelligenttally.util.StaticValue;
-
 import org.mobile.library.common.function.AutoLogin;
-import org.mobile.library.global.ApplicationAttribute;
 import org.mobile.library.global.ApplicationStaticValue;
 import org.mobile.library.global.Global;
 
