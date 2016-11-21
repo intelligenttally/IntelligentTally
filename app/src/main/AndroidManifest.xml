@@ -21,6 +21,7 @@
         <activity android:name=".activity.LoginActivity" />
         <activity android:name=".activity.VoyageDownloadActivity"/>
         <activity android:name=".activity.VoyageSelectActivity"/>
+        <activity android:name=".activity.BayActivity"/>
 
     </application>
 

@@ -33,14 +33,14 @@ public class Voyage {
     private String chi_Vessel = null;
 
     /**
-     * 内外贸
-     */
-    private String trade = null;
-
-    /**
      * 进出口编码
      */
     private String codeInOut = null;
+
+    /**
+     * 内外贸
+     */
+    private String trade = null;
 
     /**
      * 国外轮
@@ -121,24 +121,6 @@ public class Voyage {
     }
 
     /**
-     * 获取内外贸
-     *
-     * @return 内外贸
-     */
-    public String getTrade() {
-        return trade;
-    }
-
-    /**
-     * 设置内外贸
-     *
-     * @param trade 内外贸
-     */
-    public void setTrade(String trade) {
-        this.trade = trade;
-    }
-
-    /**
      * 获取进出口编码
      *
      * @return 出口编码
@@ -154,6 +136,24 @@ public class Voyage {
      */
     public void setCodeInOut(String codeInOut) {
         this.codeInOut = codeInOut;
+    }
+
+    /**
+     * 获取内外贸
+     *
+     * @return 内外贸
+     */
+    public String getTrade() {
+        return trade;
+    }
+
+    /**
+     * 设置内外贸
+     *
+     * @param trade 内外贸
+     */
+    public void setTrade(String trade) {
+        this.trade = trade;
     }
 
     /**

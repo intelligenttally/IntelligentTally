@@ -6,6 +6,7 @@ package com.port.shenh.intelligenttally.holder;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+import com.port.shenh.intelligenttally.R;
 
 /**
  * 航次列表的ViewHolder

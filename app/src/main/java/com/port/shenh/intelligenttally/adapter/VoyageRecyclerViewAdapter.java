@@ -4,18 +4,14 @@ package com.port.shenh.intelligenttally.adapter;
  */
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import com.port.shenh.intelligenttally.R;
 import com.port.shenh.intelligenttally.bean.Voyage;
 import com.port.shenh.intelligenttally.holder.VoyageItemViewHolder;
-import com.port.tally.management.R;
-import com.port.tally.management.bean.Stock;
-import com.port.tally.management.holder.StockItemViewHolder;
-
 import org.mobile.library.model.operate.OnItemClickListenerForRecyclerViewItem;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -104,8 +100,8 @@ public class VoyageRecyclerViewAdapter extends RecyclerView.Adapter<VoyageItemVi
     @Override
     public VoyageItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // 创建Item根布局
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout
-                .stock_list_item, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.voyage_list_item
+                , parent, false);
 
         // 创建Item布局管理器
         return new VoyageItemViewHolder(itemView);
@@ -116,8 +112,8 @@ public class VoyageRecyclerViewAdapter extends RecyclerView.Adapter<VoyageItemVi
 
         // 数据绑定
         Voyage voyage = this.dataList.get(position);
-
-        holder.inOutTextView.setText(voyage.getCodeInOut().equals("1") == true ? "进口" : "出口");
+        Log.v("VoyageRecyclerViewAdapter" + "onBindViewHolder", "voyage getCodeInOut() is " + voyage.getCodeInOut());
+        holder.inOutTextView.setText(voyage.getCodeInOut().equals("1") == true ? "进" : "出");
         String voyageState = null;
         if (voyage.getCodeStatue().equals("1"))
         {

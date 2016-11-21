@@ -42,6 +42,11 @@ public interface StaticValue {
          * 登录
          */
         String HTTP_LOGIN_URL = HTTP_IP_URL + "M_Znlh/Entrance/Login.aspx";
+
+        /**
+         * 航次
+         */
+        String HTTP_VOYAGE_LIST_URL = HTTP_IP_URL + "M_Znlh/Voyage/GetVoyage.aspx";
     }
 
 }

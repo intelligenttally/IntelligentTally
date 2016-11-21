@@ -29,9 +29,8 @@
                 android:width="30dp"
                 android:height="40dp"
                 android:layout_marginLeft="6dp"
-                android:gravity="center_vertical"
+                android:gravity="center"
                 android:text="HC"
-                android:textAlignment="center"
                 android:background="@color/lightcoral"
                 android:textStyle="bold"
                 android:textColor="@android:color/black"/>
@@ -81,6 +80,14 @@
                 android:layout_marginLeft="6dp"
                 android:gravity="center_vertical"
                 android:text="中文船名"
+                android:textColor="@android:color/black"/>
+
+            <TextView
+                android:id="@+id/voyage_list_item_downloaded_textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|right"
+                android:text="已下载"
                 android:textColor="@android:color/black"/>
 
         </LinearLayout>
