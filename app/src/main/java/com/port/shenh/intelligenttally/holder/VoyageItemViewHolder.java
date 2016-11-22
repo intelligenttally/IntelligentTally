@@ -33,17 +33,17 @@ public class VoyageItemViewHolder extends RecyclerView.ViewHolder {
     public TextView chi_VesselTextView = null;
 
     /**
-     * 航次状态文本框
+     * 泊位号文本框
      */
-    public TextView voyageStatuTextView = null;
+    public TextView berthnoTextView = null;
 
 
     public VoyageItemViewHolder(View itemView) {
         super(itemView);
 
-        inOutTextView = (TextView) itemView.findViewById(R.id.voyage_list_item_inout_textView);
+        berthnoTextView = (TextView) itemView.findViewById(R.id.voyage_list_item_berthno_textView);
 
-        voyageStatuTextView = (TextView) itemView.findViewById(R.id.voyage_list_item_voyage_statue_textView);
+        inOutTextView = (TextView) itemView.findViewById(R.id.voyage_list_item_inout_textView);
 
         voyageTextView = (TextView) itemView.findViewById(R.id.voyage_list_item_voyage_textView);
 

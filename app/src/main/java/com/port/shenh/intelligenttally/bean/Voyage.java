@@ -18,9 +18,9 @@ public class Voyage {
     private String v_Id = null;
 
     /**
-     * 航次状态
+     * 泊位号
      */
-    private String codeStatue = null;
+    private String berthno = null;
 
     /**
      * 航次
@@ -67,21 +67,21 @@ public class Voyage {
     }
 
     /**
-     * 获取航次状态
+     * 获取泊位号
      *
      * @return 船舶编码
      */
-    public String getCodeStatue() {
-        return codeStatue;
+    public String getBerthno() {
+        return berthno;
     }
 
     /**
-     * 设置航次状态
+     * 设置泊位号
      *
-     * @param codeStatu 航次状态
+     * @param berthno 航次状态
      */
-    public void setCodeStatue(String codeStatu) {
-        this.codeStatue = codeStatu;
+    public void setBerthno(String berthno) {
+        this.berthno = berthno;
     }
 
     /**

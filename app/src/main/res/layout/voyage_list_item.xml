@@ -23,14 +23,14 @@
             android:paddingRight="@dimen/default_padding_small">
 
             <TextView
-                android:id="@+id/voyage_list_item_voyage_spell_textView"
+                android:id="@+id/voyage_list_item_berthno_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:width="30dp"
                 android:height="40dp"
                 android:layout_marginLeft="6dp"
                 android:gravity="center"
-                android:text="HC"
+                android:text="泊位"
                 android:background="@color/lightcoral"
                 android:textStyle="bold"
                 android:textColor="@android:color/black"/>
@@ -46,20 +46,6 @@
                 android:text="进"
                 android:textAlignment="center"
                 android:background="@color/paleturquoise"
-                android:textStyle="bold"
-                android:textColor="@android:color/black"/>
-
-            <TextView
-                android:id="@+id/voyage_list_item_voyage_statue_textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:width="40dp"
-                android:height="40dp"
-                android:layout_marginLeft="6dp"
-                android:gravity="center_vertical"
-                android:text="在港"
-                android:textAlignment="center"
-                android:background="@color/lightgray"
                 android:textStyle="bold"
                 android:textColor="@android:color/black"/>
 

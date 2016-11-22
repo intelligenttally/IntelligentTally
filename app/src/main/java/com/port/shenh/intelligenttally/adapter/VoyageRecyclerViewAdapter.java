@@ -112,18 +112,8 @@ public class VoyageRecyclerViewAdapter extends RecyclerView.Adapter<VoyageItemVi
 
         // 数据绑定
         Voyage voyage = this.dataList.get(position);
-        Log.v("VoyageRecyclerViewAdapter" + "onBindViewHolder", "voyage getCodeInOut() is " + voyage.getCodeInOut());
+        holder.berthnoTextView.setText(voyage.getBerthno());
         holder.inOutTextView.setText(voyage.getCodeInOut().equals("1") == true ? "进" : "出");
-        String voyageState = null;
-        if (voyage.getCodeStatue().equals("1"))
-        {
-            voyageState = "预报";
-        }
-        else if (voyage.getCodeStatue().equals("2"))
-        {
-            voyageState = "在港";
-        }
-        holder.voyageStatuTextView.setText(voyageState);
         holder.voyageTextView.setText(voyage.getVoyage());
         holder.chi_VesselTextView.setText(voyage.getChi_Vessel());
 

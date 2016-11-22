@@ -38,7 +38,7 @@ public class VoyageSelectActivity extends AppCompatActivity {
     /**
      * 日志标签前缀
      */
-    private static final String LOG_TAG = "VoyageDownloadActivity.";
+    private static final String LOG_TAG = "VoyageSelectActivity.";
 
     /**
      * 一次性加载的数据行数
@@ -120,7 +120,7 @@ public class VoyageSelectActivity extends AppCompatActivity {
      */
     private void initView() {
         // 初始化Toolbar
-        ToolbarInitialize.initToolbar(this, R.string.voyage_download, true, true);
+        ToolbarInitialize.initToolbar(this, R.string.vayage, true, true);
         // 初始化列表
         initListView();
     }
