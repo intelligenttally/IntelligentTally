@@ -3,8 +3,11 @@ package com.port.shenh.intelligenttally.activity;
  * Created by sh on 2016/11/15.
  */
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +16,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.port.shenh.intelligenttally.R;
 import com.port.shenh.intelligenttally.adapter.VoyageRecyclerViewAdapter;
 import com.port.shenh.intelligenttally.bean.Voyage;
@@ -49,6 +56,47 @@ public class VoyageDownloadActivity extends AppCompatActivity {
      * 加载更多数据的触发剩余行数
      */
     private static final int LAST_ROW_COUNT = 15;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
+
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    public Action getIndexApiAction() {
+        Thing object = new Thing.Builder()
+                .setName("VoyageDownload Page") // TODO: Define a title for the content shown.
+                // TODO: Make sure this auto-generated URL is correct.
+                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        AppIndex.AppIndexApi.start(client, getIndexApiAction());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.end(client, getIndexApiAction());
+        client.disconnect();
+    }
 
     /**
      * 控件集
@@ -95,6 +143,9 @@ public class VoyageDownloadActivity extends AppCompatActivity {
         initViewHolder();
         // 加载界面
         initView();
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     @Override
@@ -145,12 +196,8 @@ public class VoyageDownloadActivity extends AppCompatActivity {
         viewHolder.recyclerViewAdapter.setOnItemClickListener(new OnItemClickListenerForRecyclerViewItem<List<Voyage>, VoyageItemViewHolder>() {
             @Override
             public void onClick(List<Voyage> voyages, VoyageItemViewHolder voyageItemViewHolder) {
-                Voyage voyage = voyages.get(voyageItemViewHolder.getAdapterPosition());
 
-                // 跳转意图
-                Intent intent = new Intent(VoyageDownloadActivity.this, BayActivity.class);
-                // 跳转到详情页面
-                startActivity(intent);
+                viewHolder.recyclerViewAdapter.switchSelectedState(voyageItemViewHolder);
             }
         });
 
@@ -258,5 +305,30 @@ public class VoyageDownloadActivity extends AppCompatActivity {
      */
     private void doDownload() {
 
+        if (viewHolder.recyclerViewAdapter.getSelectedItemCount() == 0) {
+
+            new AlertDialog.Builder(VoyageDownloadActivity.this)
+                    .setTitle("警告")
+                    .setMessage("未选中！")
+                    .setPositiveButton("确定", null)
+                    .show();
+
+            return;
+
+        }
+
+        new AlertDialog.Builder(VoyageDownloadActivity.this)
+                .setTitle("确认")
+                .setIcon(android.R.drawable.ic_dialog_info)
+                .setMessage("是否下载？")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+
+                    }
+                })
+                .setNegativeButton("取消", null)
+                .show();
     }
 }

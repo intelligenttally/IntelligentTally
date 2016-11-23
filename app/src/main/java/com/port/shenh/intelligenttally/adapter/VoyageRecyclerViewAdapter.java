@@ -1,17 +1,21 @@
 package com.port.shenh.intelligenttally.adapter;
 /**
- * Created by 超悟空 on 2015/9/19.
+ * Created by sh on 2016/11/23.
  */
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.port.shenh.intelligenttally.R;
 import com.port.shenh.intelligenttally.bean.Voyage;
 import com.port.shenh.intelligenttally.holder.VoyageItemViewHolder;
+
 import org.mobile.library.model.operate.OnItemClickListenerForRecyclerViewItem;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +34,8 @@ public class VoyageRecyclerViewAdapter extends RecyclerView.Adapter<VoyageItemVi
      */
     private List<Voyage> dataList = null;
 
+    private SparseBooleanArray selectedItems;//记录选中的position
+
     /**
      * item点击事件监听器
      */
@@ -41,6 +47,7 @@ public class VoyageRecyclerViewAdapter extends RecyclerView.Adapter<VoyageItemVi
      */
     public VoyageRecyclerViewAdapter() {
         this.dataList = new ArrayList<>();
+        this.selectedItems = new SparseBooleanArray();
     }
 
     /**
@@ -88,6 +95,30 @@ public class VoyageRecyclerViewAdapter extends RecyclerView.Adapter<VoyageItemVi
     }
 
     /**
+     * 切换选择状态
+     *
+     * @param voyageItemViewHolder 航次列表的ViewHolder
+     */
+    public void switchSelectedState(VoyageItemViewHolder voyageItemViewHolder) {
+
+        int position = voyageItemViewHolder.getLayoutPosition();
+
+        if (selectedItems.get(position, false)) {
+            selectedItems.delete(position);
+        } else {
+            selectedItems.put(position, true);
+        }
+        notifyItemChanged(position);
+    }
+
+    /**
+     * 获取选中item数目
+     */
+    public int getSelectedItemCount(){
+        return selectedItems.size();
+    }
+
+    /**
      * 设置Item点击事件监听器
      *
      * @param onItemClickListener 监听器
@@ -116,6 +147,14 @@ public class VoyageRecyclerViewAdapter extends RecyclerView.Adapter<VoyageItemVi
         holder.inOutTextView.setText(voyage.getCodeInOut().equals("1") == true ? "进" : "出");
         holder.voyageTextView.setText(voyage.getVoyage());
         holder.chi_VesselTextView.setText(voyage.getChi_Vessel());
+
+        int color = 0;
+        if (selectedItems.get(position, false)) {
+            color = Color.parseColor("#E0FFFF");
+        } else {
+            color =  Color.parseColor("#FFFFFF");
+        }
+        holder.itemView.setBackgroundColor(color);
 
         // 绑定监听事件
         if (onItemClickListener != null) {
