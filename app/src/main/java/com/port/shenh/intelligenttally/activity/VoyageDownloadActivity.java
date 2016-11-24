@@ -3,6 +3,7 @@ package com.port.shenh.intelligenttally.activity;
  * Created by sh on 2016/11/15.
  */
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -57,48 +58,6 @@ public class VoyageDownloadActivity extends AppCompatActivity {
      */
     private static final int LAST_ROW_COUNT = 15;
     /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient client;
-
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    public Action getIndexApiAction() {
-        Thing object = new Thing.Builder()
-                .setName("VoyageDownload Page") // TODO: Define a title for the content shown.
-                // TODO: Make sure this auto-generated URL is correct.
-                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
-                .build();
-        return new Action.Builder(Action.TYPE_VIEW)
-                .setObject(object)
-                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
-                .build();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
-        AppIndex.AppIndexApi.start(client, getIndexApiAction());
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        AppIndex.AppIndexApi.end(client, getIndexApiAction());
-        client.disconnect();
-    }
-
-    /**
      * 控件集
      */
     private class LocalViewHolder {
@@ -134,6 +93,11 @@ public class VoyageDownloadActivity extends AppCompatActivity {
      */
     private LocalViewHolder viewHolder = null;
 
+    /**
+     * 进度条
+     */
+    protected ProgressDialog progressDialog = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -143,9 +107,7 @@ public class VoyageDownloadActivity extends AppCompatActivity {
         initViewHolder();
         // 加载界面
         initView();
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+
     }
 
     @Override
@@ -309,6 +271,7 @@ public class VoyageDownloadActivity extends AppCompatActivity {
 
             new AlertDialog.Builder(VoyageDownloadActivity.this)
                     .setTitle("警告")
+                    .setIcon(android.R.drawable.ic_dialog_info)
                     .setMessage("未选中！")
                     .setPositiveButton("确定", null)
                     .show();
@@ -325,10 +288,55 @@ public class VoyageDownloadActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
+                        //打开进度条
+                        startProgressDialog();
+                        Log.i(LOG_TAG + "doDownload", " is invoked");
+
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+
+                                    Thread.sleep(3000);
+                                    Log.i(LOG_TAG + "doDownload", "----is invoked");
+
+                                    //停止进度条
+                                    stopProgressDialog();
+
+
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }).start();
+
 
                     }
                 })
                 .setNegativeButton("取消", null)
                 .show();
+    }
+
+    /**
+     * 打开进度条
+     */
+    protected void startProgressDialog() {
+        if (progressDialog == null) {
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            // 设置提醒
+            progressDialog.setMessage(getString(R.string.data_loading));
+            progressDialog.setCancelable(false);
+        }
+        progressDialog.show();
+    }
+
+    /**
+     * 停止进度条
+     */
+    protected void stopProgressDialog() {
+        if (progressDialog != null) {
+            progressDialog.cancel();
+        }
     }
 }

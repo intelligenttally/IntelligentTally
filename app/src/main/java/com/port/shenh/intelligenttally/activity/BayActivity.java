@@ -1,6 +1,4 @@
 package com.port.shenh.intelligenttally.activity;
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -36,8 +34,8 @@ public class BayActivity extends AppCompatActivity {
 
 //        // 初始化控件引用
 //        initViewHolder();
-//        // 加载界面
-//        initView();
+        // 加载界面
+        initView();
     }
 
     /**
@@ -51,7 +49,7 @@ public class BayActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_bay, menu);
         return true;
     }
 
@@ -59,31 +57,29 @@ public class BayActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
-            case R.id.menu_logout:
+            case R.id.menu_last_bay:
                 // 退出操作
-                doLogout();
+                doLastBay();
                 break;
-            case R.id.menu_clear_cache:
+            case R.id.menu_next_bay:
                 //清楚缓存
-                doClearCache();
+                doNextBay();
                 break;
         }
         return true;
     }
 
     /**
-     * 退出操作
+     * 上一贝
      */
-    private void doLogout() {
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
-        finish();
+    private void doLastBay() {
+
     }
 
     /**
-     * 清除缓存
+     * 下一贝
      */
-    private void doClearCache() {
+    private void doNextBay() {
 
     }
 }

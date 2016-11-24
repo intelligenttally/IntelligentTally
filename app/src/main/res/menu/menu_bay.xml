@@ -4,9 +4,9 @@
     <item
         android:id="@+id/menu_last_bay"
         android:title="@string/last_bay"
-        app:showAsAction="never"/>
+        app:showAsAction="always"/>
     <item
         android:id="@+id/menu_next_bay"
         android:title="@string/next_bay"
-        app:showAsAction="never"/>
+        app:showAsAction="always"/>
 </menu>
