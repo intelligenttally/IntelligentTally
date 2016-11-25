@@ -8,27 +8,16 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-
 import com.port.shenh.intelligenttally.bean.ShipImage;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.mobile.library.global.Global;
-import org.mobile.library.global.GlobalApplication;
 import org.mobile.library.model.database.BaseOperator;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.List;
 
 /**
  * 船图数据库操作工具
  *
- * @author 超悟空
- * @version 1.0 2015/12/14
+ * @author sh
+ * @version 1.0 2016/11/25
  * @since 1.0
  */
 public class ShipImageOperator extends BaseOperator<ShipImage> {
@@ -60,7 +49,7 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
 
     @Override
     protected String onCreateTableName() {
-        return TableConst.ShipImageConst.TABLE_NAME;
+        return TableConst.ShipImage.TABLE_NAME;
     }
 
     @Override
@@ -69,25 +58,27 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
          * 建表语句
          */
         String createTableSql = String.format("CREATE TABLE IF NOT EXISTS %s ( %s INTEGER PRIMARY KEY, " +
-                "%s TEXT NOT NULL" +
-                "%s TEXT NOT NULL" +
-                "%s TEXT NOT NULL" +
-                "%s TEXT NOT NULL" +
-                "%s TEXT NOT NULL" +
-                "%s TEXT NOT NULL" +
-                "%s TEXT" +
-                "%s TEXT" +
-                "%s TEXT" +
-                "%s TEXT" +
-                "%s TEXT" +
-                "%s TEXT" +
-                "%s TEXT" +
-                "%s TEXT" +
-                "%s TEXT" +
-                "%s TEXT" +
-                "%s TEXT" +
-                "%s TEXT)",
+                        "%s TEXT NOT NULL" +
+                        "%s TEXT NOT NULL" +
+                        "%s TEXT NOT NULL" +
+                        "%s TEXT NOT NULL" +
+                        "%s TEXT NOT NULL" +
+                        "%s TEXT NOT NULL" +
+                        "%s TEXT NOT NULL" +
+                        "%s TEXT" +
+                        "%s TEXT" +
+                        "%s TEXT" +
+                        "%s TEXT" +
+                        "%s TEXT" +
+                        "%s TEXT" +
+                        "%s TEXT" +
+                        "%s TEXT" +
+                        "%s TEXT" +
+                        "%s TEXT" +
+                        "%s TEXT" +
+                        "%s TEXT)",
                 CommonConst.DB_NAME, CommonConst._ID,
+                TableConst.ShipImage.IMAGE_ID,
                 TableConst.ShipImage.BAY_NUM,
                 TableConst.ShipImage.BAY_COL,
                 TableConst.ShipImage.BAY_ROW,
@@ -117,31 +108,24 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
     protected ContentValues onFillData(ShipImage data) {
         // 数据库值对象
         ContentValues cv = new ContentValues();
-        cv.put(CommonConst.CODE, data.getToken());
-        cv.put(TableConst.ShiftChange.SEND_NAME, data.getSend());
-        cv.put(TableConst.ShiftChange.RECEIVE_NAME, data.getReceive());
-        cv.put(TableConst.ShiftChange.CONTENT, data.getContent());
-        cv.put(TableConst.ShiftChange.MY_SEND, data.isMySend() ? 1 : 0);
-
-        SimpleDateFormat formatTarget = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        SimpleDateFormat formatSource = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-
-        try {
-            cv.put(TableConst.ShiftChange.TIME, formatTarget.format(formatSource.parse(data
-                    .getTime())));
-        } catch (ParseException e) {
-            Log.e(LOG_TAG + "onFillData", "ParseException is " + e.getMessage());
-        }
-
-        if (data.getImageUrlList() != null) {
-            JSONObject imageUrl = new JSONObject(data.getImageUrlList());
-            cv.put(TableConst.ShiftChange.IMAGE_URL, imageUrl.toString());
-        }
-
-        if (data.getAudioUrlList() != null) {
-            JSONObject audioUrl = new JSONObject(data.getAudioUrlList());
-            cv.put(TableConst.ShiftChange.AUDIO_URL, audioUrl.toString());
-        }
+        cv.put(TableConst.ShipImage.IMAGE_ID, data.getIMAGE_ID());
+        cv.put(TableConst.ShipImage.BAY_NUM, data.getBay_no());
+        cv.put(TableConst.ShipImage.BAY_COL, data.getBay_col());
+        cv.put(TableConst.ShipImage.BAY_ROW, data.getBay_row());
+        cv.put(TableConst.ShipImage.CONTAINER_NO, data.getContainer_no());
+        cv.put(TableConst.ShipImage.SIZE_CON, data.getSize_con());
+        cv.put(TableConst.ShipImage.CONTAINER_TYPE, data.getContainer_type());
+        cv.put(TableConst.ShipImage.CODE_EMPTY, data.getCode_empty());
+        cv.put(TableConst.ShipImage.WEIGHT, data.getWeight());
+        cv.put(TableConst.ShipImage.WORK_DATE, data.getWork_date());
+        cv.put(TableConst.ShipImage.SEALNO, data.getSealno());
+        cv.put(TableConst.ShipImage.MOVED_NAME, data.getMoved_name());
+        cv.put(TableConst.ShipImage.INOUTMARK, data.getInoutmark());
+        cv.put(TableConst.ShipImage.TRANSMARK, data.getTransmark());
+        cv.put(TableConst.ShipImage.HOLIDAYS, data.getHolidays());
+        cv.put(TableConst.ShipImage.NIGHT, data.getHolidays());
+        cv.put(TableConst.ShipImage.CODE_CRANE, data.getCode_crane());
+        cv.put(TableConst.ShipImage.NAME, data.getName());
 
         return cv;
     }
@@ -153,67 +137,51 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
         Cursor cursor = sqLiteHelper.getReadableDatabase().rawQuery(sql, null);
 
         // 列索引
-        int code = cursor.getColumnIndex(CommonConst.CODE);
-        int sendName = cursor.getColumnIndex(TableConst.ShiftChange.SEND_NAME);
-        int receiveName = cursor.getColumnIndex(TableConst.ShiftChange.RECEIVE_NAME);
-        int time = cursor.getColumnIndex(TableConst.ShiftChange.TIME);
-        int content = cursor.getColumnIndex(TableConst.ShiftChange.CONTENT);
-        int mySend = cursor.getColumnIndex(TableConst.ShiftChange.MY_SEND);
-        int imageUrl = cursor.getColumnIndex(TableConst.ShiftChange.IMAGE_URL);
-        int audioUrl = cursor.getColumnIndex(TableConst.ShiftChange.AUDIO_URL);
+        int _id = cursor.getColumnIndex(CommonConst._ID);
+        int image_id = cursor.getColumnIndex(TableConst.ShipImage.IMAGE_ID);
+        int bay_no = cursor.getColumnIndex(TableConst.ShipImage.BAY_NUM);
+        int bay_col = cursor.getColumnIndex(TableConst.ShipImage.BAY_COL);
+        int bay_row = cursor.getColumnIndex(TableConst.ShipImage.BAY_ROW);
+        int container_no = cursor.getColumnIndex(TableConst.ShipImage.CONTAINER_NO);
+        int size_con = cursor.getColumnIndex(TableConst.ShipImage.SIZE_CON);
+        int container_type = cursor.getColumnIndex(TableConst.ShipImage.CONTAINER_TYPE);
+        int code_empty = cursor.getColumnIndex(TableConst.ShipImage.CODE_EMPTY);
+        int weight = cursor.getColumnIndex(TableConst.ShipImage.WEIGHT);
+        int work_date = cursor.getColumnIndex(TableConst.ShipImage.WORK_DATE);
+        int sealno = cursor.getColumnIndex(TableConst.ShipImage.SEALNO);
+        int moved_name = cursor.getColumnIndex(TableConst.ShipImage.MOVED_NAME);
+        int inoutmark = cursor.getColumnIndex(TableConst.ShipImage.INOUTMARK);
+        int transmark = cursor.getColumnIndex(TableConst.ShipImage.TRANSMARK);
+        int holidays = cursor.getColumnIndex(TableConst.ShipImage.HOLIDAYS);
+        int night = cursor.getColumnIndex(TableConst.ShipImage.NIGHT);
+        int code_crane = cursor.getColumnIndex(TableConst.ShipImage.CODE_CRANE);
+        int name = cursor.getColumnIndex(TableConst.ShipImage.NAME);
 
         // 数据填充
-        List<ShiftChange> list = new ArrayList<>();
+        List<ShipImage> list = new ArrayList<>();
 
         while (cursor.moveToNext()) {
             // 一条记录
-            ShiftChange data = new ShiftChange();
-            data.setToken(cursor.getString(code));
-            data.setSend(cursor.getString(sendName));
-            data.setReceive(cursor.getString(receiveName));
-            data.setTime(cursor.getString(time).replace('-', '/'));
-            data.setContent(cursor.getString(content));
-            data.setMySend(cursor.getInt(mySend) == 1);
-
-            try {
-                String imageString = cursor.getString(imageUrl);
-
-                if (imageString != null && !imageString.isEmpty()) {
-
-                    JSONObject jsonObject = new JSONObject(imageString);
-
-                    Map<String, String> map = new HashMap<>();
-
-                    Iterator<String> iterator = jsonObject.keys();
-
-                    while (iterator.hasNext()) {
-                        String key = iterator.next();
-                        map.put(key, jsonObject.getString(key));
-                    }
-
-                    data.setImageUrlList(map);
-                }
-
-                String audioString = cursor.getString(audioUrl);
-
-                if (audioString != null && !audioString.isEmpty()) {
-
-                    JSONObject jsonObject = new JSONObject(audioString);
-
-                    Map<String, String> map = new HashMap<>();
-
-                    Iterator<String> iterator = jsonObject.keys();
-
-                    while (iterator.hasNext()) {
-                        String key = iterator.next();
-                        map.put(key, jsonObject.getString(key));
-                    }
-
-                    data.setAudioUrlList(map);
-                }
-            } catch (JSONException e) {
-                Log.e(LOG_TAG + "query", "JSONException is " + e.getMessage());
-            }
+            ShipImage data = new ShipImage();
+            data.setId(cursor.getString(_id));
+            data.setIMAGE_ID(cursor.getString(image_id));
+            data.setBay_no(cursor.getString(bay_no));
+            data.setBay_col(cursor.getString(bay_col));
+            data.setBay_row(cursor.getString(bay_row));
+            data.setContainer_no(cursor.getString(container_no));
+            data.setSealno(cursor.getString(size_con));
+            data.setContainer_type(cursor.getString(container_type));
+            data.setCode_empty(cursor.getString(code_empty));
+            data.setWeight(cursor.getString(weight));
+            data.setWork_date(cursor.getString(work_date));
+            data.setSealno(cursor.getString(sealno));
+            data.setMoved_name(cursor.getString(moved_name));
+            data.setInoutmark(cursor.getString(inoutmark));
+            data.setTransmark(cursor.getString(transmark));
+            data.setHolidays(cursor.getString(holidays));
+            data.setNight(cursor.getString(night));
+            data.setCode_crane(cursor.getString(code_crane));
+            data.setNight(cursor.getString(name));
 
             list.add(data);
         }
@@ -232,14 +200,14 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
         Log.i(LOG_TAG + "queryWithCondition", "queryWithCondition is invoked");
 
         // 查询语句
-        String sql;
+        String sql = null;
 
         if (parameters.length == 1) {
-            sql = String.format("select * from %s where %s='%s'", tableName, CommonConst.CODE,
+            sql = String.format("select * from %s where %s='%s'", tableName, TableConst.ShipImage.IMAGE_ID,
                     parameters[0]);
         } else {
-            sql = String.format("select * from %s order by %s desc limit %s,%s", tableName,
-                    TableConst.ShiftChange.TIME, parameters[0], parameters[1]);
+//            sql = String.format("select * from %s order by %s desc limit %s,%s", tableName,
+//                    TableConst.ShiftChange.TIME, parameters[0], parameters[1]);
         }
         return query(sql);
     }
@@ -248,7 +216,6 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
      * 根据行ID查询结果
      *
      * @param id 行ID
-     *
      * @return 数据对象，没有返回null
      */
     public ShipImage queryById(long id) {
@@ -257,7 +224,7 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
         // 查询语句
         String sql = String.format("select * from %s where %s=%s", tableName, CommonConst._ID, id);
 
-        List<ShiftChange> list = query(sql);
+        List<ShipImage> list = query(sql);
 
         if (!list.isEmpty()) {
             return list.get(0);
@@ -268,6 +235,6 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
 
     @Override
     protected String onWhereSql(ShipImage data) {
-        return String.format("%s='%s'", CommonConst.CODE, data.getToken());
+        return String.format("%s='%s'", TableConst.ShipImage.IMAGE_ID, data.getIMAGE_ID());
     }
 }
