@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.port.shenh.intelligenttally.bean.ShipImage;
 import com.port.shenh.intelligenttally.bean.Voyage;
+import com.port.shenh.intelligenttally.database.TableConst;
 import com.port.shenh.intelligenttally.util.StaticValue;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -22,7 +23,7 @@ import java.util.Map;
  * @version 1.0 2016/10/13
  * @since 1.0
  */
-public class PullShipImageList extends SimpleWorkModel<String, List<Voyage>> {
+public class PullShipImageList extends SimpleWorkModel<String, List<ShipImage>> {
 
     /**
      * 日志标签前缀
