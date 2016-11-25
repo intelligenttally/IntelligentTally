@@ -59,7 +59,7 @@ public class PullVoyageList extends SimpleWorkModel<String, List<Voyage>> {
                 // 一条航次数据
                 Voyage voyage = new Voyage();
 
-                voyage.setV_Id(jsonRow.getString(0));
+                voyage.setShip_Id(jsonRow.getString(0));
                 voyage.setBerthno(jsonRow.getString(1));
                 voyage.setVoyage(jsonRow.getString(2));
                 voyage.setChi_Vessel(jsonRow.getString(3));

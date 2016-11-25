@@ -13,9 +13,9 @@ package com.port.shenh.intelligenttally.bean;
 public class Voyage {
 
     /**
-     * 船舶编码
+     * 航次编码
      */
-    private String v_Id = null;
+    private String ship_Id = null;
 
     /**
      * 泊位号
@@ -49,21 +49,21 @@ public class Voyage {
 
 
     /**
-     * 获取唯一船舶编码
+     * 获取唯一航次编码
      *
-     * @return 船舶编码
+     * @return 航次编码
      */
-    public String getV_Id() {
-        return v_Id;
+    public String getShip_Id() {
+        return ship_Id;
     }
 
     /**
-     * 设置唯一船舶编码
+     * 设置唯一航次编码
      *
-     * @param v_Id 船舶编码
+     * @param ship_Id 航次编码
      */
-    public void setV_Id(String v_Id) {
-        this.v_Id = v_Id;
+    public void setShip_Id(String ship_Id) {
+        this.ship_Id = ship_Id;
     }
 
     /**

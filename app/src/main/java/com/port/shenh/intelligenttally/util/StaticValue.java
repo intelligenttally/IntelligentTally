@@ -47,6 +47,11 @@ public interface StaticValue {
          * 航次
          */
         String HTTP_VOYAGE_LIST_URL = HTTP_IP_URL + "M_Znlh/Voyage/GetVoyage.aspx";
+
+        /**
+         * 船图
+         */
+        String HTTP_SHIP_IMAGE_LIST_URL = HTTP_IP_URL + "M_Znlh/Ship/GetShipImage.aspx";
     }
 
 }
