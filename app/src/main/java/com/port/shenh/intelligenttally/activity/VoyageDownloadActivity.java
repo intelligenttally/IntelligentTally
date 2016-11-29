@@ -16,11 +16,8 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.appindexing.Thing;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.port.shenh.intelligenttally.R;
 import com.port.shenh.intelligenttally.adapter.VoyageRecyclerViewAdapter;
 import com.port.shenh.intelligenttally.bean.Voyage;
@@ -96,7 +93,7 @@ public class VoyageDownloadActivity extends AppCompatActivity {
     /**
      * 进度条
      */
-    protected ProgressDialog progressDialog = null;
+    private ProgressDialog progressDialog = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -269,12 +266,14 @@ public class VoyageDownloadActivity extends AppCompatActivity {
 
         if (viewHolder.recyclerViewAdapter.getSelectedItemCount() == 0) {
 
-            new AlertDialog.Builder(VoyageDownloadActivity.this)
-                    .setTitle("警告")
-                    .setIcon(android.R.drawable.ic_dialog_info)
-                    .setMessage("未选中！")
-                    .setPositiveButton("确定", null)
-                    .show();
+//            new AlertDialog.Builder(VoyageDownloadActivity.this)
+//                    .setTitle("警告")
+//                    .setIcon(android.R.drawable.ic_dialog_info)
+//                    .setMessage("未选中！")
+//                    .setPositiveButton("返回", null)
+//                    .show();
+
+            Toast.makeText(this, R.string.not_selected, Toast.LENGTH_SHORT).show();
 
             return;
 
@@ -315,6 +314,7 @@ public class VoyageDownloadActivity extends AppCompatActivity {
                 })
                 .setNegativeButton("取消", null)
                 .show();
+
     }
 
     /**
