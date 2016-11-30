@@ -9,10 +9,10 @@
     </string-array>
 
     <array name="grid_item_function_image_list">
-        <item>@mipmap/work_bill_icon</item>
-        <item>@mipmap/work_bill_icon</item>
-        <item>@mipmap/work_bill_icon</item>
-        <item>@mipmap/work_bill_icon</item>
+        <item>@mipmap/voyage</item>
+        <item>@mipmap/bay</item>
+        <item>@mipmap/single</item>
+        <item>@mipmap/all</item>
     </array>
 
 </resources>
