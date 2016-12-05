@@ -1,10 +1,19 @@
 package com.port.shenh.intelligenttally.activity;
+
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayout;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.port.shenh.intelligenttally.R;
+import com.port.shenh.intelligenttally.view.FreedomScrollView;
 
 import org.mobile.library.common.function.ToolbarInitialize;
 
@@ -27,15 +36,18 @@ public class BayActivity extends AppCompatActivity {
      */
     private static final String LOG_TAG = "BayActivity.";
 
+    /**
+     * 表格布局
+     */
+    private GridLayout gridLayout = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bay);
 
-//        // 初始化控件引用
-//        initViewHolder();
-        // 加载界面
         initView();
+        initData();
     }
 
     /**
@@ -44,8 +56,81 @@ public class BayActivity extends AppCompatActivity {
     private void initView() {
         // 初始化Toolbar
         ToolbarInitialize.initToolbar(this, R.string.bay, true, true);
+
+        initGridLayout();
     }
 
+    /**
+     * 初始化表格布局
+     */
+    @SuppressWarnings("ConstantConditions")
+    private void initGridLayout() {
+
+        gridLayout = (GridLayout) findViewById(R.id.activity_bay_gridLayout);
+
+        final FreedomScrollView scrollView = (FreedomScrollView) findViewById(R.id
+                .activity_bay_scrollView);
+
+        scrollView.setScrollableOutsideChile(true);
+
+        final ScaleGestureDetector scaleGestureDetector = new ScaleGestureDetector(BayActivity
+                .this, new ScaleGestureDetector.SimpleOnScaleGestureListener() {
+            @Override
+            public boolean onScale(ScaleGestureDetector detector) {
+
+                float factor = detector.getScaleFactor();
+
+                if (factor > 1.5 || factor < 0.5) {
+                    return false;
+                }
+
+                gridLayout.setScaleX(factor);
+                gridLayout.setScaleY(factor);
+
+                return false;
+            }
+
+            @Override
+            public void onScaleEnd(ScaleGestureDetector detector) {
+
+                float factor = detector.getScaleFactor();
+
+                gridLayout.setTranslationX(gridLayout.getWidth() * (factor - 1) / 2);
+                gridLayout.setTranslationY(gridLayout.getHeight() * (factor - 1) / 2);
+            }
+        });
+
+        scrollView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return event.getPointerCount() > 1 && scaleGestureDetector.onTouchEvent(event);
+            }
+        });
+    }
+
+    /**
+     * 初始化数据
+     */
+    private void initData() {
+        // 模拟数据
+        for (int i = 0; i < 200; i++) {
+            View view = LayoutInflater.from(this).inflate(R.layout.layout_item_box, gridLayout,
+                    false);
+
+            final TextView textView = (TextView) view.findViewById(R.id.layout_item_box_textView);
+            textView.setText("box" + i);
+
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(BayActivity.this, textView.getText().toString(), Toast
+                            .LENGTH_SHORT).show();
+                }
+            });
+
+            gridLayout.addView(view);
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

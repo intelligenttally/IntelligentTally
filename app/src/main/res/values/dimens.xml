@@ -15,4 +15,6 @@
     <dimen name="default_margin_small">2dp</dimen>
     <dimen name="default_padding_small">2dp</dimen>
 
+    <dimen name="layout_default_size">48dp</dimen>
+
 </resources>
