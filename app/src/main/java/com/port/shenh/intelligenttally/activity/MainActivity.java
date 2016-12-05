@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import com.port.shenh.intelligenttally.R;
 import com.port.shenh.intelligenttally.adapter.MainFunctionRecyclerViewAdapter;
+import com.port.shenh.intelligenttally.function.ShipImageListFunction;
 import com.port.shenh.intelligenttally.holder.MainFunctionItemViewHolder;
 import org.mobile.library.common.function.CheckUpdate;
 import org.mobile.library.common.function.ToolbarInitialize;
@@ -154,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
      * 清除缓存
      */
     private void doClearCache() {
-
+        ShipImageListFunction shipImageListFunction = new ShipImageListFunction(getBaseContext());
+        shipImageListFunction.onClear();
     }
 }

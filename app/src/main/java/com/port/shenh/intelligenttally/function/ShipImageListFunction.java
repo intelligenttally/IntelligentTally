@@ -23,6 +23,15 @@ public class ShipImageListFunction extends BaseDataListFunction<ShipImage,String
         super(context);
     }
 
+    /**
+     * 构造函数
+     * @param context 上下文
+     * @param parameter 查询条件参数
+     */
+    public ShipImageListFunction(Context context, String parameter) {
+        super(context, parameter);
+    }
+
     @Override
     protected BaseOperator<ShipImage> onCreateOperator(Context context) {
         return new ShipImageOperator(context);

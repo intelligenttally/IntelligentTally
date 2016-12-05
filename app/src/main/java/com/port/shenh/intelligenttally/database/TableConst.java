@@ -13,18 +13,13 @@ package com.port.shenh.intelligenttally.database;
 public interface TableConst {
 
     /**
-     * 所有需要数据库初始化时创建的数据表的建表语句集合
-     */
-    String[] CREATE_TABLE_SQL_ARRAY = {ShipImage.CREATE_TABLE_SQL};
-
-    /**
      * 船图
      */
     interface ShipImage {
         /**
          * 表名
          */
-        String TABLE_NAME = "tb_ship_chart";
+        String TABLE_NAME = "tb_ship_Image";
 
         /**
          * 船图ID
@@ -115,48 +110,5 @@ public interface TableConst {
          * 理货员
          */
         String NAME = "name";
-
-        /**
-         * 建表语句
-         */
-        String CREATE_TABLE_SQL = String.format("CREATE TABLE IF NOT EXISTS %s ( %s INTEGER PRIMARY KEY, " +
-                        "%s TEXT NOT NULL" +
-                        "%s TEXT NOT NULL" +
-                        "%s TEXT NOT NULL" +
-                        "%s TEXT NOT NULL" +
-                        "%s TEXT NOT NULL" +
-                        "%s TEXT NOT NULL" +
-                        "%s TEXT NOT NULL" +
-                        "%s TEXT" +
-                        "%s TEXT" +
-                        "%s TEXT" +
-                        "%s TEXT" +
-                        "%s TEXT" +
-                        "%s TEXT" +
-                        "%s TEXT" +
-                        "%s TEXT" +
-                        "%s TEXT" +
-                        "%s TEXT" +
-                        "%s TEXT" +
-                        "%s TEXT)",
-                CommonConst.DB_NAME, CommonConst._ID,
-                ShipImage.IMAGE_ID,
-                ShipImage.BAY_NUM,
-                ShipImage.BAY_COL,
-                ShipImage.BAY_ROW,
-                ShipImage.CONTAINER_NO,
-                ShipImage.SIZE_CON,
-                ShipImage.CONTAINER_TYPE,
-                ShipImage.CODE_EMPTY,
-                ShipImage.WEIGHT,
-                ShipImage.WORK_DATE,
-                ShipImage.SEALNO,
-                ShipImage.MOVED_NAME,
-                ShipImage.INOUTMARK,
-                ShipImage.TRANSMARK,
-                ShipImage.HOLIDAYS,
-                ShipImage.NIGHT,
-                ShipImage.CODE_CRANE,
-                ShipImage.NAME);
     }
 }

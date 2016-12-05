@@ -60,12 +60,13 @@ public class PullVoyageList extends SimpleWorkModel<String, List<Voyage>> {
                 Voyage voyage = new Voyage();
 
                 voyage.setShip_Id(jsonRow.getString(0));
-                voyage.setBerthno(jsonRow.getString(1));
-                voyage.setVoyage(jsonRow.getString(2));
-                voyage.setChi_Vessel(jsonRow.getString(3));
-                voyage.setCodeInOut(jsonRow.getString(4));
-                voyage.setTrade(jsonRow.getString(5));
-                voyage.setWheel(jsonRow.getString(6));
+                voyage.setV_Id(jsonRow.getString(1));
+                voyage.setBerthno(jsonRow.getString(2));
+                voyage.setVoyage(jsonRow.getString(3));
+                voyage.setChi_Vessel(jsonRow.getString(4));
+                voyage.setCodeInOut(jsonRow.getString(5));
+                voyage.setTrade(jsonRow.getString(6));
+                voyage.setWheel(jsonRow.getString(7));
 
                 // 添加到列表
                 voyageList.add(voyage);

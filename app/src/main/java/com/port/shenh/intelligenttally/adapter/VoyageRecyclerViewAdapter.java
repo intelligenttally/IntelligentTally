@@ -114,9 +114,47 @@ public class VoyageRecyclerViewAdapter extends RecyclerView.Adapter<VoyageItemVi
     /**
      * 获取选中item数目
      */
-    public int getSelectedItemCount(){
+    public int getSelectedItemCount() {
         return selectedItems.size();
     }
+
+    /**
+     * 获取选中的Items
+     *
+     * @return Items
+     */
+    public List<Integer> getSelectedItems() {
+
+        if (selectedItems.size() == 0 ){
+            return null;
+        }
+
+        List<Integer> items = new ArrayList<>(selectedItems.size());
+        for (int i = 0; i < selectedItems.size(); i++) {
+            items.add(selectedItems.keyAt(i));
+        }
+
+        return items;
+    }
+
+    /**
+     * 获取选中的数据列表
+     * @return 获取选中的数据列表
+     */
+    public List<Voyage> getSelectedDataList() {
+
+        if (selectedItems.size() == 0 ){
+            return null;
+        }
+
+        List<Voyage> selectedDataList = new ArrayList<>(selectedItems.size());
+        for (int i = 0; i < selectedItems.size(); i++) {
+            selectedDataList.add(i, dataList.get(getSelectedItems().get(i)));
+        }
+
+        return selectedDataList;
+    }
+
 
     /**
      * 设置Item点击事件监听器
@@ -152,7 +190,7 @@ public class VoyageRecyclerViewAdapter extends RecyclerView.Adapter<VoyageItemVi
         if (selectedItems.get(position, false)) {
             color = Color.parseColor("#E0FFFF");
         } else {
-            color =  Color.parseColor("#FFFFFF");
+            color = Color.parseColor("#FFFFFF");
         }
         holder.itemView.setBackgroundColor(color);
 

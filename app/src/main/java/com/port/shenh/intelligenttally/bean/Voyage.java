@@ -18,6 +18,11 @@ public class Voyage {
     private String ship_Id = null;
 
     /**
+     * 船舶编码
+     */
+    private String v_Id = null;
+
+    /**
      * 泊位号
      */
     private String berthno = null;
@@ -49,7 +54,7 @@ public class Voyage {
 
 
     /**
-     * 获取唯一航次编码
+     * 获取航次编码
      *
      * @return 航次编码
      */
@@ -58,7 +63,7 @@ public class Voyage {
     }
 
     /**
-     * 设置唯一航次编码
+     * 设置航次编码
      *
      * @param ship_Id 航次编码
      */
@@ -67,9 +72,27 @@ public class Voyage {
     }
 
     /**
-     * 获取泊位号
+     * 获取船舶编码
      *
      * @return 船舶编码
+     */
+    public String getV_Id() {
+        return v_Id;
+    }
+
+    /**
+     * 设置船舶编码
+     *
+     * @param v_Id 船舶编码
+     */
+    public void setV_Id(String v_Id) {
+        this.v_Id = v_Id;
+    }
+
+    /**
+     * 获取泊位号
+     *
+     * @return 泊位号
      */
     public String getBerthno() {
         return berthno;
@@ -78,7 +101,7 @@ public class Voyage {
     /**
      * 设置泊位号
      *
-     * @param berthno 航次状态
+     * @param berthno 泊位号
      */
     public void setBerthno(String berthno) {
         this.berthno = berthno;

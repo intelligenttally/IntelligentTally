@@ -249,4 +249,18 @@ public abstract class BaseDataListFunction<DataModel, Condition> {
      */
     protected void onNotify(Context context) {
     }
+
+    /**
+     * 清空表
+     */
+    public void onClear()
+    {
+        Log.i(LOG_TAG + "onClear", "clear is invoked");
+
+        Log.i(LOG_TAG + "onCreate", "onCreateOperator is invoked");
+        this.operator = onCreateOperator(context);
+        operator.clear();
+    }
+
+
 }

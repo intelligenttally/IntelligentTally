@@ -20,7 +20,10 @@ import android.widget.Toast;
 
 import com.port.shenh.intelligenttally.R;
 import com.port.shenh.intelligenttally.adapter.VoyageRecyclerViewAdapter;
+import com.port.shenh.intelligenttally.bean.ShipImage;
 import com.port.shenh.intelligenttally.bean.Voyage;
+import com.port.shenh.intelligenttally.function.BaseDataListFunction;
+import com.port.shenh.intelligenttally.function.ShipImageListFunction;
 import com.port.shenh.intelligenttally.holder.VoyageItemViewHolder;
 import com.port.shenh.intelligenttally.work.PullVoyageList;
 
@@ -54,6 +57,7 @@ public class VoyageDownloadActivity extends AppCompatActivity {
      * 加载更多数据的触发剩余行数
      */
     private static final int LAST_ROW_COUNT = 15;
+
     /**
      * 控件集
      */
@@ -287,28 +291,57 @@ public class VoyageDownloadActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-                        //打开进度条
-                        startProgressDialog();
                         Log.i(LOG_TAG + "doDownload", " is invoked");
+//
+//                        new Thread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                try {
+//
+//                                    Thread.sleep(3000);
+//                                    Log.i(LOG_TAG + "doDownload", "----is invoked");
+//
+//                                    //停止进度条
+//                                    stopProgressDialog();
+//
+//
+//                                } catch (InterruptedException e) {
+//                                    e.printStackTrace();
+//                                }
+//                            }
+//                        }).start();
 
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
+                        List<Voyage> selectedDataList = viewHolder.recyclerViewAdapter.getSelectedDataList();
+                        for (int i = 0; i < selectedDataList.size(); i++) {
+                            Voyage voyage = selectedDataList.get(i);
+                            String message = "航次" + voyage.getVoyage() + "数据正在下载中...";
+                            Log.i(LOG_TAG + "doDownload ", message);
+                            startProgressDialog(message);
 
-                                    Thread.sleep(3000);
-                                    Log.i(LOG_TAG + "doDownload", "----is invoked");
-
-                                    //停止进度条
-                                    stopProgressDialog();
+//                            ShipImageListFunction shipImageListFunction = new ShipImageListFunction(getBaseContext(), ship_id);
+//                            shipImageListFunction.onCreate();
 
 
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
+
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        Thread.sleep(3000);
+                                        Log.i(LOG_TAG + "doDownload", "----is invoked");
+
+                                        //停止进度条
+                                        stopProgressDialog();
+
+
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
-                            }
-                        }).start();
+                            }).start();
 
+
+                        }
 
                     }
                 })
@@ -320,12 +353,12 @@ public class VoyageDownloadActivity extends AppCompatActivity {
     /**
      * 打开进度条
      */
-    protected void startProgressDialog() {
+    protected void startProgressDialog(String message) {
         if (progressDialog == null) {
             progressDialog = new ProgressDialog(this);
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             // 设置提醒
-            progressDialog.setMessage(getString(R.string.data_loading));
+            progressDialog.setMessage(message);
             progressDialog.setCancelable(false);
         }
         progressDialog.show();

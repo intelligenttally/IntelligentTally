@@ -90,7 +90,7 @@ public class PullShipImageList extends SimpleWorkModel<String, List<ShipImage>> 
 
     @Override
     protected String onTaskUri() {
-        return StaticValue.Url.HTTP_SHIP_IMAGE_LIST_URL;
+        return StaticValue.Url.HTTP_SHIP_IMAGE_URL;
     }
 }
 

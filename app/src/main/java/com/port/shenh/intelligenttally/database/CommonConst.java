@@ -20,7 +20,7 @@ public interface CommonConst {
     /**
      * 数据库名
      */
-    String DB_NAME = "tally_ship.db";
+    String DB_NAME = "tally.db";
 
     /**
      * 数据库版本

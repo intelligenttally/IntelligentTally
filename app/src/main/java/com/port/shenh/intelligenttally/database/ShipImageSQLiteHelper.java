@@ -65,15 +65,7 @@ public class ShipImageSQLiteHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        Log.i(LOG_TAG + "onCreate", "onCreate is invoked");
 
-        // 建表
-        for (String sql : TableConst.CREATE_TABLE_SQL_ARRAY) {
-            db.execSQL(sql);
-            Log.i(LOG_TAG + "onCreate", "create table sql is " + sql);
-        }
-
-        Log.i(LOG_TAG + "onCreate", "onCreate end");
     }
 
     @Override

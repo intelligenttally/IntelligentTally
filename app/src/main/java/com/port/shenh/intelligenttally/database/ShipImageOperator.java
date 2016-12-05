@@ -58,26 +58,25 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
          * 建表语句
          */
         String createTableSql = String.format("CREATE TABLE IF NOT EXISTS %s ( %s INTEGER PRIMARY KEY, " +
-                        "%s TEXT NOT NULL" +
-                        "%s TEXT NOT NULL" +
-                        "%s TEXT NOT NULL" +
-                        "%s TEXT NOT NULL" +
-                        "%s TEXT NOT NULL" +
-                        "%s TEXT NOT NULL" +
-                        "%s TEXT NOT NULL" +
-                        "%s TEXT" +
-                        "%s TEXT" +
-                        "%s TEXT" +
-                        "%s TEXT" +
-                        "%s TEXT" +
-                        "%s TEXT" +
-                        "%s TEXT" +
-                        "%s TEXT" +
-                        "%s TEXT" +
-                        "%s TEXT" +
-                        "%s TEXT" +
+                        "%s TEXT NOT NULL," +
+                        "%s TEXT NOT NULL," +
+                        "%s TEXT NOT NULL," +
+                        "%s TEXT NOT NULL," +
+                        "%s TEXT NOT NULL," +
+                        "%s TEXT NOT NULL," +
+                        "%s TEXT NOT NULL," +
+                        "%s TEXT," +
+                        "%s TEXT," +
+                        "%s TEXT," +
+                        "%s TEXT," +
+                        "%s TEXT," +
+                        "%s TEXT," +
+                        "%s TEXT," +
+                        "%s TEXT," +
+                        "%s TEXT," +
+                        "%s TEXT," +
                         "%s TEXT)",
-                CommonConst.DB_NAME, CommonConst._ID,
+                tableName, CommonConst._ID,
                 TableConst.ShipImage.IMAGE_ID,
                 TableConst.ShipImage.BAY_NUM,
                 TableConst.ShipImage.BAY_COL,
