@@ -6,8 +6,6 @@ package com.port.shenh.intelligenttally.work;
 import android.util.Log;
 
 import com.port.shenh.intelligenttally.bean.ShipImage;
-import com.port.shenh.intelligenttally.bean.Voyage;
-import com.port.shenh.intelligenttally.database.TableConst;
 import com.port.shenh.intelligenttally.util.StaticValue;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -55,7 +53,7 @@ public class PullShipImageList extends SimpleWorkModel<String, List<ShipImage>> 
             JSONArray jsonRow = jsonArray.getJSONArray(i);
             Log.i(LOG_TAG + "onSuccessExtract", " voyage jsonRow length() is " + jsonRow.length());
 
-            if (jsonRow.length() > 17) {
+            if (jsonRow.length() > 46) {
                 // 一条航次数据
                 ShipImage shipImage = new ShipImage();
 

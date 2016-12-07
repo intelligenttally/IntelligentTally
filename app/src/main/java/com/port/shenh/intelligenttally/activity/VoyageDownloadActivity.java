@@ -5,8 +5,6 @@ package com.port.shenh.intelligenttally.activity;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -20,9 +18,7 @@ import android.widget.Toast;
 
 import com.port.shenh.intelligenttally.R;
 import com.port.shenh.intelligenttally.adapter.VoyageRecyclerViewAdapter;
-import com.port.shenh.intelligenttally.bean.ShipImage;
 import com.port.shenh.intelligenttally.bean.Voyage;
-import com.port.shenh.intelligenttally.function.BaseDataListFunction;
 import com.port.shenh.intelligenttally.function.ShipImageListFunction;
 import com.port.shenh.intelligenttally.holder.VoyageItemViewHolder;
 import com.port.shenh.intelligenttally.work.PullVoyageList;
@@ -292,24 +288,6 @@ public class VoyageDownloadActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
 
                         Log.i(LOG_TAG + "doDownload", " is invoked");
-//
-//                        new Thread(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                try {
-//
-//                                    Thread.sleep(3000);
-//                                    Log.i(LOG_TAG + "doDownload", "----is invoked");
-//
-//                                    //停止进度条
-//                                    stopProgressDialog();
-//
-//
-//                                } catch (InterruptedException e) {
-//                                    e.printStackTrace();
-//                                }
-//                            }
-//                        }).start();
 
                         List<Voyage> selectedDataList = viewHolder.recyclerViewAdapter.getSelectedDataList();
                         for (int i = 0; i < selectedDataList.size(); i++) {
@@ -318,30 +296,31 @@ public class VoyageDownloadActivity extends AppCompatActivity {
                             Log.i(LOG_TAG + "doDownload ", message);
                             startProgressDialog(message);
 
-//                            ShipImageListFunction shipImageListFunction = new ShipImageListFunction(getBaseContext(), ship_id);
-//                            shipImageListFunction.onCreate();
+                            ShipImageListFunction shipImageListFunction = new ShipImageListFunction(getBaseContext(), voyage.getShip_Id());
+                            shipImageListFunction.onLoad();
 
 
 
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        Thread.sleep(3000);
-                                        Log.i(LOG_TAG + "doDownload", "----is invoked");
+//                            new Thread(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    try {
+//                                        Thread.sleep(3000);
+//                                        Log.i(LOG_TAG + "doDownload", "----is invoked");
+//
+//                                        //停止进度条
+//                                        stopProgressDialog();
+//
+//
+//                                    } catch (InterruptedException e) {
+//                                        e.printStackTrace();
+//                                    }
+//                                }
+//                            }).start();
 
-                                        //停止进度条
-                                        stopProgressDialog();
 
-
-                                    } catch (InterruptedException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            }).start();
-
-
-
+                            //停止进度条
+                            stopProgressDialog();
 
 
 

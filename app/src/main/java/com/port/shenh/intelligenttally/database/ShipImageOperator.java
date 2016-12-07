@@ -58,13 +58,41 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
          * 建表语句
          */
         String createTableSql = String.format("CREATE TABLE IF NOT EXISTS %s ( %s INTEGER PRIMARY KEY, " +
-                        "%s TEXT NOT NULL," +
-                        "%s TEXT NOT NULL," +
-                        "%s TEXT NOT NULL," +
-                        "%s TEXT NOT NULL," +
-                        "%s TEXT NOT NULL," +
-                        "%s TEXT NOT NULL," +
-                        "%s TEXT NOT NULL," +
+                        "%s TEXT," +
+                        "%s TEXT," +
+                        "%s TEXT," +
+                        "%s TEXT," +
+                        "%s TEXT," +
+                        "%s TEXT," +
+                        "%s TEXT," +
+                        "%s TEXT," +
+                        "%s TEXT," +
+                        "%s TEXT," +
+                        "%s TEXT," +
+                        "%s TEXT," +
+                        "%s TEXT," +
+                        "%s TEXT," +
+                        "%s TEXT," +
+                        "%s TEXT," +
+                        "%s TEXT," +
+                        "%s TEXT," +
+                        "%s TEXT," +
+                        "%s TEXT," +
+                        "%s TEXT," +
+                        "%s TEXT," +
+                        "%s TEXT," +
+                        "%s TEXT," +
+                        "%s TEXT," +
+                        "%s TEXT," +
+                        "%s TEXT," +
+                        "%s TEXT," +
+                        "%s TEXT," +
+                        "%s TEXT," +
+                        "%s TEXT," +
+                        "%s TEXT," +
+                        "%s TEXT," +
+                        "%s TEXT," +
+                        "%s TEXT," +
                         "%s TEXT," +
                         "%s TEXT," +
                         "%s TEXT," +
@@ -77,10 +105,40 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
                         "%s TEXT," +
                         "%s TEXT)",
                 tableName, CommonConst._ID,
-                TableConst.ShipImage.IMAGE_ID,
+
+                TableConst.ShipImage.SHIP_ID,
+                TableConst.ShipImage.V_ID,
+                TableConst.ShipImage.ENG_VESSEL,
+                TableConst.ShipImage.CHI_VESSEL,
+                TableConst.ShipImage.LOCATION,
                 TableConst.ShipImage.BAY_NUM,
                 TableConst.ShipImage.BAY_COL,
                 TableConst.ShipImage.BAY_ROW,
+                TableConst.ShipImage.SBAYNO,
+                TableConst.ShipImage.TBAYNO,
+                TableConst.ShipImage.JBAYNO,
+                TableConst.ShipImage.USER_CHAR,
+                TableConst.ShipImage.SCREEN_ROW,
+                TableConst.ShipImage.SCREEN_COL,
+                TableConst.ShipImage.JOINT,
+                TableConst.ShipImage.CODE_LOAD_PORT,
+                TableConst.ShipImage.CODE_UNLOAD_PORT,
+                TableConst.ShipImage.DELIVERY,
+                TableConst.ShipImage.MOVED,
+                TableConst.ShipImage.UNLOAD_MARK,
+                TableConst.ShipImage.WORK_NO,
+                TableConst.ShipImage.DANGER_GRAGE,
+                TableConst.ShipImage.DEGREE_SETTING,
+                TableConst.ShipImage.DEGREE_UNIT,
+                TableConst.ShipImage.MIN_DEGREE,
+                TableConst.ShipImage.MAX_DEGREE,
+                TableConst.ShipImage.BAYNO,
+                TableConst.ShipImage.OLDBAYNO,
+                TableConst.ShipImage.CODE_CRANE,
+                TableConst.ShipImage.IMAGE_ID,
+                TableConst.ShipImage.BAYNUM,
+                TableConst.ShipImage.BAYCOL,
+                TableConst.ShipImage.BAYROW,
                 TableConst.ShipImage.CONTAINER_NO,
                 TableConst.ShipImage.SIZE_CON,
                 TableConst.ShipImage.CONTAINER_TYPE,
@@ -93,7 +151,6 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
                 TableConst.ShipImage.TRANSMARK,
                 TableConst.ShipImage.HOLIDAYS,
                 TableConst.ShipImage.NIGHT,
-                TableConst.ShipImage.CODE_CRANE,
                 TableConst.ShipImage.NAME);
 
 
