@@ -341,6 +341,10 @@ public class VoyageDownloadActivity extends AppCompatActivity {
                             }).start();
 
 
+
+
+
+
                         }
 
                     }
@@ -354,13 +358,14 @@ public class VoyageDownloadActivity extends AppCompatActivity {
      * 打开进度条
      */
     protected void startProgressDialog(String message) {
+
         if (progressDialog == null) {
             progressDialog = new ProgressDialog(this);
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             // 设置提醒
-            progressDialog.setMessage(message);
             progressDialog.setCancelable(false);
         }
+        progressDialog.setMessage(message);
         progressDialog.show();
     }
 

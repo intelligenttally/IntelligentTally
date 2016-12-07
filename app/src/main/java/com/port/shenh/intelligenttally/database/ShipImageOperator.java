@@ -107,10 +107,40 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
     protected ContentValues onFillData(ShipImage data) {
         // 数据库值对象
         ContentValues cv = new ContentValues();
-        cv.put(TableConst.ShipImage.IMAGE_ID, data.getIMAGE_ID());
-        cv.put(TableConst.ShipImage.BAY_NUM, data.getBay_no());
+
+        cv.put(TableConst.ShipImage.SHIP_ID, data.getShip_id());
+        cv.put(TableConst.ShipImage.V_ID, data.getV_id());
+        cv.put(TableConst.ShipImage.ENG_VESSEL, data.getEng_vessel());
+        cv.put(TableConst.ShipImage.CHI_VESSEL, data.getChi_vessel());
+        cv.put(TableConst.ShipImage.LOCATION, data.getLocation());
+        cv.put(TableConst.ShipImage.BAY_NUM, data.getBay_num());
         cv.put(TableConst.ShipImage.BAY_COL, data.getBay_col());
         cv.put(TableConst.ShipImage.BAY_ROW, data.getBay_row());
+        cv.put(TableConst.ShipImage.SBAYNO, data.getSealno());
+        cv.put(TableConst.ShipImage.TBAYNO, data.getTbayno());
+        cv.put(TableConst.ShipImage.JBAYNO, data.getJbayno());
+        cv.put(TableConst.ShipImage.USER_CHAR, data.getUser_char());
+        cv.put(TableConst.ShipImage.SCREEN_ROW, data.getScreen_row());
+        cv.put(TableConst.ShipImage.SCREEN_COL, data.getScreen_col());
+        cv.put(TableConst.ShipImage.JOINT, data.getJoint());
+        cv.put(TableConst.ShipImage.CODE_LOAD_PORT, data.getCode_load_port());
+        cv.put(TableConst.ShipImage.CODE_UNLOAD_PORT, data.getCode_unload_port());
+        cv.put(TableConst.ShipImage.DELIVERY, data.getDelivery());
+        cv.put(TableConst.ShipImage.MOVED, data.getMoved());
+        cv.put(TableConst.ShipImage.UNLOAD_MARK, data.getUnload_mark());
+        cv.put(TableConst.ShipImage.WORK_NO, data.getWork_no());
+        cv.put(TableConst.ShipImage.DANGER_GRAGE, data.getDanger_grade());
+        cv.put(TableConst.ShipImage.DEGREE_SETTING, data.getDegree_setting());
+        cv.put(TableConst.ShipImage.DEGREE_UNIT, data.getDegree_unit());
+        cv.put(TableConst.ShipImage.MIN_DEGREE, data.getMin_degree());
+        cv.put(TableConst.ShipImage.MAX_DEGREE, data.getMax_degree());
+        cv.put(TableConst.ShipImage.BAYNO, data.getBayno());
+        cv.put(TableConst.ShipImage.OLDBAYNO, data.getOldbayno());
+        cv.put(TableConst.ShipImage.CODE_CRANE, data.getCode_crane());
+        cv.put(TableConst.ShipImage.IMAGE_ID, data.getImage_id());
+        cv.put(TableConst.ShipImage.BAYNUM, data.getBaynum());
+        cv.put(TableConst.ShipImage.BAYCOL, data.getBaycol());
+        cv.put(TableConst.ShipImage.BAYROW, data.getBayrow());
         cv.put(TableConst.ShipImage.CONTAINER_NO, data.getContainer_no());
         cv.put(TableConst.ShipImage.SIZE_CON, data.getSize_con());
         cv.put(TableConst.ShipImage.CONTAINER_TYPE, data.getContainer_type());
@@ -123,7 +153,6 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
         cv.put(TableConst.ShipImage.TRANSMARK, data.getTransmark());
         cv.put(TableConst.ShipImage.HOLIDAYS, data.getHolidays());
         cv.put(TableConst.ShipImage.NIGHT, data.getHolidays());
-        cv.put(TableConst.ShipImage.CODE_CRANE, data.getCode_crane());
         cv.put(TableConst.ShipImage.NAME, data.getName());
 
         return cv;
@@ -137,10 +166,41 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
 
         // 列索引
         int _id = cursor.getColumnIndex(CommonConst._ID);
-        int image_id = cursor.getColumnIndex(TableConst.ShipImage.IMAGE_ID);
-        int bay_no = cursor.getColumnIndex(TableConst.ShipImage.BAY_NUM);
+
+        int ship_id = cursor.getColumnIndex(TableConst.ShipImage.SHIP_ID);
+        int v_id = cursor.getColumnIndex(TableConst.ShipImage.V_ID);
+        int eng_vessel = cursor.getColumnIndex(TableConst.ShipImage.ENG_VESSEL);
+        int chi_vessel = cursor.getColumnIndex(TableConst.ShipImage.CHI_VESSEL);
+        int location = cursor.getColumnIndex(TableConst.ShipImage.LOCATION);
+        int bay_num = cursor.getColumnIndex(TableConst.ShipImage.BAY_NUM);
         int bay_col = cursor.getColumnIndex(TableConst.ShipImage.BAY_COL);
         int bay_row = cursor.getColumnIndex(TableConst.ShipImage.BAY_ROW);
+        int sbayno = cursor.getColumnIndex(TableConst.ShipImage.SBAYNO);
+        int tbayno = cursor.getColumnIndex(TableConst.ShipImage.TBAYNO);
+        int jbayno = cursor.getColumnIndex(TableConst.ShipImage.JBAYNO);
+        int user_char = cursor.getColumnIndex(TableConst.ShipImage.USER_CHAR);
+        int screen_row = cursor.getColumnIndex(TableConst.ShipImage.SCREEN_ROW);
+        int screen_col = cursor.getColumnIndex(TableConst.ShipImage.SCREEN_COL);
+        int joint = cursor.getColumnIndex(TableConst.ShipImage.JOINT);
+        int code_load_port = cursor.getColumnIndex(TableConst.ShipImage.CODE_LOAD_PORT);
+        int code_unload_port = cursor.getColumnIndex(TableConst.ShipImage.CODE_UNLOAD_PORT);
+        int delivery = cursor.getColumnIndex(TableConst.ShipImage.DELIVERY);
+        int moved = cursor.getColumnIndex(TableConst.ShipImage.MOVED);
+        int unload_mark = cursor.getColumnIndex(TableConst.ShipImage.UNLOAD_MARK);
+        int work_no = cursor.getColumnIndex(TableConst.ShipImage.WORK_NO);
+        int danger_grade = cursor.getColumnIndex(TableConst.ShipImage.DANGER_GRAGE);
+        int degree_setting = cursor.getColumnIndex(TableConst.ShipImage.DEGREE_SETTING);
+        int degree_unit = cursor.getColumnIndex(TableConst.ShipImage.DEGREE_UNIT);
+        int min_degree = cursor.getColumnIndex(TableConst.ShipImage.MIN_DEGREE);
+        int max_degree = cursor.getColumnIndex(TableConst.ShipImage.MAX_DEGREE);
+        int bayno = cursor.getColumnIndex(TableConst.ShipImage.BAYNO);
+        int oldbayno = cursor.getColumnIndex(TableConst.ShipImage.OLDBAYNO);
+        int code_crane = cursor.getColumnIndex(TableConst.ShipImage.CODE_CRANE);
+
+        int image_id = cursor.getColumnIndex(TableConst.ShipImage.IMAGE_ID);
+        int baynum = cursor.getColumnIndex(TableConst.ShipImage.BAYNUM);
+        int baycol = cursor.getColumnIndex(TableConst.ShipImage.BAYCOL);
+        int bayrow = cursor.getColumnIndex(TableConst.ShipImage.BAYROW);
         int container_no = cursor.getColumnIndex(TableConst.ShipImage.CONTAINER_NO);
         int size_con = cursor.getColumnIndex(TableConst.ShipImage.SIZE_CON);
         int container_type = cursor.getColumnIndex(TableConst.ShipImage.CONTAINER_TYPE);
@@ -153,7 +213,6 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
         int transmark = cursor.getColumnIndex(TableConst.ShipImage.TRANSMARK);
         int holidays = cursor.getColumnIndex(TableConst.ShipImage.HOLIDAYS);
         int night = cursor.getColumnIndex(TableConst.ShipImage.NIGHT);
-        int code_crane = cursor.getColumnIndex(TableConst.ShipImage.CODE_CRANE);
         int name = cursor.getColumnIndex(TableConst.ShipImage.NAME);
 
         // 数据填充
@@ -163,10 +222,40 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
             // 一条记录
             ShipImage data = new ShipImage();
             data.setId(cursor.getString(_id));
-            data.setIMAGE_ID(cursor.getString(image_id));
-            data.setBay_no(cursor.getString(bay_no));
+            data.setShip_id(cursor.getString(ship_id));
+            data.setV_id(cursor.getString(v_id));
+            data.setEng_vessel(cursor.getString(eng_vessel));
+            data.setChi_vessel(cursor.getString(chi_vessel));
+            data.setLocation(cursor.getString(location));
+            data.setBay_num(cursor.getString(bay_num));
             data.setBay_col(cursor.getString(bay_col));
             data.setBay_row(cursor.getString(bay_row));
+            data.setSbayno(cursor.getString(sbayno));
+            data.setTbayno(cursor.getString(tbayno));
+            data.setJbayno(cursor.getString(jbayno));
+            data.setUser_char(cursor.getString(user_char));
+            data.setScreen_row(cursor.getString(screen_row));
+            data.setScreen_col(cursor.getString(screen_col));
+            data.setJoint(cursor.getString(joint));
+            data.setCode_load_port(cursor.getString(code_load_port));
+            data.setCode_unload_port(cursor.getString(code_unload_port));
+            data.setDelivery(cursor.getString(delivery));
+            data.setMoved(cursor.getString(moved));
+            data.setUnload_mark(cursor.getString(unload_mark));
+            data.setWork_no(cursor.getString(work_no));
+            data.setDanger_grade(cursor.getString(danger_grade));
+            data.setDegree_setting(cursor.getString(degree_setting));
+            data.setDegree_unit(cursor.getString(degree_unit));
+            data.setMin_degree(cursor.getString(min_degree));
+            data.setMax_degree(cursor.getString(max_degree));
+            data.setBayno(cursor.getString(bayno));
+            data.setOldbayno(cursor.getString(oldbayno));
+            data.setCode_crane(cursor.getString(code_crane));
+
+            data.setImage_id(cursor.getString(image_id));
+            data.setBaynum(cursor.getString(baynum));
+            data.setBaycol(cursor.getString(baycol));
+            data.setBayrow(cursor.getString(bayrow));
             data.setContainer_no(cursor.getString(container_no));
             data.setSealno(cursor.getString(size_con));
             data.setContainer_type(cursor.getString(container_type));
@@ -179,7 +268,6 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
             data.setTransmark(cursor.getString(transmark));
             data.setHolidays(cursor.getString(holidays));
             data.setNight(cursor.getString(night));
-            data.setCode_crane(cursor.getString(code_crane));
             data.setNight(cursor.getString(name));
 
             list.add(data);
@@ -234,6 +322,6 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
 
     @Override
     protected String onWhereSql(ShipImage data) {
-        return String.format("%s='%s'", TableConst.ShipImage.IMAGE_ID, data.getIMAGE_ID());
+        return String.format("%s='%s'", TableConst.ShipImage.IMAGE_ID, data.getImage_id());
     }
 }
