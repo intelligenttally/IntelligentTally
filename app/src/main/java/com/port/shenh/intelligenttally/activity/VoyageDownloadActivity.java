@@ -311,7 +311,6 @@ public class VoyageDownloadActivity extends AppCompatActivity {
 
                     ShipImageListFunction shipImageListFunction = new ShipImageListFunction
                             (getBaseContext(), voyage.getShip_Id());
-
                     shipImageListFunction.SetOnLoadEndListener(new ShipImageListFunction
                             .OnLoadEndListener() {
                         @Override
