@@ -84,6 +84,8 @@ public class VoyageDownloadActivity extends AppCompatActivity {
          * 保留上次查询数据
          */
         public String oldParameter = null;
+
+        public ShipImageListFunction shipImageListFunction = null;
     }
 
     /**
@@ -124,6 +126,8 @@ public class VoyageDownloadActivity extends AppCompatActivity {
 
         // 堆存列表适配器
         viewHolder.recyclerViewAdapter = new VoyageRecyclerViewAdapter();
+
+        viewHolder.shipImageListFunction = new ShipImageListFunction(this);
     }
 
     /**
@@ -218,15 +222,10 @@ public class VoyageDownloadActivity extends AppCompatActivity {
 
                     for (int i = 0; i < data.size(); i++) {
                         Voyage voyage = data.get(i);
-                        ShipImageListFunction shipImageListFunction = new ShipImageListFunction
-                                (getBaseContext(), voyage.getShip_Id());
-                        Log.i(LOG_TAG + "loadData", "isDownloaded is " + shipImageListFunction
-                                .isDownloaded());
-                        if (shipImageListFunction.isDownloaded()) {
+
+                        if (viewHolder.shipImageListFunction.isDownloaded(voyage.getShip_Id())) {
                             voyage.setDownloaded(true);
                         }
-
-                        data.set(i, voyage);
                     }
 
                     // 插入新数据
@@ -238,7 +237,8 @@ public class VoyageDownloadActivity extends AppCompatActivity {
                         viewHolder.hasMoreData = true;
                     }
                 }
-
+                //停止进度条
+                stopProgressDialog();
                 // 改变请求状态
                 viewHolder.loading = false;
             }
@@ -303,29 +303,32 @@ public class VoyageDownloadActivity extends AppCompatActivity {
 
                 final AtomicInteger count = new AtomicInteger(1);
 
+                viewHolder.shipImageListFunction.SetOnLoadEndListener(new ShipImageListFunction
+                        .OnLoadEndListener() {
+                    @Override
+                    public void OnLoadEnd() {
+                        Log.i(LOG_TAG + "OnLoadEnd", "count is" + count.get());
+                        if (count.decrementAndGet() == 0) {
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    loadData(true);
+                                    Toast.makeText(getBaseContext(), R.string.download_success,
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    }
+                });
+
                 for (int i = 0; i < selectedDataList.size(); i++) {
                     count.incrementAndGet();
                     Voyage voyage = selectedDataList.get(i);
 
                     Log.i(LOG_TAG + "doDownload", "Ship_Id is" + voyage.getShip_Id());
 
-                    ShipImageListFunction shipImageListFunction = new ShipImageListFunction
-                            (getBaseContext(), voyage.getShip_Id());
-                    shipImageListFunction.SetOnLoadEndListener(new ShipImageListFunction
-                            .OnLoadEndListener() {
-                        @Override
-                        public void OnLoadEnd() {
-                            if (count.decrementAndGet() == 0) {
-                                loadData(true);
-                                //停止进度条
-                                stopProgressDialog();
-                                Toast.makeText(getBaseContext(), R.string.download_success, Toast
-                                        .LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-
-                    shipImageListFunction.onLoad();
+                    viewHolder.shipImageListFunction.onLoad(voyage.getShip_Id());
                 }
                 count.decrementAndGet();
 
