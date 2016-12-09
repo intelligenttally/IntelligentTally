@@ -29,6 +29,7 @@ import org.mobile.library.model.work.DefaultWorkModel;
 import org.mobile.library.model.work.WorkBack;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 航次下载Activity
@@ -141,7 +142,8 @@ public class VoyageDownloadActivity extends AppCompatActivity {
     private void initListView() {
 
         // RecyclerView列表对象
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.activity_voyage_download_recyclerView);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id
+                .activity_voyage_download_recyclerView);
 
         // 设置item动画
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -214,11 +216,13 @@ public class VoyageDownloadActivity extends AppCompatActivity {
             public void doEndWork(boolean state, List<Voyage> data) {
                 if (state && data != null) {
 
-                    for (int i=0;i<data.size();i++){
+                    for (int i = 0; i < data.size(); i++) {
                         Voyage voyage = data.get(i);
-                        ShipImageListFunction shipImageListFunction = new ShipImageListFunction(getBaseContext(), voyage.getShip_Id());
-                        Log.i(LOG_TAG + "loadData", "isDownloaded is " + shipImageListFunction.isDownloaded());
-                        if(shipImageListFunction.isDownloaded()){
+                        ShipImageListFunction shipImageListFunction = new ShipImageListFunction
+                                (getBaseContext(), voyage.getShip_Id());
+                        Log.i(LOG_TAG + "loadData", "isDownloaded is " + shipImageListFunction
+                                .isDownloaded());
+                        if (shipImageListFunction.isDownloaded()) {
                             voyage.setDownloaded(true);
                         }
 
@@ -246,13 +250,12 @@ public class VoyageDownloadActivity extends AppCompatActivity {
         viewHolder.hasMoreData = false;
 
         // 执行任务
-        pullVoyageList.beginExecute(String.valueOf(viewHolder.recyclerViewAdapter
-                .getItemCount()), String.valueOf(ROW_COUNT));
+        pullVoyageList.beginExecute(String.valueOf(viewHolder.recyclerViewAdapter.getItemCount())
+                , String.valueOf(ROW_COUNT));
 
         // 保存新的加载任务对象
         viewHolder.beforeLoadWork = pullVoyageList;
     }
-
 
 
     @Override
@@ -286,48 +289,51 @@ public class VoyageDownloadActivity extends AppCompatActivity {
 
         }
 
-        new AlertDialog.Builder(VoyageDownloadActivity.this)
-                .setTitle("确认")
-                .setIcon(android.R.drawable.ic_dialog_info)
-                .setMessage("是否下载？")
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+        new AlertDialog.Builder(VoyageDownloadActivity.this).setTitle("确认").setIcon(android.R
+                .drawable.ic_dialog_info).setMessage("是否下载？").setPositiveButton("确定", new
+                DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
 
-                        Log.i(LOG_TAG + "doDownload", " is invoked");
+                Log.i(LOG_TAG + "doDownload", " is invoked");
 
-                        List<Voyage> selectedDataList = viewHolder.recyclerViewAdapter.getSelectedDataList();
-                        startProgressDialog();
-                        for (int i = 0; i < selectedDataList.size(); i++) {
+                List<Voyage> selectedDataList = viewHolder.recyclerViewAdapter
+                        .getSelectedDataList();
+                startProgressDialog();
 
-                            Voyage voyage = selectedDataList.get(i);
+                final AtomicInteger count = new AtomicInteger(1);
 
-                            Log.i(LOG_TAG + "doDownload", "Ship_Id is" + voyage.getShip_Id());
+                for (int i = 0; i < selectedDataList.size(); i++) {
+                    count.incrementAndGet();
+                    Voyage voyage = selectedDataList.get(i);
 
-                            ShipImageListFunction shipImageListFunction = new ShipImageListFunction(getBaseContext(), voyage.getShip_Id());
+                    Log.i(LOG_TAG + "doDownload", "Ship_Id is" + voyage.getShip_Id());
 
-                            shipImageListFunction.SetOnLoadEndListener(new ShipImageListFunction.OnLoadEndListener() {
-                                @Override
-                                public void OnLoadEnd() {
+                    ShipImageListFunction shipImageListFunction = new ShipImageListFunction
+                            (getBaseContext(), voyage.getShip_Id());
 
-                                    //停止进度条
-                                    stopProgressDialog();
-                                    Toast.makeText(getBaseContext(), R.string.download_success, Toast.LENGTH_SHORT).show();
-                                }
-                            });
-
-                            shipImageListFunction.onLoad();
-
-
+                    shipImageListFunction.SetOnLoadEndListener(new ShipImageListFunction
+                            .OnLoadEndListener() {
+                        @Override
+                        public void OnLoadEnd() {
+                            if (count.decrementAndGet() == 0) {
+                                loadData(true);
+                            }
+                            //停止进度条
+                            stopProgressDialog();
+                            Toast.makeText(getBaseContext(), R.string.download_success, Toast
+                                    .LENGTH_SHORT).show();
                         }
+                    });
 
-                    }
-                })
-                .setNegativeButton("取消", null)
-                .show();
+                    shipImageListFunction.onLoad();
+                }
+                count.decrementAndGet();
+
+            }
+        }).setNegativeButton("取消", null).show();
 
     }
-
 
 
     /**
@@ -354,7 +360,6 @@ public class VoyageDownloadActivity extends AppCompatActivity {
         }
     }
 }
-
 
 
 //                            new Thread(new Runnable() {
