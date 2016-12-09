@@ -464,7 +464,7 @@ public class FreedomScrollView extends FrameLayout {
                  */
                 mLastMotionY = y;
                 mLastMotionX = x;
-                mActivePointerId = ev.getPointerId(0);
+                mActivePointerId = MotionEventCompat.getPointerId(ev, 0);
 
                 /*
                  * If being flinged and user touches the screen, initiate drag;
