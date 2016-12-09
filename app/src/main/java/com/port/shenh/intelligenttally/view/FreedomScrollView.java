@@ -3,6 +3,7 @@ package com.port.shenh.intelligenttally.view;
 import android.content.Context;
 import android.graphics.Rect;
 import android.support.v4.view.MotionEventCompat;
+import android.support.v4.view.VelocityTrackerCompat;
 import android.util.AttributeSet;
 import android.view.FocusFinder;
 import android.view.KeyEvent;
@@ -553,6 +554,9 @@ public class FreedomScrollView extends FrameLayout {
                     // Scroll to follow the motion event
                     final int activePointerIndex = MotionEventCompat.findPointerIndex(ev,
                             mActivePointerId);
+                    if (activePointerIndex == -1) {
+                        break;
+                    }
                     final float y = MotionEventCompat.getY(ev, activePointerIndex);
                     final int deltaY = (int) (mLastMotionY - y);
                     mLastMotionY = y;
@@ -569,8 +573,10 @@ public class FreedomScrollView extends FrameLayout {
                     if (mFlingEnabled) {
                         final VelocityTracker velocityTracker = mVelocityTracker;
                         velocityTracker.computeCurrentVelocity(1000, mMaximumVelocity);
-                        int initialVelocitx = (int) velocityTracker.getXVelocity(mActivePointerId);
-                        int initialVelocity = (int) velocityTracker.getYVelocity(mActivePointerId);
+                        int initialVelocitx = (int) VelocityTrackerCompat.getXVelocity
+                                (velocityTracker, mActivePointerId);
+                        int initialVelocity = (int) VelocityTrackerCompat.getYVelocity
+                                (velocityTracker, mActivePointerId);
 
                         if (getChildCount() > 0) {
                             if (Math.abs(initialVelocitx) > initialVelocitx || Math.abs
@@ -609,6 +615,9 @@ public class FreedomScrollView extends FrameLayout {
             }
             case MotionEventCompat.ACTION_POINTER_UP:
                 onSecondaryPointerUp(ev);
+                final int index = MotionEventCompat.findPointerIndex(ev, mActivePointerId);
+                mLastMotionX = MotionEventCompat.getX(ev, index);
+                mLastMotionY = MotionEventCompat.getY(ev, index);
                 break;
         }
         return true;
