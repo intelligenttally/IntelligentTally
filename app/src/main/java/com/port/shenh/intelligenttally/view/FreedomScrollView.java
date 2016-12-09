@@ -2,6 +2,7 @@ package com.port.shenh.intelligenttally.view;
 
 import android.content.Context;
 import android.graphics.Rect;
+import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
 import android.view.FocusFinder;
 import android.view.KeyEvent;
@@ -433,14 +434,14 @@ public class FreedomScrollView extends FrameLayout {
                     break;
                 }
 
-                final int pointerIndex = ev.findPointerIndex(activePointerId);
-                final float y = ev.getY(pointerIndex);
+                final int pointerIndex = MotionEventCompat.findPointerIndex(ev, activePointerId);
+                final float y = MotionEventCompat.getY(ev, pointerIndex);
                 final int yDiff = (int) Math.abs(y - mLastMotionY);
                 if (yDiff > mTouchSlop) {
                     mIsBeingDragged = true;
                     mLastMotionY = y;
                 }
-                final float x = ev.getX(pointerIndex);
+                final float x = MotionEventCompat.getX(ev, pointerIndex);
                 final int xDiff = (int) Math.abs(x - mLastMotionX);
                 if (xDiff > mTouchSlop) {
                     mIsBeingDragged = true;
@@ -480,7 +481,7 @@ public class FreedomScrollView extends FrameLayout {
                 mIsBeingDragged = false;
                 mActivePointerId = INVALID_POINTER;
                 break;
-            case MotionEvent.ACTION_POINTER_UP:
+            case MotionEventCompat.ACTION_POINTER_UP:
                 onSecondaryPointerUp(ev);
                 break;
         }
@@ -507,8 +508,9 @@ public class FreedomScrollView extends FrameLayout {
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
+        final int action = MotionEventCompat.getActionMasked(ev);
 
-        if (ev.getAction() == MotionEvent.ACTION_DOWN && ev.getEdgeFlags() != 0) {
+        if (action == MotionEvent.ACTION_DOWN && ev.getEdgeFlags() != 0) {
             // Don't handle edge touches immediately -- they may actually belong
             // to one of our
             // descendants.
@@ -519,8 +521,6 @@ public class FreedomScrollView extends FrameLayout {
             mVelocityTracker = VelocityTracker.obtain();
         }
         mVelocityTracker.addMovement(ev);
-
-        final int action = ev.getAction();
 
         switch (action & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN: {
@@ -545,18 +545,19 @@ public class FreedomScrollView extends FrameLayout {
                 // Remember where the motion event started
                 mLastMotionY = y;
                 mLastMotionX = x;
-                mActivePointerId = ev.getPointerId(0);
+                mActivePointerId = MotionEventCompat.getPointerId(ev, 0);
                 break;
             }
             case MotionEvent.ACTION_MOVE:
                 if (mIsBeingDragged || scrollableOutsideTouch) {
                     // Scroll to follow the motion event
-                    final int activePointerIndex = ev.findPointerIndex(mActivePointerId);
-                    final float y = ev.getY(activePointerIndex);
+                    final int activePointerIndex = MotionEventCompat.findPointerIndex(ev,
+                            mActivePointerId);
+                    final float y = MotionEventCompat.getY(ev, activePointerIndex);
                     final int deltaY = (int) (mLastMotionY - y);
                     mLastMotionY = y;
 
-                    final float x = ev.getX(activePointerIndex);
+                    final float x = MotionEventCompat.getX(ev, activePointerIndex);
                     final int deltaX = (int) (mLastMotionX - x);
                     mLastMotionX = x;
                     // 全方向滚动
@@ -599,7 +600,14 @@ public class FreedomScrollView extends FrameLayout {
                     }
                 }
                 break;
-            case MotionEvent.ACTION_POINTER_UP:
+            case MotionEventCompat.ACTION_POINTER_DOWN: {
+                final int index = MotionEventCompat.getActionIndex(ev);
+                mLastMotionX = MotionEventCompat.getX(ev, index);
+                mLastMotionY = MotionEventCompat.getY(ev, index);
+                mActivePointerId = MotionEventCompat.getPointerId(ev, index);
+                break;
+            }
+            case MotionEventCompat.ACTION_POINTER_UP:
                 onSecondaryPointerUp(ev);
                 break;
         }
@@ -607,16 +615,16 @@ public class FreedomScrollView extends FrameLayout {
     }
 
     private void onSecondaryPointerUp(MotionEvent ev) {
-        final int pointerIndex = (ev.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK) >>
-                MotionEvent.ACTION_POINTER_INDEX_SHIFT;
-        final int pointerId = ev.getPointerId(pointerIndex);
+        final int pointerIndex = (ev.getAction() & MotionEventCompat.ACTION_POINTER_INDEX_MASK)
+                >> MotionEventCompat.ACTION_POINTER_INDEX_SHIFT;
+        final int pointerId = MotionEventCompat.getPointerId(ev, pointerIndex);
         if (pointerId == mActivePointerId) {
             // This was our active pointer going up. Choose a new
             // active pointer and adjust accordingly.
             final int newPointerIndex = pointerIndex == 0 ? 1 : 0;
-            mLastMotionX = ev.getX(newPointerIndex);
-            mLastMotionY = ev.getY(newPointerIndex);
-            mActivePointerId = ev.getPointerId(newPointerIndex);
+            mLastMotionX = MotionEventCompat.getX(ev, newPointerIndex);
+            mLastMotionY = MotionEventCompat.getY(ev, newPointerIndex);
+            mActivePointerId = MotionEventCompat.getPointerId(ev, newPointerIndex);
             if (mVelocityTracker != null) {
                 mVelocityTracker.clear();
             }
