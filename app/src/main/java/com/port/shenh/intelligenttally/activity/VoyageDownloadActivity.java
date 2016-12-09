@@ -217,7 +217,7 @@ public class VoyageDownloadActivity extends AppCompatActivity {
                     for (int i=0;i<data.size();i++){
                         Voyage voyage = data.get(i);
                         ShipImageListFunction shipImageListFunction = new ShipImageListFunction(getBaseContext(), voyage.getShip_Id());
-                        Log.i(LOG_TAG + "doEndWork", "isDownloaded is " + shipImageListFunction.isDownloaded());
+                        Log.i(LOG_TAG + "loadData", "isDownloaded is " + shipImageListFunction.isDownloaded());
                         if(shipImageListFunction.isDownloaded()){
                             voyage.setDownloaded(true);
                         }

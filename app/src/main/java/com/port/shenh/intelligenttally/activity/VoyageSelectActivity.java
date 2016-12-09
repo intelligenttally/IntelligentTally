@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import com.port.shenh.intelligenttally.R;
 import com.port.shenh.intelligenttally.adapter.VoyageRecyclerViewAdapter;
 import com.port.shenh.intelligenttally.bean.Voyage;
+import com.port.shenh.intelligenttally.function.ShipImageListFunction;
 import com.port.shenh.intelligenttally.holder.VoyageItemViewHolder;
 import com.port.shenh.intelligenttally.work.PullVoyageList;
 
@@ -207,6 +208,18 @@ public class VoyageSelectActivity extends AppCompatActivity {
             @Override
             public void doEndWork(boolean state, List<Voyage> data) {
                 if (state && data != null) {
+
+                    for (int i=0;i<data.size();i++){
+                        Voyage voyage = data.get(i);
+                        ShipImageListFunction shipImageListFunction = new ShipImageListFunction(getBaseContext(), voyage.getShip_Id());
+                        Log.i(LOG_TAG + "loadData", "isDownloaded is " + shipImageListFunction.isDownloaded());
+                        if(shipImageListFunction.isDownloaded()){
+                            voyage.setDownloaded(true);
+                        }
+
+                        data.set(i, voyage);
+                    }
+
                     // 插入新数据
                     viewHolder.recyclerViewAdapter.addData(viewHolder.recyclerViewAdapter
                             .getItemCount(), data);
