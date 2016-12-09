@@ -5,6 +5,7 @@ package com.port.shenh.intelligenttally.adapter;
 
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +29,11 @@ import java.util.List;
  * @since 1.0
  */
 public class VoyageRecyclerViewAdapter extends RecyclerView.Adapter<VoyageItemViewHolder> {
+
+    /**
+     * 日志标签前缀
+     */
+    private static final String LOG_TAG = "VoyageRecyclerViewAdapter.";
 
     /**
      * 数据源
@@ -87,10 +93,14 @@ public class VoyageRecyclerViewAdapter extends RecyclerView.Adapter<VoyageItemVi
      * 清空数据
      */
     public void clear() {
+
+        Log.i(LOG_TAG + "clear", "is invoked");
         if (dataList.size() > 0) {
             int count = dataList.size();
+            Log.i(LOG_TAG + "clear", "count is "+ dataList.size());
             dataList.clear();
             notifyItemRangeRemoved(0, count);
+            Log.i(LOG_TAG + "clear", "count is "+ dataList.size());
         }
     }
 
@@ -125,7 +135,7 @@ public class VoyageRecyclerViewAdapter extends RecyclerView.Adapter<VoyageItemVi
      */
     public List<Integer> getSelectedItems() {
 
-        if (selectedItems.size() == 0 ){
+        if (selectedItems.size() == 0) {
             return null;
         }
 
@@ -139,11 +149,12 @@ public class VoyageRecyclerViewAdapter extends RecyclerView.Adapter<VoyageItemVi
 
     /**
      * 获取选中的数据列表
+     *
      * @return 获取选中的数据列表
      */
     public List<Voyage> getSelectedDataList() {
 
-        if (selectedItems.size() == 0 ){
+        if (selectedItems.size() == 0) {
             return null;
         }
 
@@ -185,6 +196,7 @@ public class VoyageRecyclerViewAdapter extends RecyclerView.Adapter<VoyageItemVi
         holder.inOutTextView.setText(voyage.getCodeInOut().equals("1") == true ? "进" : "出");
         holder.voyageTextView.setText(voyage.getVoyage());
         holder.chi_VesselTextView.setText(voyage.getChi_Vessel());
+        holder.downloadedTextView.setText(voyage.isDownloaded() == true ? "已下载" : "");
 
         int color = 0;
         if (selectedItems.get(position, false)) {

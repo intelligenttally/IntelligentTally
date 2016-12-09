@@ -1,5 +1,6 @@
 package com.port.shenh.intelligenttally.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,6 +8,8 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
 import com.port.shenh.intelligenttally.R;
 import com.port.shenh.intelligenttally.adapter.MainFunctionRecyclerViewAdapter;
 import com.port.shenh.intelligenttally.function.ShipImageListFunction;
@@ -30,6 +33,11 @@ public class MainActivity extends AppCompatActivity {
      * 日志标签前缀
      */
     private static final String LOG_TAG = "MainActivity.";
+
+    /**
+     * 进度条
+     */
+    private ProgressDialog progressDialog = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,7 +163,41 @@ public class MainActivity extends AppCompatActivity {
      * 清除缓存
      */
     private void doClearCache() {
+
+        startProgressDialog();
+
         ShipImageListFunction shipImageListFunction = new ShipImageListFunction(getBaseContext());
+        shipImageListFunction.SetOnClearEndListener(new ShipImageListFunction.OnClearEndListener() {
+            @Override
+            public void OnClearEnd() {
+                stopProgressDialog();
+                Toast.makeText(getBaseContext(), R.string.clear_success, Toast.LENGTH_SHORT).show();
+            }
+        });
         shipImageListFunction.onClear();
+    }
+
+    /**
+     * 打开进度条
+     */
+    protected void startProgressDialog() {
+
+        if (progressDialog == null) {
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            // 设置提醒
+            progressDialog.setMessage("清除缓存中....");
+            progressDialog.setCancelable(false);
+        }
+        progressDialog.show();
+    }
+
+    /**
+     * 停止进度条
+     */
+    protected void stopProgressDialog() {
+        if (progressDialog != null) {
+            progressDialog.cancel();
+        }
     }
 }

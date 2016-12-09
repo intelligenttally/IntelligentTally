@@ -213,6 +213,18 @@ public class VoyageDownloadActivity extends AppCompatActivity {
             @Override
             public void doEndWork(boolean state, List<Voyage> data) {
                 if (state && data != null) {
+
+                    for (int i=0;i<data.size();i++){
+                        Voyage voyage = data.get(i);
+                        ShipImageListFunction shipImageListFunction = new ShipImageListFunction(getBaseContext(), voyage.getShip_Id());
+                        Log.i(LOG_TAG + "doEndWork", "isDownloaded is " + shipImageListFunction.isDownloaded());
+                        if(shipImageListFunction.isDownloaded()){
+                            voyage.setDownloaded(true);
+                        }
+
+                        data.set(i, voyage);
+                    }
+
                     // 插入新数据
                     viewHolder.recyclerViewAdapter.addData(viewHolder.recyclerViewAdapter
                             .getItemCount(), data);
@@ -241,6 +253,8 @@ public class VoyageDownloadActivity extends AppCompatActivity {
         viewHolder.beforeLoadWork = pullVoyageList;
     }
 
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_vovage_download, menu);
@@ -266,13 +280,6 @@ public class VoyageDownloadActivity extends AppCompatActivity {
 
         if (viewHolder.recyclerViewAdapter.getSelectedItemCount() == 0) {
 
-//            new AlertDialog.Builder(VoyageDownloadActivity.this)
-//                    .setTitle("警告")
-//                    .setIcon(android.R.drawable.ic_dialog_info)
-//                    .setMessage("未选中！")
-//                    .setPositiveButton("返回", null)
-//                    .show();
-
             Toast.makeText(this, R.string.not_selected, Toast.LENGTH_SHORT).show();
 
             return;
@@ -290,14 +297,63 @@ public class VoyageDownloadActivity extends AppCompatActivity {
                         Log.i(LOG_TAG + "doDownload", " is invoked");
 
                         List<Voyage> selectedDataList = viewHolder.recyclerViewAdapter.getSelectedDataList();
+                        startProgressDialog();
                         for (int i = 0; i < selectedDataList.size(); i++) {
+
                             Voyage voyage = selectedDataList.get(i);
-                            String message = "航次" + voyage.getVoyage() + "数据正在下载中...";
-                            Log.i(LOG_TAG + "doDownload ", message);
-                            startProgressDialog(message);
+
+                            Log.i(LOG_TAG + "doDownload", "Ship_Id is" + voyage.getShip_Id());
 
                             ShipImageListFunction shipImageListFunction = new ShipImageListFunction(getBaseContext(), voyage.getShip_Id());
+
+                            shipImageListFunction.SetOnLoadEndListener(new ShipImageListFunction.OnLoadEndListener() {
+                                @Override
+                                public void OnLoadEnd() {
+
+                                    //停止进度条
+                                    stopProgressDialog();
+                                    Toast.makeText(getBaseContext(), R.string.download_success, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
                             shipImageListFunction.onLoad();
+
+
+                        }
+
+                    }
+                })
+                .setNegativeButton("取消", null)
+                .show();
+
+    }
+
+
+
+    /**
+     * 打开进度条
+     */
+    protected void startProgressDialog() {
+
+        if (progressDialog == null) {
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            // 设置提醒
+            progressDialog.setMessage("数据正在下载中....");
+            progressDialog.setCancelable(false);
+        }
+        progressDialog.show();
+    }
+
+    /**
+     * 停止进度条
+     */
+    protected void stopProgressDialog() {
+        if (progressDialog != null) {
+            progressDialog.cancel();
+        }
+    }
+}
 
 
 
@@ -317,43 +373,3 @@ public class VoyageDownloadActivity extends AppCompatActivity {
 //                                    }
 //                                }
 //                            }).start();
-
-
-                            //停止进度条
-                            stopProgressDialog();
-
-
-
-                        }
-
-                    }
-                })
-                .setNegativeButton("取消", null)
-                .show();
-
-    }
-
-    /**
-     * 打开进度条
-     */
-    protected void startProgressDialog(String message) {
-
-        if (progressDialog == null) {
-            progressDialog = new ProgressDialog(this);
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            // 设置提醒
-            progressDialog.setCancelable(false);
-        }
-        progressDialog.setMessage(message);
-        progressDialog.show();
-    }
-
-    /**
-     * 停止进度条
-     */
-    protected void stopProgressDialog() {
-        if (progressDialog != null) {
-            progressDialog.cancel();
-        }
-    }
-}

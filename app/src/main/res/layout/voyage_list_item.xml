@@ -33,7 +33,7 @@
                 android:text="泊位"
                 android:background="@color/lightcoral"
                 android:textStyle="bold"
-                android:textColor="@android:color/black"/>
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/voyage_list_item_inout_textView"
@@ -47,7 +47,7 @@
                 android:textAlignment="center"
                 android:background="@color/paleturquoise"
                 android:textStyle="bold"
-                android:textColor="@android:color/black"/>
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/voyage_list_item_voyage_textView"
@@ -57,7 +57,7 @@
                 android:gravity="center_vertical"
                 android:text="航次"
                 android:textStyle="bold"
-                android:textColor="@android:color/black"/>
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/voyage_list_item_chi_Vessel_textView"
@@ -66,7 +66,7 @@
                 android:layout_marginLeft="6dp"
                 android:gravity="center_vertical"
                 android:text="中文船名"
-                android:textColor="@android:color/black"/>
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/voyage_list_item_downloaded_textView"
@@ -74,7 +74,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical|right"
                 android:text="已下载"
-                android:textColor="@android:color/black"/>
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimaryDark"/>
 
         </LinearLayout>
 

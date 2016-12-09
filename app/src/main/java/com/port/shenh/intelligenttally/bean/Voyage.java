@@ -52,6 +52,11 @@ public class Voyage {
      */
     private String wheel = null;
 
+    /**
+     * 已下载
+     */
+    private boolean downloaded = false;
+
 
     /**
      * 获取航次编码
@@ -195,5 +200,21 @@ public class Voyage {
      */
     public void setWheel(String wheel) {
         this.wheel = wheel;
+    }
+
+    /**
+     * 获取已下载标志
+     * @return true/false
+     */
+    public boolean isDownloaded() {
+        return downloaded;
+    }
+
+    /**
+     * 设置已下载
+     * @param downloaded true/false
+     */
+    public void setDownloaded(boolean downloaded) {
+        this.downloaded = downloaded;
     }
 }

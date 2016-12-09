@@ -53,7 +53,7 @@ public class PullShipImageList extends SimpleWorkModel<String, List<ShipImage>> 
             JSONArray jsonRow = jsonArray.getJSONArray(i);
             Log.i(LOG_TAG + "onSuccessExtract", " voyage jsonRow length() is " + jsonRow.length());
 
-            if (jsonRow.length() > 46) {
+            if (jsonRow.length() > 45) {
                 // 一条航次数据
                 ShipImage shipImage = new ShipImage();
 

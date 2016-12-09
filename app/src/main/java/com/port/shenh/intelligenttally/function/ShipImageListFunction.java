@@ -8,9 +8,11 @@ import android.util.Log;
 
 import com.port.shenh.intelligenttally.bean.ShipImage;
 import com.port.shenh.intelligenttally.database.ShipImageOperator;
+import com.port.shenh.intelligenttally.database.TableConst;
 import com.port.shenh.intelligenttally.work.PullShipImageList;
 
 import org.mobile.library.model.database.BaseOperator;
+import org.mobile.library.model.work.WorkBack;
 
 import java.util.List;
 
@@ -21,7 +23,7 @@ import java.util.List;
  * @version 1.1 2016/11/25
  * @since 1.0
  */
-public class ShipImageListFunction{
+public class ShipImageListFunction {
 
     /**
      * 日志标签前缀
@@ -41,7 +43,7 @@ public class ShipImageListFunction{
     /**
      * 数据库操作工具
      */
-    private BaseOperator<ShipImage> operator = null;
+    private ShipImageOperator operator = null;
 
     /**
      * 标识是否正在加载数据
@@ -80,6 +82,38 @@ public class ShipImageListFunction{
         Log.i(LOG_TAG + "BaseDataListFunction", "BaseDataListFunction is invoked");
     }
 
+    public interface OnLoadEndListener {
+
+        void OnLoadEnd();
+    }
+
+    OnLoadEndListener onLoadEndListener;
+
+    public interface OnClearEndListener {
+
+        void OnClearEnd();
+    }
+
+    OnClearEndListener onClearEndListener;
+
+    /**
+     * 加载结束监听事件
+     *
+     * @param onLoadEndListener
+     */
+    public void SetOnLoadEndListener(OnLoadEndListener onLoadEndListener) {
+        this.onLoadEndListener = onLoadEndListener;
+    }
+
+    /**
+     * 清楚缓存结束监听事件
+     *
+     * @param onClearEndListener
+     */
+    public void SetOnClearEndListener(OnClearEndListener onClearEndListener) {
+        this.onClearEndListener = onClearEndListener;
+    }
+
     /**
      * 创建数据库操作对象
      *
@@ -106,6 +140,7 @@ public class ShipImageListFunction{
         canceled = true;
     }
 
+
     /**
      * 数据加载
      */
@@ -113,6 +148,14 @@ public class ShipImageListFunction{
         Log.i(LOG_TAG + "onCreate", "getDataList is invoked");
         // 加载开始
         loading = true;
+        Log.i(LOG_TAG + "onCreate", "onCreateOperator is invoked");
+        this.operator = (ShipImageOperator) onCreateOperator(context);
+
+//        if (dataList == null) {
+//            // 从数据库拉取
+//            Log.i(LOG_TAG + "onCreate", "from database");
+//            dataList = onLoadFromDataBase(operator, parameter);
+//        }
 
         if (!canceled && (dataList == null || dataList.size() == 0)) {
             // 从网络拉取
@@ -160,41 +203,48 @@ public class ShipImageListFunction{
         return dataList;
     }
 
-//    /**
-//     * 从数据库加载数据
-//     *
-//     * @param operator 数据库操作对象
-//     *
-//     * @return 数据集合
-//     */
-//    private List<ShipImage> onLoadFromDataBase(BaseOperator<ShipImage> operator, String
-//            parameter) {
-//        if (operator == null || operator.isEmpty()) {
-//            Log.i(LOG_TAG + "onLoadFromDataBase", "database null");
-//            return null;
-//        }
-//
-//        return operator.queryAll();
-//    }
+    /**
+     * 从数据库加载数据
+     *
+     * @param operator 数据库操作对象
+     * @return 数据集合
+     */
+    private List<ShipImage> onLoadFromDataBase(BaseOperator<ShipImage> operator, String
+            parameter) {
+        if (operator == null || operator.isEmpty()) {
+            Log.i(LOG_TAG + "onLoadFromDataBase", "database null");
+            return null;
+        }
+
+        return operator.queryAll();
+    }
 
     /**
      * 从网络加载数据，
-     * 完成请求后要调用{@link #netWorkEndSetData(boolean , List)}继续执行后续任务
+     * 完成请求后要调用{@link #netWorkEndSetData(boolean, List)}继续执行后续任务
      *
      * @param parameter 取值条件参数
      */
-     private void onLoadFromNetWork(String parameter)
-     {
-         Log.i(LOG_TAG + "onLoadFromNetWork", "parameter is " + parameter);
+    private void onLoadFromNetWork(String parameter) {
+        Log.i(LOG_TAG + "onLoadFromNetWork", "parameter is " + parameter);
 
-         PullShipImageList workModel = new PullShipImageList();
+        final PullShipImageList workModel = new PullShipImageList();
 
-         Log.i(LOG_TAG + "netWorkEndSetData", "beginExecute is invoked");
-         workModel.beginExecute(parameter);
+        workModel.setWorkEndListener(new WorkBack<List<ShipImage>>() {
+            @Override
+            public void doEndWork(boolean state, List<ShipImage> data) {
+                if (state && data != null) {
 
-         Log.i(LOG_TAG + "netWorkEndSetData", "getResult is invoked");
-         netWorkEndSetData(true, workModel.getResult());
-     }
+                    Log.i(LOG_TAG + "netWorkEndSetData", "getResult is invoked");
+                    netWorkEndSetData(state, data);
+                }
+
+            }
+        });
+
+        Log.i(LOG_TAG + "netWorkEndSetData", "beginExecute is invoked");
+        workModel.beginExecute(parameter);
+    }
 
     /**
      * 网络请求结束后调用
@@ -222,6 +272,8 @@ public class ShipImageListFunction{
         }
         // 加载结束
         loading = false;
+
+        onLoadEndListener.OnLoadEnd();
     }
 
     /**
@@ -229,7 +281,6 @@ public class ShipImageListFunction{
      *
      * @param state 执行结果
      * @param data  响应数据
-     *
      * @return 整理好的数据集
      */
     private List<ShipImage> onNetworkEnd(boolean state, List<ShipImage> data) {
@@ -244,7 +295,7 @@ public class ShipImageListFunction{
      */
     private void onSaveData(BaseOperator<ShipImage> operator, List<ShipImage> dataList) {
         if (!canceled && operator != null && dataList != null) {
-            operator.clear();
+            operator.delete(dataList.get(0));
             operator.insert(dataList);
         }
     }
@@ -258,14 +309,27 @@ public class ShipImageListFunction{
     /**
      * 清空表
      */
-    public void onClear()
-    {
+    public void onClear() {
         Log.i(LOG_TAG + "onClear", "clear is invoked");
 
         Log.i(LOG_TAG + "onCreate", "onCreateOperator is invoked");
-        this.operator = onCreateOperator(context);
+        this.operator = (ShipImageOperator) onCreateOperator(context);
         operator.clear();
+        onClearEndListener.OnClearEnd();
     }
 
+    /**
+     * 是否已下载
+     * @return true\false
+     */
+    public boolean isDownloaded() {
+        Log.i(LOG_TAG + "onClear", "isDownloaded is invoked");
 
+        Log.i(LOG_TAG + "onCreate", "onCreateOperator is invoked");
+        this.operator = (ShipImageOperator) onCreateOperator(context);
+        if (!operator.isExistByShipId(parameter)) {
+            return false;
+        }
+        return true;
+    }
 }

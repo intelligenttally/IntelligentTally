@@ -357,16 +357,18 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
     }
 
     /**
-     * 根据行ID查询结果
+     * 根据行船舶编码查询结果
      *
-     * @param id 行ID
+     * @param ShipId 船舶编码
      * @return 数据对象，没有返回null
      */
-    public ShipImage queryById(long id) {
-        Log.i(LOG_TAG + "queryById", "query id is " + id);
+    public ShipImage queryByShipId(String ShipId) {
+        Log.i(LOG_TAG + "queryByShipId", "query shipId is " + ShipId);
 
         // 查询语句
-        String sql = String.format("select * from %s where %s=%s", tableName, CommonConst._ID, id);
+        String sql = String.format("select * from %s where %s=%s", tableName, "ship_id", ShipId);
+
+        Log.i(LOG_TAG + "queryByShipId", "query sql is " + sql);
 
         List<ShipImage> list = query(sql);
 
@@ -377,8 +379,36 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
         }
     }
 
+    /**
+     * 根据行航次编码判断数据是否存在
+     * @param ShipId 航次编码
+     * @return true/flase
+     */
+    public boolean isExistByShipId(String ShipId){
+
+        Log.i(LOG_TAG + "isExistByShipId", "isExist shipId is " + ShipId);
+
+        // 查询语句
+        String sql = String.format("select  count(*) from %s where %s=%s", tableName, "ship_id", ShipId);
+
+        Log.i(LOG_TAG + "queryByShipId", "query sql is " + sql);
+
+        Cursor cursor = sqLiteHelper.getReadableDatabase().rawQuery(sql, null);
+        if (cursor.moveToNext()) {
+            if (cursor.getInt(0) > 0) {
+                cursor.close();
+                close(sqLiteHelper);
+                return true;
+            }
+        }
+        cursor.close();
+        close(sqLiteHelper);
+        return false;
+    }
+
+
     @Override
     protected String onWhereSql(ShipImage data) {
-        return String.format("%s='%s'", TableConst.ShipImage.IMAGE_ID, data.getImage_id());
+        return String.format("%s='%s'", TableConst.ShipImage.SHIP_ID, data.getShip_id());
     }
 }

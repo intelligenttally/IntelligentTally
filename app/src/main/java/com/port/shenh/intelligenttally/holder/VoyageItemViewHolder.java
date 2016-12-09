@@ -37,6 +37,11 @@ public class VoyageItemViewHolder extends RecyclerView.ViewHolder {
      */
     public TextView berthnoTextView = null;
 
+    /**
+     * 已下载文本框
+     */
+    public TextView downloadedTextView = null;
+
 
     public VoyageItemViewHolder(View itemView) {
         super(itemView);
@@ -48,5 +53,9 @@ public class VoyageItemViewHolder extends RecyclerView.ViewHolder {
         voyageTextView = (TextView) itemView.findViewById(R.id.voyage_list_item_voyage_textView);
 
         chi_VesselTextView = (TextView) itemView.findViewById(R.id.voyage_list_item_chi_Vessel_textView);
+
+        downloadedTextView = (TextView) itemView.findViewById(R.id.voyage_list_item_downloaded_textView);
+
+
     }
 }
