@@ -318,11 +318,11 @@ public class VoyageDownloadActivity extends AppCompatActivity {
                         public void OnLoadEnd() {
                             if (count.decrementAndGet() == 0) {
                                 loadData(true);
+                                //停止进度条
+                                stopProgressDialog();
+                                Toast.makeText(getBaseContext(), R.string.download_success, Toast
+                                        .LENGTH_SHORT).show();
                             }
-                            //停止进度条
-                            stopProgressDialog();
-                            Toast.makeText(getBaseContext(), R.string.download_success, Toast
-                                    .LENGTH_SHORT).show();
                         }
                     });
 
