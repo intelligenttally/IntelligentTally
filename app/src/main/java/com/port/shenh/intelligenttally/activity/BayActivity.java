@@ -87,16 +87,10 @@ public class BayActivity extends AppCompatActivity {
                 gridLayout.setScaleX(factor);
                 gridLayout.setScaleY(factor);
 
-                return false;
-            }
-
-            @Override
-            public void onScaleEnd(ScaleGestureDetector detector) {
-
-                float factor = detector.getScaleFactor();
-
                 gridLayout.setTranslationX(gridLayout.getWidth() * (factor - 1) / 2);
                 gridLayout.setTranslationY(gridLayout.getHeight() * (factor - 1) / 2);
+
+                return false;
             }
         });
 
