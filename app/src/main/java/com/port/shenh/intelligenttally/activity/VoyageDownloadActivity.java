@@ -85,6 +85,9 @@ public class VoyageDownloadActivity extends AppCompatActivity {
          */
         public String oldParameter = null;
 
+        /**
+         * 船图数据功能类
+         */
         public ShipImageListFunction shipImageListFunction = null;
     }
 
@@ -223,7 +226,7 @@ public class VoyageDownloadActivity extends AppCompatActivity {
                     for (int i = 0; i < data.size(); i++) {
                         Voyage voyage = data.get(i);
 
-                        if (viewHolder.shipImageListFunction.isDownloaded(voyage.getShip_Id())) {
+                        if (viewHolder.shipImageListFunction.isDownloaded(voyage.getShip_id())) {
                             voyage.setDownloaded(true);
                         }
                     }
@@ -326,9 +329,9 @@ public class VoyageDownloadActivity extends AppCompatActivity {
                     count.incrementAndGet();
                     Voyage voyage = selectedDataList.get(i);
 
-                    Log.i(LOG_TAG + "doDownload", "Ship_Id is" + voyage.getShip_Id());
+                    Log.i(LOG_TAG + "doDownload", "Ship_Id is" + voyage.getShip_id());
 
-                    viewHolder.shipImageListFunction.onLoad(voyage.getShip_Id());
+                    viewHolder.shipImageListFunction.onLoad(voyage.getShip_id());
                 }
                 count.decrementAndGet();
 

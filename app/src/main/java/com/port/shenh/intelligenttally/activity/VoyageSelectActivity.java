@@ -14,6 +14,7 @@ import android.util.Log;
 import com.port.shenh.intelligenttally.R;
 import com.port.shenh.intelligenttally.adapter.VoyageRecyclerViewAdapter;
 import com.port.shenh.intelligenttally.bean.Voyage;
+import com.port.shenh.intelligenttally.function.ShipImageListFunction;
 import com.port.shenh.intelligenttally.holder.VoyageItemViewHolder;
 import com.port.shenh.intelligenttally.work.PullVoyageList;
 
@@ -77,6 +78,11 @@ public class VoyageSelectActivity extends AppCompatActivity {
          * 保留上次查询数据
          */
         public String oldParameter = null;
+
+        /**
+         * 船图数据功能类
+         */
+        public ShipImageListFunction shipImageListFunction = null;
     }
 
     /**
@@ -111,6 +117,8 @@ public class VoyageSelectActivity extends AppCompatActivity {
 
         // 堆存列表适配器
         viewHolder.recyclerViewAdapter = new VoyageRecyclerViewAdapter();
+
+        viewHolder.shipImageListFunction = new ShipImageListFunction(this);
     }
 
     /**
@@ -206,15 +214,12 @@ public class VoyageSelectActivity extends AppCompatActivity {
             public void doEndWork(boolean state, List<Voyage> data) {
                 if (state && data != null) {
 
-                    for (int i=0;i<data.size();i++){
+                    for (int i = 0; i < data.size(); i++) {
                         Voyage voyage = data.get(i);
-//                        ShipImageListFunction shipImageListFunction = new ShipImageListFunction(getBaseContext(), voyage.getShip_Id());
-//                        Log.i(LOG_TAG + "loadData", "isDownloaded is " + shipImageListFunction.isDownloaded());
-//                        if(shipImageListFunction.isDownloaded()){
-//                            voyage.setDownloaded(true);
-//                        }
 
-                        data.set(i, voyage);
+                        if (viewHolder.shipImageListFunction.isDownloaded(voyage.getShip_id())) {
+                            voyage.setDownloaded(true);
+                        }
                     }
 
                     // 插入新数据

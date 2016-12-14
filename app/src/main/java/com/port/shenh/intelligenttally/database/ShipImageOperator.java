@@ -8,6 +8,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
+import com.port.shenh.intelligenttally.bean.Bay;
 import com.port.shenh.intelligenttally.bean.ShipImage;
 import org.mobile.library.model.database.BaseOperator;
 import java.util.ArrayList;
@@ -70,8 +72,8 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
                         "%s TEXT," +
                         "%s TEXT," +
                         "%s TEXT," +
-                        "%s TEXT," +
-                        "%s TEXT," +
+                        "%s INTEGER," +
+                        "%s INTEGER," +
                         "%s TEXT," +
                         "%s TEXT," +
                         "%s TEXT," +
@@ -291,8 +293,8 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
             data.setTbayno(cursor.getString(tbayno));
             data.setJbayno(cursor.getString(jbayno));
             data.setUser_char(cursor.getString(user_char));
-            data.setScreen_row(cursor.getString(screen_row));
-            data.setScreen_col(cursor.getString(screen_col));
+            data.setScreen_row(cursor.getInt(screen_row));
+            data.setScreen_col(cursor.getInt(screen_col));
             data.setJoint(cursor.getString(joint));
             data.setCode_load_port(cursor.getString(code_load_port));
             data.setCode_unload_port(cursor.getString(code_unload_port));
@@ -357,16 +359,16 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
     }
 
     /**
-     * 根据行船舶编码查询结果
+     * 根据行航次编码查询结果
      *
-     * @param ShipId 船舶编码
+     * @param shipId 航次编码
      * @return 数据对象，没有返回null
      */
-    public ShipImage queryByShipId(String ShipId) {
-        Log.i(LOG_TAG + "queryByShipId", "query shipId is " + ShipId);
+    public ShipImage queryByShipId(String shipId) {
+        Log.i(LOG_TAG + "queryByShipId", "query shipId is " + shipId);
 
         // 查询语句
-        String sql = String.format("select * from %s where %s=%s", tableName, "ship_id", ShipId);
+        String sql = String.format("select * from %s where %s=%s", tableName, "ship_id", shipId);
 
         Log.i(LOG_TAG + "queryByShipId", "query sql is " + sql);
 
@@ -380,16 +382,16 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
     }
 
     /**
-     * 根据行航次编码判断数据是否存在
-     * @param ShipId 航次编码
+     * 根据航次编码判断数据是否存在
+     * @param shipId 航次编码
      * @return true/flase
      */
-    public boolean isExistByShipId(String ShipId){
+    public boolean isExistByShipId(String shipId){
 
-        Log.i(LOG_TAG + "isExistByShipId", "isExist shipId is " + ShipId);
+        Log.i(LOG_TAG + "isExistByShipId", "isExist shipId is " + shipId);
 
         // 查询语句
-        String sql = String.format("select  count(*) from %s where %s=%s", tableName, "ship_id", ShipId);
+        String sql = String.format("select  count(*) from %s where %s=%s", tableName, "ship_id", shipId);
 
         Log.i(LOG_TAG + "queryByShipId", "query sql is " + sql);
 
@@ -410,5 +412,106 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
     @Override
     protected String onWhereSql(ShipImage data) {
         return String.format("%s='%s'", TableConst.ShipImage.SHIP_ID, data.getShip_id());
+    }
+
+    /**
+     * 根据航次编码查询单号列表
+     *
+     * @param shipId 航次编码
+     *
+     * @return 数据对象，没有返回null
+     */
+    public List<String> queryBayNumList(String shipId) {
+        Log.i(LOG_TAG + "queryBayNumList", "query shipId is " + shipId);
+
+        List<String> bayList = new ArrayList<>();
+
+        // 查询语句
+        String sql = String.format("select distinct bay_num from %s where %s=%s", tableName, "ship_id", shipId);
+        Log.i(LOG_TAG + "queryBayNumList", "sql is " + sql);
+        // 查询数据
+        Cursor cursor = sqLiteHelper.getReadableDatabase().rawQuery(sql, null);
+
+        // 列索引
+        int bay_num = cursor.getColumnIndex("bay_num");
+
+        while (cursor.moveToNext()) {
+            bayList.add(cursor.getString(bay_num));
+        }
+
+        // 关闭数据库
+        cursor.close();
+        close(sqLiteHelper);
+
+        return bayList;
+    }
+
+    /**
+     * 根据航次编码、贝号查询单贝船图结果
+     *
+     * @param shipId 航次编码
+     * @param bayNum 贝号
+     * @return 数据对象，没有返回null
+     */
+    public List<ShipImage> queryShipImage(String shipId, String bayNum) {
+        Log.i(LOG_TAG + "queryShipImage", "query param is " + shipId + " " + bayNum);
+
+        // 查询语句
+        String sql = String.format("select * from %s where %s=%s and %s=%s", tableName, "ship_id", shipId, "bay_num", bayNum);
+
+        Log.i(LOG_TAG + "queryShipImage", "query sql is " + sql);
+
+        List<ShipImage> list = query(sql);
+
+        return list;
+    }
+
+    /**
+     * 根据航次编码、贝号查询贝数据
+     *
+     * @param bayNum 贝号
+     * @param shipId 航次编码
+     * @return 数据对象，没有返回null
+     */
+    public Bay queryBay(String shipId, String bayNum) {
+        Log.i(LOG_TAG + "queryBay", "query param is " + shipId + " " + bayNum);
+
+        Bay bay = new Bay();
+
+        // 查询语句
+        String sql = String.format("select Max(t.SCREEN_ROW) as SUM_SCREEN_ROW_BOARD,Max(t.SCREEN_COL) as SUM_SCREEN_COL_BOARD from %s where %s=%s and %s=%s and %s=%s", tableName, "ship_id", shipId, "bay_num", bayNum, "location", "board");
+        Log.i(LOG_TAG + "queryBay", "sql is " + sql);
+        // 查询数据
+        Cursor cursor = sqLiteHelper.getReadableDatabase().rawQuery(sql, null);
+
+        // 列索引
+        int sumScreenRow_board = cursor.getColumnIndex(TableConst.Bay.SUM_SCREEN_ROW_BOARD);
+        int sumScreenCol_board = cursor.getColumnIndex(TableConst.Bay.SUM_SCREEN_COL_BOARD);
+
+        while (cursor.moveToNext()) {
+            bay.setSumScreenRow_board(cursor.getInt(sumScreenRow_board));
+            bay.setSumScreenCol_board(cursor.getInt(sumScreenCol_board));
+        }
+
+        // 查询语句
+        sql = String.format("select Max(t.SCREEN_ROW) as SUM_SCREEN_ROW_BOARD,Max(t.SCREEN_COL) as SUM_SCREEN_COL_BOARD from %s where %s=%s and %s=%s and %s=%s", tableName, "ship_id", shipId, "bay_num", bayNum, "location", "cabin");
+        Log.i(LOG_TAG + "queryBay", "sql is " + sql);
+        // 查询数据
+        cursor = sqLiteHelper.getReadableDatabase().rawQuery(sql, null);
+
+        // 列索引
+        int sumScreenRow_cabin = cursor.getColumnIndex(TableConst.Bay.SUM_SCREEN_ROW_CABIN);
+        int sumScreenCol_cabin = cursor.getColumnIndex(TableConst.Bay.SUM_SCREEN_COL_CABIN);
+
+        while (cursor.moveToNext()) {
+            bay.setSumScreenRow_cabin(cursor.getInt(sumScreenRow_cabin));
+            bay.setSumScreenCol_cabin(cursor.getInt(sumScreenCol_cabin));
+        }
+
+        // 关闭数据库
+        cursor.close();
+        close(sqLiteHelper);
+
+        return bay;
     }
 }

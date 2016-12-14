@@ -75,19 +75,19 @@ public class ShipImage {
     private String jbayno = null;
 
     /**
-     * 用户标志
+     * 有贝标志
      */
     private String user_char = null;
 
     /**
      * 屏幕行
      */
-    private String screen_row = null;
+    private int screen_row = 0;
 
     /**
      * 屏幕列
      */
-    private String screen_col = null;
+    private int screen_col = 0;
 
     /**
      * 通贝标志
@@ -115,7 +115,7 @@ public class ShipImage {
     private String moved = null;
 
     /**
-     * 卸箱标志
+     * 卸箱标志（作业标志）
      */
     private String unload_mark = null;
 
@@ -150,7 +150,7 @@ public class ShipImage {
     private String max_degree = null;
 
     /**
-     * 贝位号
+     * 实际贝位号
      */
     private String bayno = null;
 
@@ -467,7 +467,7 @@ public class ShipImage {
     }
 
     /**
-     * 获取用户标志
+     * 获取有贝标志
      *
      * @return 用户标志
      */
@@ -476,9 +476,9 @@ public class ShipImage {
     }
 
     /**
-     * 设置用户标志
+     * 设置有贝标志
      *
-     * @param user_char 用户标志
+     * @param user_char 有贝标志
      */
     public void setUser_char(String user_char) {
         this.user_char = user_char;
@@ -489,7 +489,7 @@ public class ShipImage {
      *
      * @return 屏幕行
      */
-    public String getScreen_row() {
+    public int getScreen_row() {
         return screen_row;
     }
 
@@ -498,7 +498,7 @@ public class ShipImage {
      *
      * @param screen_row 屏幕行
      */
-    public void setScreen_row(String screen_row) {
+    public void setScreen_row(int screen_row) {
         this.screen_row = screen_row;
     }
 
@@ -507,7 +507,7 @@ public class ShipImage {
      *
      * @return 屏幕列
      */
-    public String getScreen_col() {
+    public int getScreen_col() {
         return screen_col;
     }
 
@@ -516,7 +516,7 @@ public class ShipImage {
      *
      * @param screen_col 屏幕列
      */
-    public void setScreen_col(String screen_col) {
+    public void setScreen_col(int screen_col) {
         this.screen_col = screen_col;
     }
 
@@ -737,18 +737,18 @@ public class ShipImage {
     }
 
     /**
-     * 获取贝位号
+     * 获取实际贝位号
      *
-     * @return 贝位号
+     * @return 实际贝位号
      */
     public String getBayno() {
         return bayno;
     }
 
     /**
-     * 设置贝位号
+     * 设置实际贝位号
      *
-     * @param bayno 贝位号
+     * @param bayno 实际贝位号
      */
     public void setBayno(String bayno) {
         this.bayno = bayno;
@@ -1096,4 +1096,8 @@ public class ShipImage {
     public void setName(String name) {
         this.name = name;
     }
+
+
+
+
 }

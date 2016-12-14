@@ -6,6 +6,7 @@ package com.port.shenh.intelligenttally.function;
 import android.content.Context;
 import android.util.Log;
 
+import com.port.shenh.intelligenttally.bean.Bay;
 import com.port.shenh.intelligenttally.bean.ShipImage;
 import com.port.shenh.intelligenttally.database.ShipImageOperator;
 import com.port.shenh.intelligenttally.work.PullShipImageList;
@@ -109,23 +110,6 @@ public class ShipImageListFunction {
     }
 
     /**
-     * 判断是否正在加载数据
-     *
-     * @return true表示正在加载数据
-     */
-    public boolean isLoading() {
-        return loading;
-    }
-
-    /**
-     * 取消数据加载，将不发出完成通知
-     */
-    public void cancel() {
-        canceled = true;
-    }
-
-
-    /**
      * 数据加载
      *
      * @param parameter 取值条件参数
@@ -135,12 +119,6 @@ public class ShipImageListFunction {
         // 加载开始
         loading = true;
         dataList = null;
-
-        //        if (dataList == null) {
-        //            // 从数据库拉取
-        //            Log.i(LOG_TAG + "onCreate", "from database");
-        //            dataList = onLoadFromDataBase(operator, parameter);
-        //        }
 
         if (!canceled && (dataList == null || dataList.size() == 0)) {
             // 从网络拉取
@@ -170,40 +148,6 @@ public class ShipImageListFunction {
             Log.i(LOG_TAG + "onCreate", "from network");
             onLoadFromNetWork(parameter);
         }
-    }
-
-    /**
-     * 通知该工具已存在，不必重新加载
-     */
-    public final void notifyExist() {
-        onNotify(context);
-    }
-
-    /**
-     * 获取数据集合
-     *
-     * @return 数据集合
-     */
-    public List<ShipImage> getDataList() {
-        Log.i(LOG_TAG + "getDataList", "getDataList is invoked");
-
-        return dataList;
-    }
-
-    /**
-     * 从数据库加载数据
-     *
-     * @param operator 数据库操作对象
-     *
-     * @return 数据集合
-     */
-    private List<ShipImage> onLoadFromDataBase(BaseOperator<ShipImage> operator, String parameter) {
-        if (operator == null || operator.isEmpty()) {
-            Log.i(LOG_TAG + "onLoadFromDataBase", "database null");
-            return null;
-        }
-
-        return operator.queryAll();
     }
 
     /**
@@ -306,13 +250,71 @@ public class ShipImageListFunction {
     /**
      * 是否已下载
      *
-     * @param parameter 参数
+     * @param shipId 航次编码
      *
      * @return true/false
      */
-    public boolean isDownloaded(String parameter) {
+    public boolean isDownloaded(String shipId) {
         Log.i(LOG_TAG + "isDownloaded", "isDownloaded is invoked");
 
-        return operator.isExistByShipId(parameter);
+        return operator.isExistByShipId(shipId);
+    }
+
+
+    /**
+     * 从数据库获取贝号列表
+     *
+     * @param shipId 航次编码
+     *
+     * @return 数据集合
+     */
+    private List<String> onLoadBayNumListFromDataBase(String shipId) {
+        if (operator == null || operator.isEmpty()) {
+            Log.i(LOG_TAG + "onLoadFromDataBase", "database null");
+            return null;
+        }
+
+        Log.i(LOG_TAG + "onLoadBayNumListFromDataBase", "query shipId is " + shipId);
+
+        return operator.queryBayNumList(shipId);
+    }
+
+
+    /**
+     * 从数据库获取单个贝船图数据
+     *
+     * @param shipId 航次编码
+     * @param bayNum 贝号
+     *
+     * @return 数据集合
+     */
+    private List<ShipImage> onLoadShipImageFromDataBase(String shipId, String bayNum) {
+        if (operator == null || operator.isEmpty()) {
+            Log.i(LOG_TAG + "onLoadFromDataBase", "database null");
+            return null;
+        }
+
+        Log.i(LOG_TAG + "onLoadShipImageFromDataBase", "query param is " + shipId + " " + bayNum);
+
+        return operator.queryShipImage(shipId, bayNum);
+    }
+
+    /**
+     * 从数据库获取贝数据
+     *
+     * @param shipId 航次编码
+     * @param bayNum 贝号
+     *
+     * @return 数据集合
+     */
+    private Bay onLoadBayFromDataBase(String shipId, String bayNum) {
+        if (operator == null || operator.isEmpty()) {
+            Log.i(LOG_TAG + "onLoadFromDataBase", "database null");
+            return null;
+        }
+
+        Log.i(LOG_TAG + "onLoadShipImageFromDataBase", "query param is " + shipId + " " + bayNum);
+
+        return operator.queryBay(shipId, bayNum);
     }
 }

@@ -97,10 +97,9 @@ public class VoyageRecyclerViewAdapter extends RecyclerView.Adapter<VoyageItemVi
         Log.i(LOG_TAG + "clear", "is invoked");
         if (dataList.size() > 0) {
             int count = dataList.size();
-            Log.i(LOG_TAG + "clear", "count is "+ dataList.size());
             dataList.clear();
+            selectedItems.clear();
             notifyItemRangeRemoved(0, count);
-            Log.i(LOG_TAG + "clear", "count is "+ dataList.size());
         }
     }
 
@@ -195,7 +194,7 @@ public class VoyageRecyclerViewAdapter extends RecyclerView.Adapter<VoyageItemVi
         holder.berthnoTextView.setText(voyage.getBerthno());
         holder.inOutTextView.setText(voyage.getCodeInOut().equals("1") == true ? "进" : "出");
         holder.voyageTextView.setText(voyage.getVoyage());
-        holder.chi_VesselTextView.setText(voyage.getChi_Vessel());
+        holder.chi_VesselTextView.setText(voyage.getChi_vessel());
         holder.downloadedTextView.setText(voyage.isDownloaded() == true ? "已下载" : "");
 
         int color = 0;

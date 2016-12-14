@@ -29,7 +29,7 @@ public interface TableConst {
         /**
          * 船舶编码
          */
-       String V_ID = "v_id";
+        String V_ID = "v_id";
 
         /**
          * 英文船名
@@ -251,5 +251,31 @@ public interface TableConst {
          * 理货员
          */
         String NAME = "name";
+    }
+
+    /**
+     * Bay
+     */
+    interface Bay{
+
+        /**
+         * 屏幕甲板行数
+         */
+        String SUM_SCREEN_ROW_BOARD = "sumScreenRow_board";
+
+        /**
+         * 屏幕甲板列数
+         */
+        String SUM_SCREEN_COL_BOARD = "sumScreenCol_board";
+
+        /**
+         * 屏幕船舱行数
+         */
+        String SUM_SCREEN_ROW_CABIN = "sumScreenRow_cabin";
+
+        /**
+         * 屏幕船舱列数
+         */
+        String SUM_SCREEN_COL_CABIN = "sumScreenCol_cabin";
     }
 }

@@ -69,8 +69,8 @@ public class PullShipImageList extends SimpleWorkModel<String, List<ShipImage>> 
                 shipImage.setTbayno(jsonRow.getString(9));
                 shipImage.setJbayno(jsonRow.getString(10));
                 shipImage.setUser_char(jsonRow.getString(11));
-                shipImage.setScreen_row(jsonRow.getString(12));
-                shipImage.setScreen_col(jsonRow.getString(13));
+                shipImage.setScreen_row(jsonRow.getInt(12));
+                shipImage.setScreen_col(jsonRow.getInt(13));
                 shipImage.setJoint(jsonRow.getString(14));
                 shipImage.setCode_load_port(jsonRow.getString(15));
                 shipImage.setCode_unload_port(jsonRow.getString(16));

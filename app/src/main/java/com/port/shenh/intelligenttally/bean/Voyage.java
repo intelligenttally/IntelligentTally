@@ -15,12 +15,12 @@ public class Voyage {
     /**
      * 航次编码
      */
-    private String ship_Id = null;
+    private String ship_id = null;
 
     /**
      * 船舶编码
      */
-    private String v_Id = null;
+    private String v_id = null;
 
     /**
      * 泊位号
@@ -35,7 +35,7 @@ public class Voyage {
     /**
      * 中文船名
      */
-    private String chi_Vessel = null;
+    private String chi_vessel = null;
 
     /**
      * 进出口编码
@@ -63,17 +63,17 @@ public class Voyage {
      *
      * @return 航次编码
      */
-    public String getShip_Id() {
-        return ship_Id;
+    public String getShip_id() {
+        return ship_id;
     }
 
     /**
      * 设置航次编码
      *
-     * @param ship_Id 航次编码
+     * @param ship_id 航次编码
      */
-    public void setShip_Id(String ship_Id) {
-        this.ship_Id = ship_Id;
+    public void setShip_id(String ship_id) {
+        this.ship_id = ship_id;
     }
 
     /**
@@ -81,17 +81,17 @@ public class Voyage {
      *
      * @return 船舶编码
      */
-    public String getV_Id() {
-        return v_Id;
+    public String getV_id() {
+        return v_id;
     }
 
     /**
      * 设置船舶编码
      *
-     * @param v_Id 船舶编码
+     * @param v_id 船舶编码
      */
-    public void setV_Id(String v_Id) {
-        this.v_Id = v_Id;
+    public void setV_id(String v_id) {
+        this.v_id = v_id;
     }
 
     /**
@@ -135,17 +135,17 @@ public class Voyage {
      *
      * @return 中文船名
      */
-    public String getChi_Vessel() {
-        return chi_Vessel;
+    public String getChi_vessel() {
+        return chi_vessel;
     }
 
     /**
      * 设置中文船名
      *
-     * @param chi_Vessel 中文船名
+     * @param chi_vessel 中文船名
      */
-    public void setChi_Vessel(String chi_Vessel) {
-        this.chi_Vessel = chi_Vessel;
+    public void setChi_vessel(String chi_vessel) {
+        this.chi_vessel = chi_vessel;
     }
 
     /**
@@ -204,6 +204,7 @@ public class Voyage {
 
     /**
      * 获取已下载标志
+     *
      * @return true/false
      */
     public boolean isDownloaded() {
@@ -212,6 +213,7 @@ public class Voyage {
 
     /**
      * 设置已下载
+     *
      * @param downloaded true/false
      */
     public void setDownloaded(boolean downloaded) {
