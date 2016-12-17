@@ -12,10 +12,15 @@ import android.widget.Toast;
 
 import com.port.shenh.intelligenttally.R;
 import com.port.shenh.intelligenttally.adapter.BayGridAdapter;
+import com.port.shenh.intelligenttally.bean.Bay;
 import com.port.shenh.intelligenttally.bean.ShipImage;
+import com.port.shenh.intelligenttally.function.ShipImageListFunction;
+import com.port.shenh.intelligenttally.util.StaticValue;
 import com.port.shenh.intelligenttally.view.FreedomScrollView;
 
 import org.mobile.library.common.function.ToolbarInitialize;
+
+import java.util.List;
 
 /**
  * Created by shenh on 2016/11/21.
@@ -39,7 +44,12 @@ public class BayActivity extends AppCompatActivity {
     /**
      * 贝布局数据适配器
      */
-    private BayGridAdapter adapter=null;
+    private BayGridAdapter adapter = null;
+
+    /**
+     * 数据加载工具
+     */
+    private ShipImageListFunction function = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,12 +76,12 @@ public class BayActivity extends AppCompatActivity {
      * 初始化贝布局
      */
     private void initBay() {
-        adapter=new BayGridAdapter(this);
+        adapter = new BayGridAdapter(this);
 
         adapter.setOnGridItemClickListener(new BayGridAdapter.OnGridItemClickListener() {
             @Override
             public void onClick(BayGridAdapter.ViewHolder holder, ShipImage data) {
-                Toast.makeText(BayActivity.this,data.getBay_num(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(BayActivity.this, data.getBay_num(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -123,7 +133,16 @@ public class BayActivity extends AppCompatActivity {
      * 初始化数据
      */
     private void initData() {
+        function = new ShipImageListFunction(this);
 
+        String shipId = getIntent().getStringExtra(StaticValue.IntentTag.VOYAGE_TAG);
+        String bayNumber = getIntent().getStringExtra(StaticValue.IntentTag.BAYNUM_SELECT_TAG);
+
+        Bay bay = function.onLoadBayFromDataBase(shipId, bayNumber);
+
+        List<ShipImage> list = function.onLoadShipImageFromDataBase(shipId, bayNumber);
+
+        adapter.showBay(bay, list);
     }
 
     @Override

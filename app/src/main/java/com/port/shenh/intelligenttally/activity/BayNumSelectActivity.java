@@ -23,6 +23,8 @@ import org.mobile.library.model.operate.OnItemClickListenerForRecyclerViewItem;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.port.shenh.intelligenttally.R.mipmap.voyage;
+
 /**
  * 贝位号选择Activity
  *
@@ -112,7 +114,8 @@ public class BayNumSelectActivity extends AppCompatActivity {
     private void initListView() {
 
         // RecyclerView列表对象
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.activity_baynum_select_recyclerView);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id
+                .activity_baynum_select_recyclerView);
 
         // 设置item动画
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -126,8 +129,10 @@ public class BayNumSelectActivity extends AppCompatActivity {
 
             List<String> dataList;
 
-            if (viewHolder.shipImageListFunction.onLoadBayNumListFromDataBase(viewHolder.ship_d) != null) {
-                dataList = new ArrayList<>(viewHolder.shipImageListFunction.onLoadBayNumListFromDataBase(viewHolder.ship_d));
+            if (viewHolder.shipImageListFunction.onLoadBayNumListFromDataBase(viewHolder.ship_d)
+                    != null) {
+                dataList = new ArrayList<>(viewHolder.shipImageListFunction
+                        .onLoadBayNumListFromDataBase(viewHolder.ship_d));
             } else {
                 dataList = new ArrayList<>();
             }
@@ -148,7 +153,9 @@ public class BayNumSelectActivity extends AppCompatActivity {
 
                     // 跳转意图
                     Intent intent = new Intent(BayNumSelectActivity.this, BayActivity.class);
-//                    intent.putExtra(StaticValue.IntentTag.BAYNUM_SELECT_TAG, voyage.getShip_id());
+                    intent.putExtra(StaticValue.IntentTag.BAYNUM_SELECT_TAG, dataSource.get
+                            (position));
+                    intent.putExtra(StaticValue.IntentTag.VOYAGE_TAG, viewHolder.ship_d);
                     // 跳转到详情页面
                     startActivity(intent);
 

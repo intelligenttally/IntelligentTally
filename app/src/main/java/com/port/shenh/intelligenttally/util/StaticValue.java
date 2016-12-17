@@ -30,6 +30,11 @@ public interface StaticValue {
          * 贝位号选择取值标签
          */
         String BAYNUM_SELECT_TAG = "baynum_select_tag";
+
+        /**
+         * 航次
+         */
+        String VOYAGE_TAG = "voyage_tag";
     }
 
     /**
