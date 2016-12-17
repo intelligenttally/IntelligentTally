@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="@dimen/layout_default_size"
               android:layout_height="@dimen/layout_default_size"
-              android:background="@android:color/holo_orange_light"
+              android:background="@drawable/box_level_background"
               android:orientation="vertical">
 
     <TextView

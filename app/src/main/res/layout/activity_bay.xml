@@ -21,12 +21,77 @@
         android:layout_height="match_parent"
         android:fillViewport="true">
 
-        <android.support.v7.widget.GridLayout
-            android:id="@+id/activity_bay_gridLayout"
+        <LinearLayout
+            android:id="@+id/activity_bay_content_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:columnCount="10"
-            app:useDefaultMargins="true"/>
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="bottom"
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.GridLayout
+                    android:id="@+id/activity_bay_up_left_gridLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:columnCount="1"
+                    app:useDefaultMargins="true"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <android.support.v7.widget.GridLayout
+                        android:id="@+id/activity_bay_up_gridLayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:columnCount="10"
+                        app:useDefaultMargins="true"/>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="@dimen/layout_default_spacing"
+                android:layout_marginTop="@dimen/layout_default_spacing"
+                android:background="@android:color/darker_gray"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top"
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.GridLayout
+                    android:id="@+id/activity_bay_down_left_gridLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:columnCount="1"
+                    app:useDefaultMargins="true"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <android.support.v7.widget.GridLayout
+                        android:id="@+id/activity_bay_down_gridLayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:columnCount="10"
+                        app:useDefaultMargins="true"/>
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
 
     </com.port.shenh.intelligenttally.view.FreedomScrollView>
 

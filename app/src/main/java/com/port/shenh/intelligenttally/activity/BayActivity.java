@@ -2,17 +2,17 @@ package com.port.shenh.intelligenttally.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayout;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.port.shenh.intelligenttally.R;
+import com.port.shenh.intelligenttally.adapter.BayGridAdapter;
+import com.port.shenh.intelligenttally.bean.ShipImage;
 import com.port.shenh.intelligenttally.view.FreedomScrollView;
 
 import org.mobile.library.common.function.ToolbarInitialize;
@@ -37,9 +37,9 @@ public class BayActivity extends AppCompatActivity {
     private static final String LOG_TAG = "BayActivity.";
 
     /**
-     * 表格布局
+     * 贝布局数据适配器
      */
-    private GridLayout gridLayout = null;
+    private BayGridAdapter adapter=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,16 +57,33 @@ public class BayActivity extends AppCompatActivity {
         // 初始化Toolbar
         ToolbarInitialize.initToolbar(this, R.string.bay, true, true);
 
-        initGridLayout();
+        initLayout();
+
+        initBay();
     }
 
     /**
-     * 初始化表格布局
+     * 初始化贝布局
+     */
+    private void initBay() {
+        adapter=new BayGridAdapter(this);
+
+        adapter.setOnGridItemClickListener(new BayGridAdapter.OnGridItemClickListener() {
+            @Override
+            public void onClick(BayGridAdapter.ViewHolder holder, ShipImage data) {
+                Toast.makeText(BayActivity.this,data.getBay_num(),Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    /**
+     * 初始化内容布局
      */
     @SuppressWarnings("ConstantConditions")
-    private void initGridLayout() {
+    private void initLayout() {
 
-        gridLayout = (GridLayout) findViewById(R.id.activity_bay_gridLayout);
+        final LinearLayout linearLayout = (LinearLayout) findViewById(R.id
+                .activity_bay_content_layout);
 
         final FreedomScrollView scrollView = (FreedomScrollView) findViewById(R.id
                 .activity_bay_scrollView);
@@ -84,11 +101,11 @@ public class BayActivity extends AppCompatActivity {
                     return false;
                 }
 
-                gridLayout.setScaleX(factor);
-                gridLayout.setScaleY(factor);
+                linearLayout.setScaleX(factor);
+                linearLayout.setScaleY(factor);
 
-                gridLayout.setTranslationX(gridLayout.getWidth() * (factor - 1) / 2);
-                gridLayout.setTranslationY(gridLayout.getHeight() * (factor - 1) / 2);
+                linearLayout.setTranslationX(linearLayout.getWidth() * (factor - 1) / 2);
+                linearLayout.setTranslationY(linearLayout.getHeight() * (factor - 1) / 2);
 
                 return false;
             }
@@ -106,24 +123,7 @@ public class BayActivity extends AppCompatActivity {
      * 初始化数据
      */
     private void initData() {
-        // 模拟数据
-        for (int i = 0; i < 200; i++) {
-            View view = LayoutInflater.from(this).inflate(R.layout.layout_item_box, gridLayout,
-                    false);
 
-            final TextView textView = (TextView) view.findViewById(R.id.layout_item_box_textView);
-            textView.setText("box" + i);
-
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(BayActivity.this, textView.getText().toString(), Toast
-                            .LENGTH_SHORT).show();
-                }
-            });
-
-            gridLayout.addView(view);
-        }
     }
 
     @Override

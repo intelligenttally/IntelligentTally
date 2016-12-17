@@ -288,7 +288,7 @@ public class ShipImageListFunction {
      *
      * @return 数据集合
      */
-    private List<ShipImage> onLoadShipImageFromDataBase(String shipId, String bayNum) {
+    public List<ShipImage> onLoadShipImageFromDataBase(String shipId, String bayNum) {
         if (operator == null || operator.isEmpty()) {
             Log.i(LOG_TAG + "onLoadFromDataBase", "database null");
             return null;
@@ -307,7 +307,7 @@ public class ShipImageListFunction {
      *
      * @return 数据集合
      */
-    private Bay onLoadBayFromDataBase(String shipId, String bayNum) {
+    public Bay onLoadBayFromDataBase(String shipId, String bayNum) {
         if (operator == null || operator.isEmpty()) {
             Log.i(LOG_TAG + "onLoadFromDataBase", "database null");
             return null;

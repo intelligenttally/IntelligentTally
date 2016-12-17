@@ -15,4 +15,18 @@
         <item>@mipmap/all</item>
     </array>
 
+    <array name="box_text_colors">
+        <item>@color/orange</item>
+        <item>@color/mediumseagreen</item>
+        <item>@color/red</item>
+        <item>@color/deeppink</item>
+        <item>@color/lightskyblue</item>
+        <item>@color/mediumslateblue</item>
+        <item>@color/blue</item>
+        <item>@color/limegreen</item>
+        <item>@color/khaki</item>
+        <item>@color/sandybrown</item>
+        <item>@color/gold</item>
+    </array>
+
 </resources>
