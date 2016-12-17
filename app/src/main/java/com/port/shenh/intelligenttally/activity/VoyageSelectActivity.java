@@ -16,6 +16,7 @@ import com.port.shenh.intelligenttally.adapter.VoyageRecyclerViewAdapter;
 import com.port.shenh.intelligenttally.bean.Voyage;
 import com.port.shenh.intelligenttally.function.ShipImageListFunction;
 import com.port.shenh.intelligenttally.holder.VoyageItemViewHolder;
+import com.port.shenh.intelligenttally.util.StaticValue;
 import com.port.shenh.intelligenttally.work.PullVoyageList;
 
 import org.mobile.library.common.function.ToolbarInitialize;
@@ -93,7 +94,7 @@ public class VoyageSelectActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_voyage_download);
+        setContentView(R.layout.activity_voyage_select);
 
         // 初始化控件引用
         initViewHolder();
@@ -154,7 +155,8 @@ public class VoyageSelectActivity extends AppCompatActivity {
                 Voyage voyage = voyages.get(voyageItemViewHolder.getAdapterPosition());
 
                 // 跳转意图
-                Intent intent = new Intent(VoyageSelectActivity.this, BayActivity.class);
+                Intent intent = new Intent(VoyageSelectActivity.this, BayNumSelectActivity.class);
+                intent.putExtra(StaticValue.IntentTag.BAYNUM_SELECT_TAG, voyage.getShip_id());
                 // 跳转到详情页面
                 startActivity(intent);
             }

@@ -427,7 +427,7 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
         List<String> bayList = new ArrayList<>();
 
         // 查询语句
-        String sql = String.format("select distinct bay_num from %s where %s=%s", tableName, "ship_id", shipId);
+        String sql = String.format("select distinct bay_num from %s where %s=%s order by bay_num asc", tableName, "ship_id", shipId);
         Log.i(LOG_TAG + "queryBayNumList", "sql is " + sql);
         // 查询数据
         Cursor cursor = sqLiteHelper.getReadableDatabase().rawQuery(sql, null);

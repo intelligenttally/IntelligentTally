@@ -102,7 +102,6 @@ public class ShipImageListFunction {
      * 创建数据库操作对象
      *
      * @param context 上下文
-     *
      * @return 数据库操作对象
      */
     private BaseOperator<ShipImage> onCreateOperator(Context context) {
@@ -152,7 +151,7 @@ public class ShipImageListFunction {
 
     /**
      * 从网络加载数据，
-     * 完成请求后要调用{@link #netWorkEndSetData(boolean , List)}继续执行后续任务
+     * 完成请求后要调用{@link #netWorkEndSetData(boolean, List)}继续执行后续任务
      *
      * @param parameter 取值条件参数
      */
@@ -212,7 +211,6 @@ public class ShipImageListFunction {
      *
      * @param state 执行结果
      * @param data  响应数据
-     *
      * @return 整理好的数据集
      */
     private List<ShipImage> onNetworkEnd(boolean state, List<ShipImage> data) {
@@ -251,7 +249,6 @@ public class ShipImageListFunction {
      * 是否已下载
      *
      * @param shipId 航次编码
-     *
      * @return true/false
      */
     public boolean isDownloaded(String shipId) {
@@ -265,10 +262,9 @@ public class ShipImageListFunction {
      * 从数据库获取贝号列表
      *
      * @param shipId 航次编码
-     *
      * @return 数据集合
      */
-    private List<String> onLoadBayNumListFromDataBase(String shipId) {
+    public List<String> onLoadBayNumListFromDataBase(String shipId) {
         if (operator == null || operator.isEmpty()) {
             Log.i(LOG_TAG + "onLoadFromDataBase", "database null");
             return null;
@@ -285,7 +281,6 @@ public class ShipImageListFunction {
      *
      * @param shipId 航次编码
      * @param bayNum 贝号
-     *
      * @return 数据集合
      */
     public List<ShipImage> onLoadShipImageFromDataBase(String shipId, String bayNum) {
@@ -304,7 +299,6 @@ public class ShipImageListFunction {
      *
      * @param shipId 航次编码
      * @param bayNum 贝号
-     *
      * @return 数据集合
      */
     public Bay onLoadBayFromDataBase(String shipId, String bayNum) {

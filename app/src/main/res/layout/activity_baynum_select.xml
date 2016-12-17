@@ -15,18 +15,9 @@
 
     </android.support.design.widget.AppBarLayout>
 
-
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/activity_voyage_download_swipeRefreshLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/activity_voyage_download_recyclerView"
+        android:id="@+id/activity_baynum_select_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
-    </android.support.v4.widget.SwipeRefreshLayout>
-
 
 </android.widget.LinearLayout>

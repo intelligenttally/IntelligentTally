@@ -5,7 +5,9 @@ package com.port.shenh.intelligenttally.activity;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.res.TypedArray;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -89,6 +91,11 @@ public class VoyageDownloadActivity extends AppCompatActivity {
          * 船图数据功能类
          */
         public ShipImageListFunction shipImageListFunction = null;
+
+        /**
+         * 下拉刷新控件
+         */
+        public SwipeRefreshLayout refreshLayout = null;
     }
 
     /**
@@ -131,6 +138,9 @@ public class VoyageDownloadActivity extends AppCompatActivity {
         viewHolder.recyclerViewAdapter = new VoyageRecyclerViewAdapter();
 
         viewHolder.shipImageListFunction = new ShipImageListFunction(this);
+
+        viewHolder.refreshLayout = (SwipeRefreshLayout) findViewById(R.id
+                .activity_voyage_download_swipeRefreshLayout);
     }
 
     /**
@@ -141,6 +151,8 @@ public class VoyageDownloadActivity extends AppCompatActivity {
         ToolbarInitialize.initToolbar(this, R.string.voyage_download, true, true);
         // 初始化列表
         initListView();
+        //初始化刷新控件
+        initSwipeRefresh();
     }
 
     /**
@@ -187,6 +199,22 @@ public class VoyageDownloadActivity extends AppCompatActivity {
                     Log.i(LOG_TAG + "initListView", "onScrolled now load more");
                     loadData(false);
                 }
+            }
+        });
+    }
+
+    /**
+     * 初始化刷新控件
+     */
+    private void initSwipeRefresh() {
+        TypedArray typedArray = obtainStyledAttributes(new int[]{R.attr.colorPrimary});
+        viewHolder.refreshLayout.setColorSchemeResources(typedArray.getResourceId(0, 0));
+        typedArray.recycle();
+
+        viewHolder.refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                initData();
             }
         });
     }
@@ -244,6 +272,9 @@ public class VoyageDownloadActivity extends AppCompatActivity {
                 stopProgressDialog();
                 // 改变请求状态
                 viewHolder.loading = false;
+
+                // 停止动画
+                viewHolder.refreshLayout.setRefreshing(false);
             }
         });
 
@@ -251,6 +282,9 @@ public class VoyageDownloadActivity extends AppCompatActivity {
         viewHolder.loading = true;
         // 初始化更多预期
         viewHolder.hasMoreData = false;
+
+        // 打开加载动画
+        viewHolder.refreshLayout.setRefreshing(true);
 
         // 执行任务
         pullVoyageList.beginExecute(String.valueOf(viewHolder.recyclerViewAdapter.getItemCount())

@@ -17,4 +17,8 @@
 
     <dimen name="layout_default_size">48dp</dimen>
 
+    <dimen name="default_spacing">8dp</dimen>
+
+    <dimen name="filter_popup_window_height">240dp</dimen>
+
 </resources>

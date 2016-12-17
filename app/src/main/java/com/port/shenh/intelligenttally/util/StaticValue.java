@@ -26,7 +26,10 @@ public interface StaticValue {
      * 意图数据传递标签
      */
     interface IntentTag {
-
+        /**
+         * 贝位号选择取值标签
+         */
+        String BAYNUM_SELECT_TAG = "baynum_select_tag";
     }
 
     /**
