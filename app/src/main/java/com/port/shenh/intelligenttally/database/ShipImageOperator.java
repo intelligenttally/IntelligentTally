@@ -479,7 +479,7 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
         Bay bay = new Bay();
 
         // 查询语句
-        String sql = String.format("select Max(t.SCREEN_ROW) as SUM_SCREEN_ROW_BOARD,Max(t.SCREEN_COL) as SUM_SCREEN_COL_BOARD from %s where %s=%s and %s=%s and %s=%s", tableName, "ship_id", shipId, "bay_num", bayNum, "location", "board");
+        String sql = String.format("select Max(SCREEN_ROW) as SUM_SCREEN_ROW_BOARD,Max(SCREEN_COL) as SUM_SCREEN_COL_BOARD from %s where %s=%s and %s=%s and %s='%s'", tableName, "ship_id", shipId, "bay_num", bayNum, "location", "board");
         Log.i(LOG_TAG + "queryBay", "sql is " + sql);
         // 查询数据
         Cursor cursor = sqLiteHelper.getReadableDatabase().rawQuery(sql, null);
