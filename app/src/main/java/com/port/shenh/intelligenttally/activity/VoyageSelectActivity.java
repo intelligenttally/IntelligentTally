@@ -10,6 +10,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.port.shenh.intelligenttally.R;
 import com.port.shenh.intelligenttally.adapter.VoyageRecyclerViewAdapter;
@@ -153,6 +154,12 @@ public class VoyageSelectActivity extends AppCompatActivity {
             @Override
             public void onClick(List<Voyage> voyages, VoyageItemViewHolder voyageItemViewHolder) {
                 Voyage voyage = voyages.get(voyageItemViewHolder.getAdapterPosition());
+
+                if(!voyage.isDownloaded()){
+                    Toast.makeText(getApplication(), R.string.not_download,
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 // 跳转意图
                 Intent intent = new Intent(VoyageSelectActivity.this, BayNumSelectActivity.class);

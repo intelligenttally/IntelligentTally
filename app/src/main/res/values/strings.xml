@@ -14,5 +14,6 @@
     <string name="data_loading">数据下载中...</string>
     <string name="not_selected">未选中</string>
     <string name="download_success">下载成功</string>
+    <string name="not_download">清除成功</string>
     <string name="clear_success">清除成功</string>
 </resources>
