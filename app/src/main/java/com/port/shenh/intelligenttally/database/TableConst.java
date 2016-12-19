@@ -261,21 +261,21 @@ public interface TableConst {
         /**
          * 屏幕甲板行数
          */
-        String SUM_SCREEN_ROW_BOARD = "sumScreenRow_board";
+        String SUM_SCREEN_ROW_BOARD = "sum_screen_row_board";
 
         /**
          * 屏幕甲板列数
          */
-        String SUM_SCREEN_COL_BOARD = "sumScreenCol_board";
+        String SUM_SCREEN_COL_BOARD = "sum_screen_col_board";
 
         /**
          * 屏幕船舱行数
          */
-        String SUM_SCREEN_ROW_CABIN = "sumScreenRow_cabin";
+        String SUM_SCREEN_ROW_CABIN = "sum_screen_row_cabin";
 
         /**
          * 屏幕船舱列数
          */
-        String SUM_SCREEN_COL_CABIN = "sumScreenCol_cabin";
+        String SUM_SCREEN_COL_CABIN = "sum_screen_col_cabin";
     }
 }

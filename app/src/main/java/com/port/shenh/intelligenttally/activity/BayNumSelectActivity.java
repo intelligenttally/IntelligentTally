@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.port.shenh.intelligenttally.R;
+import com.port.shenh.intelligenttally.bean.Bay;
 import com.port.shenh.intelligenttally.holder.BayNumItemViewHolder;
 import com.port.shenh.intelligenttally.adapter.BayNumRecyclerViewAdapter;
 import com.port.shenh.intelligenttally.function.ShipImageListFunction;
@@ -63,7 +64,7 @@ public class BayNumSelectActivity extends AppCompatActivity {
         /**
          * 航次
          */
-        String ship_d = null;
+        String ship_id = null;
     }
 
     /**
@@ -93,9 +94,9 @@ public class BayNumSelectActivity extends AppCompatActivity {
 
         viewHolder.shipImageListFunction = new ShipImageListFunction(this);
 
-        viewHolder.ship_d = (String) getIntent().getSerializableExtra(StaticValue.IntentTag
+        viewHolder.ship_id = (String) getIntent().getSerializableExtra(StaticValue.IntentTag
                 .BAYNUM_SELECT_TAG);
-        Log.i(LOG_TAG + " initViewAdapter", "ship_d is " + viewHolder.ship_d);
+        Log.i(LOG_TAG + " initViewAdapter", "ship_d is " + viewHolder.ship_id);
     }
 
     /**
@@ -125,14 +126,14 @@ public class BayNumSelectActivity extends AppCompatActivity {
         // 设置布局管理器
         recyclerView.setLayoutManager(layoutManager);
 
-        if (viewHolder.shipImageListFunction != null && viewHolder.ship_d != null) {
+        if (viewHolder.shipImageListFunction != null && viewHolder.ship_id != null) {
 
             List<String> dataList;
 
-            if (viewHolder.shipImageListFunction.onLoadBayNumListFromDataBase(viewHolder.ship_d)
+            if (viewHolder.shipImageListFunction.onLoadBayNumListFromDataBase(viewHolder.ship_id)
                     != null) {
                 dataList = new ArrayList<>(viewHolder.shipImageListFunction
-                        .onLoadBayNumListFromDataBase(viewHolder.ship_d));
+                        .onLoadBayNumListFromDataBase(viewHolder.ship_id));
             } else {
                 dataList = new ArrayList<>();
             }
@@ -155,7 +156,12 @@ public class BayNumSelectActivity extends AppCompatActivity {
                     Intent intent = new Intent(BayNumSelectActivity.this, BayActivity.class);
                     intent.putExtra(StaticValue.IntentTag.BAYNUM_SELECT_TAG, dataSource.get
                             (position));
-                    intent.putExtra(StaticValue.IntentTag.VOYAGE_TAG, viewHolder.ship_d);
+                    intent.putExtra(StaticValue.IntentTag.VOYAGE_TAG, viewHolder.ship_id);
+                    Bay bay = viewHolder.shipImageListFunction.onLoadBayFromDataBase(viewHolder.ship_id, dataSource.get
+                            (position));
+
+                    Log.i(LOG_TAG + "initListView", "Bay is " + bay.getSumScreenRow_board() + bay.getSumScreenRow_cabin() + bay.getSumScreenCol_board() + bay.getSumScreenCol_cabin());
+
                     // 跳转到详情页面
                     startActivity(intent);
 
