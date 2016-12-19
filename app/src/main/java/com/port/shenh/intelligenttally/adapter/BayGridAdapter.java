@@ -151,6 +151,7 @@ public class BayGridAdapter {
         inflater = LayoutInflater.from(activity);
         viewHolderList = new ArrayList<>();
         dataMap = new HashMap<>();
+        colorMap = new HashMap<>();
 
         TypedArray typedArray = activity.getResources().obtainTypedArray(R.array.box_text_colors);
 
