@@ -4,9 +4,11 @@
     <item
         android:id="@+id/menu_last_bay"
         android:title="@string/last_bay"
+        android:icon="@mipmap/last"
         app:showAsAction="always"/>
     <item
         android:id="@+id/menu_next_bay"
         android:title="@string/next_bay"
+        android:icon="@mipmap/next"
         app:showAsAction="always"/>
 </menu>
