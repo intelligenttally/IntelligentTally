@@ -7,7 +7,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.widget.TableLayout;
 import android.widget.Toast;
 
 import com.port.shenh.intelligenttally.R;
@@ -92,8 +92,7 @@ public class BayActivity extends AppCompatActivity {
     @SuppressWarnings("ConstantConditions")
     private void initLayout() {
 
-        final LinearLayout linearLayout = (LinearLayout) findViewById(R.id
-                .activity_bay_content_layout);
+        final TableLayout layout = (TableLayout) findViewById(R.id.activity_bay_content_layout);
 
         final FreedomScrollView scrollView = (FreedomScrollView) findViewById(R.id
                 .activity_bay_scrollView);
@@ -111,11 +110,11 @@ public class BayActivity extends AppCompatActivity {
                     return false;
                 }
 
-                linearLayout.setScaleX(factor);
-                linearLayout.setScaleY(factor);
+                layout.setScaleX(factor);
+                layout.setScaleY(factor);
 
-                linearLayout.setTranslationX(linearLayout.getWidth() * (factor - 1) / 2);
-                linearLayout.setTranslationY(linearLayout.getHeight() * (factor - 1) / 2);
+                layout.setTranslationX(layout.getWidth() * (factor - 1) / 2);
+                layout.setTranslationY(layout.getHeight() * (factor - 1) / 2);
 
                 return false;
             }

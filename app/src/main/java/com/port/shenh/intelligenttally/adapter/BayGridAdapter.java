@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayout;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -107,22 +106,27 @@ public class BayGridAdapter {
     private OnGridItemClickListener onGridItemClickListener = null;
 
     /**
-     * 当前有效的表格控件行数
+     * 当前有效的甲板最大行
      */
     private int currentUpGridIndexMaxRow = 0;
 
     /**
-     * 当前有效的表格控件列数
+     * 当前有效的甲板最小行
+     */
+    private int currentUpGridIndexMinRow = 0;
+
+    /**
+     * 当前有效的甲板最大列
      */
     private int currentUpGridIndexMaxColumn = 0;
 
     /**
-     * 当前有效的表格控件行数
+     * 当前有效的船舱最大行
      */
     private int currentDownGridIndexMaxRow = 0;
 
     /**
-     * 当前有效的表格控件列数
+     * 当前有效的船舱最大列
      */
     private int currentDownGridIndexMaxColumn = 0;
 
@@ -248,16 +252,18 @@ public class BayGridAdapter {
         currentColorIndex = 0;
 
         currentUpGridIndexMaxRow = bay.getSumScreenRow_board();
+        currentUpGridIndexMinRow = bay.getMinScreenRow_board();
         currentUpGridIndexMaxColumn = bay.getSumScreenCol_board();
         currentDownGridIndexMaxRow = bay.getSumScreenRow_cabin();
         currentDownGridIndexMaxColumn = bay.getSumScreenCol_cabin();
 
-        dataViewHolderIndexOffset = currentUpGridIndexMaxRow + currentDownGridIndexMaxRow +
-                currentUpGridIndexMaxColumn;
+        dataViewHolderIndexOffset = currentUpGridIndexMaxRow - currentUpGridIndexMinRow +
+                currentDownGridIndexMaxRow + currentUpGridIndexMaxColumn + 1;
 
         // item控件集缓存扩容
-        int size = (currentUpGridIndexMaxRow + 1) * (currentUpGridIndexMaxColumn + 1) +
-                (currentDownGridIndexMaxRow + 1) * (currentDownGridIndexMaxColumn + 1) - 2;
+        int size = (currentUpGridIndexMaxRow - currentUpGridIndexMinRow + 2) *
+                (currentUpGridIndexMaxColumn + 1) + (currentDownGridIndexMaxRow + 1) *
+                (currentDownGridIndexMaxColumn + 1) - 2;
 
         if (size > viewHolderList.size()) {
             for (int i = viewHolderList.size(); i < size; i++) {
@@ -266,25 +272,18 @@ public class BayGridAdapter {
         }
 
         // 设置表格大小
-        upGridLayout.setRowCount(currentUpGridIndexMaxRow + 1);
-        upGridLayout.setColumnCount(currentUpGridIndexMaxColumn);
         downGridLayout.setRowCount(currentDownGridIndexMaxRow + 1);
         downGridLayout.setColumnCount(currentDownGridIndexMaxColumn);
+        upGridLayout.setRowCount(currentUpGridIndexMaxRow - currentUpGridIndexMinRow + 2);
+        upGridLayout.setColumnCount(currentUpGridIndexMaxColumn);
     }
 
     /**
      * 初始化表格
      */
     private void onInitGridLayout() {
-        Log.v(LOG_TAG + "onInitGridLayout", "size:" + currentUpGridIndexMaxRow + "," +
-                "" + currentUpGridIndexMaxColumn + "," + currentDownGridIndexMaxRow + "," +
-                "" + currentDownGridIndexMaxColumn);
-        Log.v(LOG_TAG + "onInitGridLayout", "dataMap count:" + dataMap.size());
-
         onInitLeftGridLayout();
-
         onInitUpGridLayout();
-
         onInitDownGridLayout();
     }
 
@@ -292,7 +291,7 @@ public class BayGridAdapter {
      * 初始化船舱部分的表格
      */
     private void onInitDownGridLayout() {
-        for (int i = 1; i <= currentDownGridIndexMaxRow; i++) {
+        for (int i = currentDownGridIndexMaxRow; i >= 1; i--) {
             for (int j = 1; j <= currentDownGridIndexMaxColumn; j++) {
                 ViewHolder holder = viewHolderList.get(viewHolderCursor++);
                 holder.rowIndex = i;
@@ -339,7 +338,7 @@ public class BayGridAdapter {
         }
 
         // 船图数据部分
-        for (int i = 1; i <= currentUpGridIndexMaxRow; i++) {
+        for (int i = currentUpGridIndexMaxRow; i >= currentUpGridIndexMinRow; i--) {
             for (int j = 1; j <= currentUpGridIndexMaxColumn; j++) {
                 ViewHolder holder = viewHolderList.get(viewHolderCursor++);
                 holder.rowIndex = i;
@@ -390,7 +389,7 @@ public class BayGridAdapter {
      */
     private void onInitLeftGridLayout() {
         // 甲板编号
-        for (int i = currentUpGridIndexMaxRow; i > 0; i--) {
+        for (int i = currentUpGridIndexMaxRow; i >= currentUpGridIndexMinRow; i--) {
             ViewHolder holder = viewHolderList.get(viewHolderCursor++);
             holder.rowIndex = i;
             holder.columnIndex = 0;
@@ -398,7 +397,8 @@ public class BayGridAdapter {
 
             // 设置编号和样式
             holder.itemView.getBackground().setLevel(0);
-            holder.labelTextView.setText(String.valueOf(i * 2 + 80));
+            holder.labelTextView.setText(String.valueOf((i - currentUpGridIndexMinRow + 1) * 2 +
+                    80));
 
             upLeftGridLayout.addView(holder.itemView);
         }
@@ -455,7 +455,10 @@ public class BayGridAdapter {
             return;
         }
 
-        if ("0".equals(data.getJoint())) {
+        if (TextUtils.isEmpty(data.getBayno())) {
+            holder.itemView.getBackground().setLevel(1);
+            holder.labelTextView.setText(null);
+        } else if (data.getBaynum().compareTo(data.getBay_num()) < 0) {
             holder.itemView.getBackground().setLevel(2);
             holder.labelTextView.setText(null);
         } else {
@@ -494,7 +497,8 @@ public class BayGridAdapter {
                 container = "*";
             }
 
-            holder.labelTextView.setText(String.format("%s%s", data.getCode_unload_port(), container));
+            holder.labelTextView.setText(String.format("%s%s", data.getCode_unload_port(),
+                    container));
         }
 
         int index = getDataViewHolderIndex(holder.rowIndex, holder.columnIndex, holder.itemGrid
@@ -535,11 +539,12 @@ public class BayGridAdapter {
      */
     private int getDataViewHolderIndex(int row, int column, boolean upOrDown) {
         if (upOrDown) {
-            return (row - 1) * currentUpGridIndexMaxColumn + column - 1 + dataViewHolderIndexOffset;
-        } else {
-            return (row - 1) * currentDownGridIndexMaxColumn + column - 1 +
-                    currentUpGridIndexMaxRow * currentUpGridIndexMaxColumn +
+            return (currentUpGridIndexMaxRow - row) * currentUpGridIndexMaxColumn + column - 1 +
                     dataViewHolderIndexOffset;
+        } else {
+            return (currentDownGridIndexMaxRow - row) * currentDownGridIndexMaxColumn + column - 1 +
+                    (currentUpGridIndexMaxRow - currentUpGridIndexMinRow + 1) *
+                            currentUpGridIndexMaxColumn + dataViewHolderIndexOffset;
         }
     }
 

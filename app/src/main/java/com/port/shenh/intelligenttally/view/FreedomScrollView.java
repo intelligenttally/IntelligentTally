@@ -106,7 +106,6 @@ public class FreedomScrollView extends FrameLayout {
     public FreedomScrollView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initScrollView();
-        setFillViewport(true);
     }
 
     @Override
