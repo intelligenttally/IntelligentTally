@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayout;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -29,6 +30,11 @@ import java.util.Map;
  * @since 1.0
  */
 public class BayGridAdapter {
+
+    /**
+     * 日志前缀
+     */
+    private static final String LOG_TAG = "BayGridAdapter.";
 
     /**
      * 甲板船图前缀
@@ -270,6 +276,10 @@ public class BayGridAdapter {
      * 初始化表格
      */
     private void onInitGridLayout() {
+        Log.v(LOG_TAG + "onInitGridLayout", "size:" + currentUpGridIndexMaxRow + "," +
+                "" + currentUpGridIndexMaxColumn + "," + currentDownGridIndexMaxRow + "," +
+                "" + currentDownGridIndexMaxColumn);
+        Log.v(LOG_TAG + "onInitGridLayout", "dataMap count:" + dataMap.size());
 
         onInitLeftGridLayout();
 
@@ -417,7 +427,7 @@ public class BayGridAdapter {
     private ViewHolder onCreateViewHolder() {
         ViewHolder holder = new ViewHolder();
 
-        holder.itemView = inflater.inflate(R.layout.layout_item_box, null, false);
+        holder.itemView = inflater.inflate(R.layout.layout_item_box, upGridLayout, false);
         holder.labelTextView = (TextView) holder.itemView.findViewById(R.id
                 .layout_item_box_textView);
 
@@ -439,16 +449,13 @@ public class BayGridAdapter {
             data = dataMap.get(DOWN + holder.rowIndex + holder.columnIndex);
         }
 
-        if (data == null) {
+        if (data == null || "0".equals(data.getUser_char())) {
             holder.itemView.getBackground().setLevel(0);
             holder.labelTextView.setText(null);
             return;
         }
 
-        if ("0".equals(data.getUser_char())) {
-            holder.itemView.getBackground().setLevel(1);
-            holder.labelTextView.setText(null);
-        } else if ("1".equals(data.getJoint())) {
+        if ("0".equals(data.getJoint())) {
             holder.itemView.getBackground().setLevel(2);
             holder.labelTextView.setText(null);
         } else {
@@ -487,8 +494,7 @@ public class BayGridAdapter {
                 container = "*";
             }
 
-            holder.labelTextView.setText(String.format("%s%s", data.getCode_unload_port().charAt
-                    (0), container));
+            holder.labelTextView.setText(String.format("%s%s", data.getCode_unload_port(), container));
         }
 
         int index = getDataViewHolderIndex(holder.rowIndex, holder.columnIndex, holder.itemGrid

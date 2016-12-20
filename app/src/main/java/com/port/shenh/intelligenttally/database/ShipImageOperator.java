@@ -6,12 +6,15 @@ package com.port.shenh.intelligenttally.database;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.port.shenh.intelligenttally.bean.Bay;
 import com.port.shenh.intelligenttally.bean.ShipImage;
+
 import org.mobile.library.model.database.BaseOperator;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +30,7 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
     /**
      * 日志标签前缀
      */
-    private static final String LOG_TAG = "ShiftChangeOperator.";
+    private static final String LOG_TAG = "ShipImageOperator.";
 
     /**
      * 构造函数
@@ -59,7 +62,8 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
         /**
          * 建表语句
          */
-        String createTableSql = String.format("CREATE TABLE IF NOT EXISTS %s ( %s INTEGER PRIMARY KEY, " +
+        String createTableSql = String.format("CREATE TABLE IF NOT EXISTS %s ( %s INTEGER PRIMARY" +
+                " KEY, " +
                         "%s TEXT," +
                         "%s TEXT," +
                         "%s TEXT," +
@@ -105,55 +109,28 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
                         "%s TEXT," +
                         "%s TEXT," +
                         "%s TEXT," +
-                        "%s TEXT)",
-                tableName, CommonConst._ID,
+                        "%s TEXT)", tableName, CommonConst._ID,
 
-                TableConst.ShipImage.SHIP_ID,
-                TableConst.ShipImage.V_ID,
-                TableConst.ShipImage.ENG_VESSEL,
-                TableConst.ShipImage.CHI_VESSEL,
-                TableConst.ShipImage.LOCATION,
-                TableConst.ShipImage.BAY_NUM,
-                TableConst.ShipImage.BAY_COL,
-                TableConst.ShipImage.BAY_ROW,
-                TableConst.ShipImage.SBAYNO,
-                TableConst.ShipImage.TBAYNO,
-                TableConst.ShipImage.JBAYNO,
-                TableConst.ShipImage.USER_CHAR,
-                TableConst.ShipImage.SCREEN_ROW,
-                TableConst.ShipImage.SCREEN_COL,
-                TableConst.ShipImage.JOINT,
-                TableConst.ShipImage.CODE_LOAD_PORT,
-                TableConst.ShipImage.CODE_UNLOAD_PORT,
-                TableConst.ShipImage.DELIVERY,
-                TableConst.ShipImage.MOVED,
-                TableConst.ShipImage.UNLOAD_MARK,
-                TableConst.ShipImage.WORK_NO,
-                TableConst.ShipImage.DANGER_GRAGE,
-                TableConst.ShipImage.DEGREE_SETTING,
-                TableConst.ShipImage.DEGREE_UNIT,
-                TableConst.ShipImage.MIN_DEGREE,
-                TableConst.ShipImage.MAX_DEGREE,
-                TableConst.ShipImage.BAYNO,
-                TableConst.ShipImage.OLDBAYNO,
-                TableConst.ShipImage.CODE_CRANE,
-                TableConst.ShipImage.IMAGE_ID,
-                TableConst.ShipImage.BAYNUM,
-                TableConst.ShipImage.BAYCOL,
-                TableConst.ShipImage.BAYROW,
-                TableConst.ShipImage.CONTAINER_NO,
-                TableConst.ShipImage.SIZE_CON,
-                TableConst.ShipImage.CONTAINER_TYPE,
-                TableConst.ShipImage.CODE_EMPTY,
-                TableConst.ShipImage.WEIGHT,
-                TableConst.ShipImage.WORK_DATE,
-                TableConst.ShipImage.SEALNO,
-                TableConst.ShipImage.MOVED_NAME,
-                TableConst.ShipImage.INOUTMARK,
-                TableConst.ShipImage.TRANSMARK,
-                TableConst.ShipImage.HOLIDAYS,
-                TableConst.ShipImage.NIGHT,
-                TableConst.ShipImage.NAME);
+                TableConst.ShipImage.SHIP_ID, TableConst.ShipImage.V_ID, TableConst.ShipImage
+                        .ENG_VESSEL, TableConst.ShipImage.CHI_VESSEL, TableConst.ShipImage
+                        .LOCATION, TableConst.ShipImage.BAY_NUM, TableConst.ShipImage.BAY_COL,
+                TableConst.ShipImage.BAY_ROW, TableConst.ShipImage.SBAYNO, TableConst.ShipImage
+                        .TBAYNO, TableConst.ShipImage.JBAYNO, TableConst.ShipImage.USER_CHAR,
+                TableConst.ShipImage.SCREEN_ROW, TableConst.ShipImage.SCREEN_COL, TableConst
+                        .ShipImage.JOINT, TableConst.ShipImage.CODE_LOAD_PORT, TableConst
+                        .ShipImage.CODE_UNLOAD_PORT, TableConst.ShipImage.DELIVERY, TableConst
+                        .ShipImage.MOVED, TableConst.ShipImage.UNLOAD_MARK, TableConst.ShipImage
+                        .WORK_NO, TableConst.ShipImage.DANGER_GRAGE, TableConst.ShipImage
+                        .DEGREE_SETTING, TableConst.ShipImage.DEGREE_UNIT, TableConst.ShipImage
+                        .MIN_DEGREE, TableConst.ShipImage.MAX_DEGREE, TableConst.ShipImage.BAYNO,
+                TableConst.ShipImage.OLDBAYNO, TableConst.ShipImage.CODE_CRANE, TableConst
+                        .ShipImage.IMAGE_ID, TableConst.ShipImage.BAYNUM, TableConst.ShipImage
+                        .BAYCOL, TableConst.ShipImage.BAYROW, TableConst.ShipImage.CONTAINER_NO,
+                TableConst.ShipImage.SIZE_CON, TableConst.ShipImage.CONTAINER_TYPE, TableConst
+                        .ShipImage.CODE_EMPTY, TableConst.ShipImage.WEIGHT, TableConst.ShipImage
+                        .WORK_DATE, TableConst.ShipImage.SEALNO, TableConst.ShipImage.MOVED_NAME,
+                TableConst.ShipImage.INOUTMARK, TableConst.ShipImage.TRANSMARK, TableConst
+                        .ShipImage.HOLIDAYS, TableConst.ShipImage.NIGHT, TableConst.ShipImage.NAME);
 
 
         Log.i(LOG_TAG + "onCreateTable", "sql is " + createTableSql);
@@ -349,11 +326,12 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
         String sql = null;
 
         if (parameters.length == 1) {
-            sql = String.format("select * from %s where %s='%s'", tableName, TableConst.ShipImage.IMAGE_ID,
-                    parameters[0]);
+            sql = String.format("select * from %s where %s='%s'", tableName, TableConst.ShipImage
+                    .IMAGE_ID, parameters[0]);
         } else {
-//            sql = String.format("select * from %s order by %s desc limit %s,%s", tableName,
-//                    TableConst.ShiftChange.TIME, parameters[0], parameters[1]);
+            //            sql = String.format("select * from %s order by %s desc limit %s,%s",
+            // tableName,
+            //                    TableConst.ShiftChange.TIME, parameters[0], parameters[1]);
         }
         return query(sql);
     }
@@ -362,6 +340,7 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
      * 根据行航次编码查询结果
      *
      * @param shipId 航次编码
+     *
      * @return 数据对象，没有返回null
      */
     public ShipImage queryByShipId(String shipId) {
@@ -383,15 +362,18 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
 
     /**
      * 根据航次编码判断数据是否存在
+     *
      * @param shipId 航次编码
+     *
      * @return true/flase
      */
-    public boolean isExistByShipId(String shipId){
+    public boolean isExistByShipId(String shipId) {
 
         Log.i(LOG_TAG + "isExistByShipId", "isExist shipId is " + shipId);
 
         // 查询语句
-        String sql = String.format("select  count(*) from %s where %s=%s", tableName, "ship_id", shipId);
+        String sql = String.format("select  count(*) from %s where %s=%s", tableName, "ship_id",
+                shipId);
 
         Log.i(LOG_TAG + "queryByShipId", "query sql is " + sql);
 
@@ -427,7 +409,8 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
         List<String> bayList = new ArrayList<>();
 
         // 查询语句
-        String sql = String.format("select distinct bay_num from %s where %s=%s order by bay_num asc", tableName, "ship_id", shipId);
+        String sql = String.format("select distinct bay_num from %s where %s=%s order by bay_num " +
+                "asc", tableName, "ship_id", shipId);
         Log.i(LOG_TAG + "queryBayNumList", "sql is " + sql);
         // 查询数据
         Cursor cursor = sqLiteHelper.getReadableDatabase().rawQuery(sql, null);
@@ -451,13 +434,15 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
      *
      * @param shipId 航次编码
      * @param bayNum 贝号
+     *
      * @return 数据对象，没有返回null
      */
     public List<ShipImage> queryShipImage(String shipId, String bayNum) {
         Log.i(LOG_TAG + "queryShipImage", "query param is " + shipId + " " + bayNum);
 
         // 查询语句
-        String sql = String.format("select * from %s where %s=%s and %s=%s", tableName, "ship_id", shipId, "bay_num", bayNum);
+        String sql = String.format("select * from %s where %s=%s and %s='%s'", tableName,
+                "ship_id", shipId, "bay_num", bayNum);
 
         Log.i(LOG_TAG + "queryShipImage", "query sql is " + sql);
 
@@ -471,6 +456,7 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
      *
      * @param bayNum 贝号
      * @param shipId 航次编码
+     *
      * @return 数据对象，没有返回null
      */
     public Bay queryBay(String shipId, String bayNum) {
@@ -479,14 +465,19 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
         Bay bay = new Bay();
 
         // 查询语句
-        String sql = String.format("select Max(SCREEN_ROW) as sum_screen_row_board,Max(SCREEN_COL) as sum_screen_col_board from %s where %s=%s and %s=%s and %s='%s'", tableName, "ship_id", shipId, "bay_num", bayNum, "location", "board");
+        String sql = String.format("select Max(SCREEN_ROW) as sum_screen_row_board,Max" +
+                "(SCREEN_COL) as sum_screen_col_board from %s where %s='%s' and %s='%s' and " +
+                "%s='%s'", tableName, "ship_id", shipId, "bay_num", bayNum, "location", "board");
         Log.i(LOG_TAG + "queryBay", "sql is " + sql);
+        SQLiteDatabase sqLiteDatabase = sqLiteHelper.getReadableDatabase();
+
         // 查询数据
-        Cursor cursor = sqLiteHelper.getReadableDatabase().rawQuery(sql, null);
+        Cursor cursor = sqLiteDatabase.rawQuery(sql, null);
 
         // 列索引
         int sumScreenRow_board = cursor.getColumnIndex(TableConst.Bay.SUM_SCREEN_ROW_BOARD);
-        int sumScreenCol_board = cursor.getColumnIndex(TableConst.Bay.SUM_SCREEN_COL_BOARD);;
+        int sumScreenCol_board = cursor.getColumnIndex(TableConst.Bay.SUM_SCREEN_COL_BOARD);
+        ;
 
         while (cursor.moveToNext()) {
             bay.setSumScreenRow_board(cursor.getInt(sumScreenRow_board));
@@ -495,10 +486,12 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
 
 
         // 查询语句
-        sql = String.format("select Max(SCREEN_ROW) as sum_screen_row_cabin,Max(SCREEN_COL) as sum_screen_col_cabin from %s where %s=%s and %s=%s and %s='%s'", tableName, "ship_id", shipId, "bay_num", bayNum, "location", "cabin");
+        sql = String.format("select Max(SCREEN_ROW) as sum_screen_row_cabin,Max(SCREEN_COL) as " +
+                "sum_screen_col_cabin from %s where %s='%s' and %s='%s' and %s='%s'", tableName,
+                "ship_id", shipId, "bay_num", bayNum, "location", "cabin");
         Log.i(LOG_TAG + "queryBay", "sql is " + sql);
         // 查询数据
-        cursor = sqLiteHelper.getReadableDatabase().rawQuery(sql, null);
+        cursor = sqLiteDatabase.rawQuery(sql, null);
 
         // 列索引
         int sumScreenRow_cabin = cursor.getColumnIndex(TableConst.Bay.SUM_SCREEN_ROW_CABIN);

@@ -81,7 +81,7 @@ public class BayActivity extends AppCompatActivity {
         adapter.setOnGridItemClickListener(new BayGridAdapter.OnGridItemClickListener() {
             @Override
             public void onClick(BayGridAdapter.ViewHolder holder, ShipImage data) {
-                Toast.makeText(BayActivity.this, data.getBay_num(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(BayActivity.this, data.getBayno(), Toast.LENGTH_SHORT).show();
             }
         });
     }

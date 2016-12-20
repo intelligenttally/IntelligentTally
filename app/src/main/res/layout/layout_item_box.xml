@@ -3,12 +3,13 @@
               android:layout_width="@dimen/layout_default_size"
               android:layout_height="@dimen/layout_default_size"
               android:background="@drawable/box_level_background"
+              android:gravity="center"
               android:orientation="vertical">
 
     <TextView
         android:id="@+id/layout_item_box_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"/>
+        android:gravity="center"/>
 
 </LinearLayout>

@@ -7,18 +7,19 @@
 
     <item android:maxLevel="1">
         <selector>
+            <item android:state_selected="true">
+                <shape>
+                    <stroke
+                        android:width="2dp"
+                        android:color="@color/colorPrimary"/>
+                </shape>
+            </item>
+
             <item>
                 <shape>
                     <stroke
                         android:width="1dp"
                         android:color="@android:color/black"/>
-                </shape>
-            </item>
-            <item android:state_selected="true">
-                <shape>
-                    <stroke
-                        android:width="1dp"
-                        android:color="?colorPrimary"/>
                 </shape>
             </item>
         </selector>
@@ -26,18 +27,19 @@
 
     <item android:maxLevel="2">
         <selector>
+            <item android:state_selected="true">
+                <shape>
+                    <stroke
+                        android:width="2dp"
+                        android:color="@color/colorPrimary"/>
+                </shape>
+            </item>
+
             <item>
                 <shape>
                     <stroke
                         android:width="1dp"
                         android:color="@android:color/black"/>
-                </shape>
-            </item>
-            <item android:state_selected="true">
-                <shape>
-                    <stroke
-                        android:width="1dp"
-                        android:color="?colorPrimary"/>
                 </shape>
             </item>
         </selector>
@@ -45,19 +47,20 @@
 
     <item android:maxLevel="3">
         <selector>
+            <item android:state_selected="true">
+                <shape>
+                    <stroke
+                        android:width="2dp"
+                        android:color="@color/colorPrimary"/>
+                    <solid android:color="@color/orange"/>
+                </shape>
+            </item>
+
             <item>
                 <shape>
                     <stroke
                         android:width="1dp"
                         android:color="@android:color/black"/>
-                    <solid android:color="@color/orange"/>
-                </shape>
-            </item>
-            <item android:state_selected="true">
-                <shape>
-                    <stroke
-                        android:width="1dp"
-                        android:color="?colorPrimary"/>
                     <solid android:color="@color/orange"/>
                 </shape>
             </item>
@@ -66,19 +69,21 @@
 
     <item android:maxLevel="4">
         <selector>
+            <item
+                android:state_selected="true">
+                <shape>
+                    <stroke
+                        android:width="2dp"
+                        android:color="@color/colorPrimary"/>
+                    <solid android:color="@color/mediumseagreen"/>
+                </shape>
+            </item>
+
             <item>
                 <shape>
                     <stroke
                         android:width="1dp"
                         android:color="@android:color/black"/>
-                    <solid android:color="@color/mediumseagreen"/>
-                </shape>
-            </item>
-            <item android:state_selected="true">
-                <shape>
-                    <stroke
-                        android:width="1dp"
-                        android:color="?colorPrimary"/>
                     <solid android:color="@color/mediumseagreen"/>
                 </shape>
             </item>
@@ -87,19 +92,20 @@
 
     <item android:maxLevel="5">
         <selector>
+            <item android:state_selected="true">
+                <shape>
+                    <stroke
+                        android:width="2dp"
+                        android:color="@color/colorPrimary"/>
+                    <solid android:color="@color/red"/>
+                </shape>
+            </item>
+
             <item>
                 <shape>
                     <stroke
                         android:width="1dp"
                         android:color="@android:color/black"/>
-                    <solid android:color="@color/red"/>
-                </shape>
-            </item>
-            <item android:state_selected="true">
-                <shape>
-                    <stroke
-                        android:width="1dp"
-                        android:color="?colorPrimary"/>
                     <solid android:color="@color/red"/>
                 </shape>
             </item>
@@ -108,19 +114,20 @@
 
     <item android:maxLevel="6">
         <selector>
+            <item android:state_selected="true">
+                <shape>
+                    <stroke
+                        android:width="2dp"
+                        android:color="@color/colorPrimary"/>
+                    <solid android:color="@color/deeppink"/>
+                </shape>
+            </item>
+
             <item>
                 <shape>
                     <stroke
                         android:width="1dp"
                         android:color="@android:color/black"/>
-                    <solid android:color="@color/deeppink"/>
-                </shape>
-            </item>
-            <item android:state_selected="true">
-                <shape>
-                    <stroke
-                        android:width="1dp"
-                        android:color="?colorPrimary"/>
                     <solid android:color="@color/deeppink"/>
                 </shape>
             </item>
@@ -129,19 +136,20 @@
 
     <item android:maxLevel="7">
         <selector>
+            <item android:state_selected="true">
+                <shape>
+                    <stroke
+                        android:width="2dp"
+                        android:color="@color/colorPrimary"/>
+                    <solid android:color="@color/lightskyblue"/>
+                </shape>
+            </item>
+
             <item>
                 <shape>
                     <stroke
                         android:width="1dp"
                         android:color="@android:color/black"/>
-                    <solid android:color="@color/lightskyblue"/>
-                </shape>
-            </item>
-            <item android:state_selected="true">
-                <shape>
-                    <stroke
-                        android:width="1dp"
-                        android:color="?colorPrimary"/>
                     <solid android:color="@color/lightskyblue"/>
                 </shape>
             </item>
@@ -150,19 +158,20 @@
 
     <item android:maxLevel="8">
         <selector>
+            <item android:state_selected="true">
+                <shape>
+                    <stroke
+                        android:width="2dp"
+                        android:color="@color/colorPrimary"/>
+                    <solid android:color="@color/mediumslateblue"/>
+                </shape>
+            </item>
+
             <item>
                 <shape>
                     <stroke
                         android:width="1dp"
                         android:color="@android:color/black"/>
-                    <solid android:color="@color/mediumslateblue"/>
-                </shape>
-            </item>
-            <item android:state_selected="true">
-                <shape>
-                    <stroke
-                        android:width="1dp"
-                        android:color="?colorPrimary"/>
                     <solid android:color="@color/mediumslateblue"/>
                 </shape>
             </item>
@@ -171,19 +180,21 @@
 
     <item android:maxLevel="9">
         <selector>
+            <item
+                android:state_selected="true">
+                <shape>
+                    <stroke
+                        android:width="2dp"
+                        android:color="@color/colorPrimary"/>
+                    <solid android:color="@color/blue"/>
+                </shape>
+            </item>
+
             <item>
                 <shape>
                     <stroke
                         android:width="1dp"
                         android:color="@android:color/black"/>
-                    <solid android:color="@color/blue"/>
-                </shape>
-            </item>
-            <item android:state_selected="true">
-                <shape>
-                    <stroke
-                        android:width="1dp"
-                        android:color="?colorPrimary"/>
                     <solid android:color="@color/blue"/>
                 </shape>
             </item>
@@ -192,19 +203,20 @@
 
     <item android:maxLevel="10">
         <selector>
+            <item android:state_selected="true">
+                <shape>
+                    <stroke
+                        android:width="2dp"
+                        android:color="@color/colorPrimary"/>
+                    <solid android:color="@color/limegreen"/>
+                </shape>
+            </item>
+
             <item>
                 <shape>
                     <stroke
                         android:width="1dp"
                         android:color="@android:color/black"/>
-                    <solid android:color="@color/limegreen"/>
-                </shape>
-            </item>
-            <item android:state_selected="true">
-                <shape>
-                    <stroke
-                        android:width="1dp"
-                        android:color="?colorPrimary"/>
                     <solid android:color="@color/limegreen"/>
                 </shape>
             </item>
@@ -213,19 +225,20 @@
 
     <item android:maxLevel="11">
         <selector>
+            <item android:state_selected="true">
+                <shape>
+                    <stroke
+                        android:width="2dp"
+                        android:color="@color/colorPrimary"/>
+                    <solid android:color="@color/khaki"/>
+                </shape>
+            </item>
+
             <item>
                 <shape>
                     <stroke
                         android:width="1dp"
                         android:color="@android:color/black"/>
-                    <solid android:color="@color/khaki"/>
-                </shape>
-            </item>
-            <item android:state_selected="true">
-                <shape>
-                    <stroke
-                        android:width="1dp"
-                        android:color="?colorPrimary"/>
                     <solid android:color="@color/khaki"/>
                 </shape>
             </item>
@@ -234,19 +247,20 @@
 
     <item android:maxLevel="12">
         <selector>
+            <item android:state_selected="true">
+                <shape>
+                    <stroke
+                        android:width="2dp"
+                        android:color="@color/colorPrimary"/>
+                    <solid android:color="@color/sandybrown"/>
+                </shape>
+            </item>
+
             <item>
                 <shape>
                     <stroke
                         android:width="1dp"
                         android:color="@android:color/black"/>
-                    <solid android:color="@color/sandybrown"/>
-                </shape>
-            </item>
-            <item android:state_selected="true">
-                <shape>
-                    <stroke
-                        android:width="1dp"
-                        android:color="?colorPrimary"/>
                     <solid android:color="@color/sandybrown"/>
                 </shape>
             </item>
@@ -255,19 +269,20 @@
 
     <item android:maxLevel="13">
         <selector>
+            <item android:state_selected="true">
+                <shape>
+                    <stroke
+                        android:width="2dp"
+                        android:color="@color/colorPrimary"/>
+                    <solid android:color="@color/gold"/>
+                </shape>
+            </item>
+
             <item>
                 <shape>
                     <stroke
                         android:width="1dp"
                         android:color="@android:color/black"/>
-                    <solid android:color="@color/gold"/>
-                </shape>
-            </item>
-            <item android:state_selected="true">
-                <shape>
-                    <stroke
-                        android:width="1dp"
-                        android:color="?colorPrimary"/>
                     <solid android:color="@color/gold"/>
                 </shape>
             </item>
