@@ -465,7 +465,7 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
         Bay bay = new Bay();
 
         // 查询语句
-        String sql = String.format("select Max(SCREEN_ROW) as sum_screen_row_board,Max" +
+        String sql = String.format("select Max(SCREEN_ROW) as sum_screen_row_board,Min(SCREEN_ROW) as min_screen_row_board,Max" +
                 "(SCREEN_COL) as sum_screen_col_board from %s where %s='%s' and %s='%s' and " +
                 "%s='%s'", tableName, "ship_id", shipId, "bay_num", bayNum, "location", "board");
         Log.i(LOG_TAG + "queryBay", "sql is " + sql);
@@ -476,11 +476,12 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
 
         // 列索引
         int sumScreenRow_board = cursor.getColumnIndex(TableConst.Bay.SUM_SCREEN_ROW_BOARD);
+        int minScreenRow_board = cursor.getColumnIndex(TableConst.Bay.MIN_SCREEN_ROW_BOARD);
         int sumScreenCol_board = cursor.getColumnIndex(TableConst.Bay.SUM_SCREEN_COL_BOARD);
-        ;
 
         while (cursor.moveToNext()) {
             bay.setSumScreenRow_board(cursor.getInt(sumScreenRow_board));
+            bay.setMinScreenRow_board(cursor.getInt(minScreenRow_board));
             bay.setSumScreenCol_board(cursor.getInt(sumScreenCol_board));
         }
 

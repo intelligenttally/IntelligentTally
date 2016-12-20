@@ -259,22 +259,27 @@ public interface TableConst {
     interface Bay{
 
         /**
-         * 屏幕甲板行数
+         * 屏幕甲板最大行数
          */
         String SUM_SCREEN_ROW_BOARD = "sum_screen_row_board";
 
         /**
-         * 屏幕甲板列数
+         * 屏幕甲板最小行数
+         */
+        String MIN_SCREEN_ROW_BOARD = "min_screen_row_board";
+
+        /**
+         * 屏幕甲板最大列数
          */
         String SUM_SCREEN_COL_BOARD = "sum_screen_col_board";
 
         /**
-         * 屏幕船舱行数
+         * 屏幕船舱最大行数
          */
         String SUM_SCREEN_ROW_CABIN = "sum_screen_row_cabin";
 
         /**
-         * 屏幕船舱列数
+         * 屏幕船舱最大列数
          */
         String SUM_SCREEN_COL_CABIN = "sum_screen_col_cabin";
     }

@@ -24,22 +24,27 @@ public class Bay {
     private String bay_num = null;
 
     /**
-     * 屏幕甲板行数
+     * 屏幕甲板最大行数
      */
     private int sumScreenRow_board = 0;
 
     /**
-     * 屏幕甲板列数
+     * 屏幕甲板最小行数
+     */
+    private int minScreenRow_board = 0;
+
+    /**
+     * 屏幕甲板最大列数
      */
     private int sumScreenCol_board = 0;
 
     /**
-     * 屏幕船舱行数
+     * 屏幕船舱最大行数
      */
     private int sumScreenRow_cabin = 0;
 
     /**
-     * 屏幕船舱列数
+     * 屏幕船舱最大列数
      */
     private int sumScreenCol_cabin = 0;
 
@@ -68,72 +73,91 @@ public class Bay {
     }
 
     /**
-     * 获取屏幕甲板行数
+     * 获取屏幕甲板最大行数
      *
-     * @return 屏幕甲板行数
+     * @return 屏幕甲板最大行数
      */
     public int getSumScreenRow_board() {
         return sumScreenRow_board;
     }
 
     /**
-     * 设置屏幕甲板行数
+     * 设置屏幕甲板最大行数
      *
-     * @param sumScreenRow_board 屏幕甲板行数
+     * @param sumScreenRow_board 屏幕甲板最大行数
      */
     public void setSumScreenRow_board(int sumScreenRow_board) {
         this.sumScreenRow_board = sumScreenRow_board;
     }
 
     /**
-     * 获取屏幕甲板列数
+     * 获取屏幕甲板最小行数
      *
-     * @return 屏幕甲板列数
+     * @return 屏幕甲板最小行数
+     */
+    public int getMinScreenRow_board() {
+        return minScreenRow_board;
+    }
+
+    /**
+     * 设置屏幕甲板最小行数
+     *
+     * @param minScreenRow_board 屏幕甲板最小行数
+     */
+    public void setMinScreenRow_board(int minScreenRow_board) {
+        this.minScreenRow_board = minScreenRow_board;
+    }
+
+
+    /**
+     * 获取屏幕甲板最大列数
+     *
+     * @return 屏幕甲板最大列数
      */
     public int getSumScreenCol_board() {
         return sumScreenCol_board;
     }
 
     /**
-     * 设置屏幕甲板列数
+     * 设置屏幕甲板最大列数
      *
-     * @param sumScreenCol_board 屏幕甲板列数
+     * @param sumScreenCol_board 屏幕甲板最大列数
      */
     public void setSumScreenCol_board(int sumScreenCol_board) {
         this.sumScreenCol_board = sumScreenCol_board;
     }
 
     /**
-     * 获取屏幕船舱行数
+     * 获取屏幕船舱最大行数
      *
-     * @return 屏幕船舱行数
+     * @return 屏幕船舱最大行数
      */
     public int getSumScreenRow_cabin() {
         return sumScreenRow_cabin;
     }
 
     /**
-     * 设置屏幕船舱行数
+     * 设置屏幕船舱最大行数
      *
-     * @param sumScreenRow_cabin 屏幕船舱行数
+     * @param sumScreenRow_cabin 屏幕船舱最大行数
      */
     public void setSumScreenRow_cabin(int sumScreenRow_cabin) {
         this.sumScreenRow_cabin = sumScreenRow_cabin;
     }
 
     /**
-     * 获取屏幕船舱列数
+     * 获取屏幕船舱最大列数
      *
-     * @return 屏幕船舱列数
+     * @return 屏幕船舱最大列数
      */
     public int getSumScreenCol_cabin() {
         return sumScreenCol_cabin;
     }
 
     /**
-     * 设置屏幕船舱列数
+     * 设置屏幕船舱最大列数
      *
-     * @param sumScreenCol_cabin 屏幕船舱列数
+     * @param sumScreenCol_cabin 屏幕船舱最大列数
      */
     public void setSumScreenCol_cabin(int sumScreenCol_cabin) {
         this.sumScreenCol_cabin = sumScreenCol_cabin;

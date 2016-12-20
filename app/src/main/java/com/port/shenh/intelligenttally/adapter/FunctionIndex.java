@@ -5,7 +5,6 @@ package com.port.shenh.intelligenttally.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-
 import com.port.shenh.intelligenttally.activity.VoyageDownloadActivity;
 import com.port.shenh.intelligenttally.activity.VoyageSelectActivity;
 
