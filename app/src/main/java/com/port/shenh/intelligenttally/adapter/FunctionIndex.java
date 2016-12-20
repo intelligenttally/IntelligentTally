@@ -6,7 +6,6 @@ package com.port.shenh.intelligenttally.adapter;
 import android.content.Context;
 import android.content.Intent;
 
-import com.port.shenh.intelligenttally.activity.TestActivity;
 import com.port.shenh.intelligenttally.activity.VoyageDownloadActivity;
 import com.port.shenh.intelligenttally.activity.VoyageSelectActivity;
 
@@ -45,7 +44,7 @@ public class FunctionIndex {
                 break;
             case 3:
                 // 全统计
-                intent = new Intent(context, TestActivity.class);
+                intent = new Intent(context, VoyageSelectActivity.class);
                 break;
 
         }
