@@ -31,11 +31,6 @@ import java.util.Map;
 public class BayGridAdapter {
 
     /**
-     * 日志前缀
-     */
-    private static final String LOG_TAG = "BayGridAdapter.";
-
-    /**
      * 甲板船图前缀
      */
     private static final String UP = "board";
