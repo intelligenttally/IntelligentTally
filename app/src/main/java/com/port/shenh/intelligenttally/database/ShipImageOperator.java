@@ -509,7 +509,7 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
         while (cursor.moveToNext()) {
             if (cursor.getString(joint).equals("1") == true)
             {
-                int tempBayNum = Integer.parseInt(bayNum) + 2;
+                int tempBayNum = Integer.parseInt(bayNum) + 1;
                 Log.i(LOG_TAG + "queryBay", "tempBayNum is " + tempBayNum);
 
                 if (tempBayNum < 10){
