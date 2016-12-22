@@ -259,6 +259,11 @@ public interface TableConst {
     interface Bay{
 
         /**
+         * 通贝标志
+         */
+        String JOINT = "joint";
+
+        /**
          * 屏幕甲板最大行数
          */
         String SUM_SCREEN_ROW_BOARD = "sum_screen_row_board";

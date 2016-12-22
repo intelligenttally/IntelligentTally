@@ -9,12 +9,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-
 import com.port.shenh.intelligenttally.bean.Bay;
 import com.port.shenh.intelligenttally.bean.ShipImage;
-
 import org.mobile.library.model.database.BaseOperator;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,7 +60,7 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
          * 建表语句
          */
         String createTableSql = String.format("CREATE TABLE IF NOT EXISTS %s ( %s INTEGER PRIMARY" +
-                " KEY, " +
+                        " KEY, " +
                         "%s TEXT," +
                         "%s TEXT," +
                         "%s TEXT," +
@@ -340,7 +337,6 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
      * 根据行航次编码查询结果
      *
      * @param shipId 航次编码
-     *
      * @return 数据对象，没有返回null
      */
     public ShipImage queryByShipId(String shipId) {
@@ -364,7 +360,6 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
      * 根据航次编码判断数据是否存在
      *
      * @param shipId 航次编码
-     *
      * @return true/flase
      */
     public boolean isExistByShipId(String shipId) {
@@ -434,7 +429,6 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
      *
      * @param shipId 航次编码
      * @param bayNum 贝号
-     *
      * @return 数据对象，没有返回null
      */
     public List<ShipImage> queryShipImage(String shipId, String bayNum) {
@@ -456,13 +450,13 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
      *
      * @param bayNum 贝号
      * @param shipId 航次编码
-     *
      * @return 数据对象，没有返回null
      */
     public Bay queryBay(String shipId, String bayNum) {
         Log.i(LOG_TAG + "queryBay", "query param is " + shipId + " " + bayNum);
 
         Bay bay = new Bay();
+        String bay_num = bayNum;
 
         // 查询语句
         String sql = String.format("select Max(SCREEN_ROW) as sum_screen_row_board,Min(SCREEN_ROW) as min_screen_row_board,Max" +
@@ -485,10 +479,9 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
             bay.setSumScreenCol_board(cursor.getInt(sumScreenCol_board));
         }
 
-
         // 查询语句
         sql = String.format("select Max(SCREEN_ROW) as sum_screen_row_cabin,Max(SCREEN_COL) as " +
-                "sum_screen_col_cabin from %s where %s='%s' and %s='%s' and %s='%s'", tableName,
+                        "sum_screen_col_cabin from %s where %s='%s' and %s='%s' and %s='%s'", tableName,
                 "ship_id", shipId, "bay_num", bayNum, "location", "cabin");
         Log.i(LOG_TAG + "queryBay", "sql is " + sql);
         // 查询数据
@@ -501,6 +494,33 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
         while (cursor.moveToNext()) {
             bay.setSumScreenRow_cabin(cursor.getInt(sumScreenRow_cabin));
             bay.setSumScreenCol_cabin(cursor.getInt(sumScreenCol_cabin));
+        }
+
+        // 查询语句
+        sql = String.format("select joint from %s where %s='%s' and %s='%s' and %s='%s'", tableName,
+                "ship_id", shipId, "bay_num", bayNum, "location", "cabin");
+        Log.i(LOG_TAG + "queryBay", "sql is " + sql);
+        // 查询数据
+        cursor = sqLiteDatabase.rawQuery(sql, null);
+
+        // 列索引
+        int joint = cursor.getColumnIndex(TableConst.Bay.JOINT);
+
+        while (cursor.moveToNext()) {
+            if (cursor.getString(joint).equals("1") == true)
+            {
+                int tempBayNum = Integer.parseInt(bayNum) + 2;
+                Log.i(LOG_TAG + "queryBay", "tempBayNum is " + tempBayNum);
+
+                if (tempBayNum < 10){
+                    bay_num = bayNum + "(" + "0" + Integer.toString(tempBayNum) + ")";
+                }else {
+                    bay_num =  bayNum + "(" + Integer.toString(tempBayNum) + ")";
+                }
+
+                bay.setBay_num(bay_num);
+                break;
+            }
         }
 
         // 关闭数据库
