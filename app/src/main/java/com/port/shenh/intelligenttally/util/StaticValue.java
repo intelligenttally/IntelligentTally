@@ -35,6 +35,11 @@ public interface StaticValue {
          * 航次
          */
         String VOYAGE_TAG = "voyage_tag";
+
+        /**
+         * 最大贝号
+         */
+        String MAX_BAY_NUMBER_TAG = "max_bay_number_tag";
     }
 
     /**

@@ -12,10 +12,9 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.port.shenh.intelligenttally.R;
-import com.port.shenh.intelligenttally.bean.Bay;
-import com.port.shenh.intelligenttally.holder.BayNumItemViewHolder;
 import com.port.shenh.intelligenttally.adapter.BayNumRecyclerViewAdapter;
 import com.port.shenh.intelligenttally.function.ShipImageListFunction;
+import com.port.shenh.intelligenttally.holder.BayNumItemViewHolder;
 import com.port.shenh.intelligenttally.util.StaticValue;
 
 import org.mobile.library.common.function.ToolbarInitialize;
@@ -23,8 +22,6 @@ import org.mobile.library.model.operate.OnItemClickListenerForRecyclerViewItem;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.port.shenh.intelligenttally.R.mipmap.voyage;
 
 /**
  * 贝位号选择Activity
@@ -157,14 +154,11 @@ public class BayNumSelectActivity extends AppCompatActivity {
                     intent.putExtra(StaticValue.IntentTag.BAYNUM_SELECT_TAG, dataSource.get
                             (position));
                     intent.putExtra(StaticValue.IntentTag.VOYAGE_TAG, viewHolder.ship_id);
-                    Bay bay = viewHolder.shipImageListFunction.onLoadBayFromDataBase(viewHolder.ship_id, dataSource.get
-                            (position));
-
-                    Log.i(LOG_TAG + "initListView", "Bay is " + bay.getSumScreenRow_board() + bay.getSumScreenRow_cabin() + bay.getSumScreenCol_board() + bay.getSumScreenCol_cabin());
+                    intent.putExtra(StaticValue.IntentTag.MAX_BAY_NUMBER_TAG, dataSource.size() *
+                            2 - 1);
 
                     // 跳转到详情页面
                     startActivity(intent);
-
                 }
             });
 

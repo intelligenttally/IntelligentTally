@@ -1,5 +1,6 @@
 package com.port.shenh.intelligenttally.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -8,6 +9,7 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.TableLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.port.shenh.intelligenttally.R;
@@ -51,6 +53,26 @@ public class BayActivity extends AppCompatActivity {
      */
     private ShipImageListFunction function = null;
 
+    /**
+     * 航次ID
+     */
+    private String shipId = null;
+
+    /**
+     * 标题文本框
+     */
+    private TextView titleTextView = null;
+
+    /**
+     * 当前贝号
+     */
+    private int bayNumber = 1;
+
+    /**
+     * 最大贝号
+     */
+    private int maxBayNumber = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +88,7 @@ public class BayActivity extends AppCompatActivity {
     private void initView() {
         // 初始化Toolbar
         ToolbarInitialize.initToolbar(this, R.string.bay, true, true);
+        titleTextView = (TextView) findViewById(R.id.toolbar_title);
 
         initLayout();
 
@@ -134,10 +157,29 @@ public class BayActivity extends AppCompatActivity {
     private void initData() {
         function = new ShipImageListFunction(this);
 
-        String shipId = getIntent().getStringExtra(StaticValue.IntentTag.VOYAGE_TAG);
-        String bayNumber = getIntent().getStringExtra(StaticValue.IntentTag.BAYNUM_SELECT_TAG);
+        Intent intent = getIntent();
+
+        shipId = intent.getStringExtra(StaticValue.IntentTag.VOYAGE_TAG);
+        String bayNumber = intent.getStringExtra(StaticValue.IntentTag.BAYNUM_SELECT_TAG);
+
+        this.bayNumber = Integer.parseInt(bayNumber);
+
+        maxBayNumber = intent.getIntExtra(StaticValue.IntentTag.MAX_BAY_NUMBER_TAG, this.bayNumber);
+
+        loadBay();
+    }
+
+    /**
+     * 加载贝图
+     */
+    private void loadBay() {
+
+        String bayNumber = this.bayNumber >= 10 ? String.valueOf(this.bayNumber) : "0" + this
+                .bayNumber;
 
         Bay bay = function.onLoadBayFromDataBase(shipId, bayNumber);
+
+        titleTextView.setText(bay.getBay_num());
 
         List<ShipImage> list = function.onLoadShipImageFromDataBase(shipId, bayNumber);
 
@@ -170,15 +212,20 @@ public class BayActivity extends AppCompatActivity {
      * 上一贝
      */
     private void doLastBay() {
-
+        if (bayNumber > 1) {
+            bayNumber -= 2;
+            loadBay();
+        }
     }
 
     /**
      * 下一贝
      */
     private void doNextBay() {
-
+        if (bayNumber < maxBayNumber) {
+            bayNumber += 2;
+            loadBay();
+        }
     }
-
 
 }
