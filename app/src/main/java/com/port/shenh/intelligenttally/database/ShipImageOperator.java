@@ -517,11 +517,11 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
                 }else {
                     bay_num =  bayNum + "(" + Integer.toString(tempBayNum) + ")";
                 }
-
-                bay.setBay_num(bay_num);
                 break;
             }
         }
+
+        bay.setBay_num(bay_num);
 
         // 关闭数据库
         cursor.close();

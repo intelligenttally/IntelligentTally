@@ -3,12 +3,16 @@ package com.port.shenh.intelligenttally.adapter;
  * Created by 超悟空 on 2016/3/16.
  */
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.port.shenh.intelligenttally.R;
 import com.port.shenh.intelligenttally.holder.BayNumItemViewHolder;
+import com.port.shenh.intelligenttally.holder.VoyageItemViewHolder;
 
 import org.mobile.library.model.operate.OnItemClickListenerForRecyclerViewItem;
 import java.util.ArrayList;
@@ -29,6 +33,11 @@ public class BayNumRecyclerViewAdapter extends RecyclerView.Adapter<BayNumItemVi
     private List<String> dataList = null;
 
     /**
+     * 记录选中的position
+     */
+    private SparseBooleanArray selectedItems;
+
+    /**
      * Item点击事件监听器
      */
     private OnItemClickListenerForRecyclerViewItem<List<String>, BayNumItemViewHolder>
@@ -38,7 +47,12 @@ public class BayNumRecyclerViewAdapter extends RecyclerView.Adapter<BayNumItemVi
      * 构造函数
      */
     public BayNumRecyclerViewAdapter() {
-        this(null);
+
+        if (this.dataList == null) {
+            this.dataList = new ArrayList<>();
+        }
+
+        this.selectedItems = new SparseBooleanArray();
     }
 
     /**
@@ -52,6 +66,8 @@ public class BayNumRecyclerViewAdapter extends RecyclerView.Adapter<BayNumItemVi
         if (this.dataList == null) {
             this.dataList = new ArrayList<>();
         }
+
+        this.selectedItems = new SparseBooleanArray();
     }
 
     /**
@@ -118,6 +134,21 @@ public class BayNumRecyclerViewAdapter extends RecyclerView.Adapter<BayNumItemVi
         this.notifyItemRangeRemoved(position, count);
     }
 
+    /**
+     * 切换选择状态
+     *
+     * @param bayNumItemViewHolder 航次列表的ViewHolder
+     */
+    public void switchSelectedState(BayNumItemViewHolder bayNumItemViewHolder) {
+
+        int position = bayNumItemViewHolder.getLayoutPosition();
+
+        selectedItems.clear();
+        selectedItems.put(position, true);
+        notifyDataSetChanged();
+    }
+
+
     @Override
     public BayNumItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // 创建Item根布局
@@ -131,6 +162,14 @@ public class BayNumRecyclerViewAdapter extends RecyclerView.Adapter<BayNumItemVi
     @Override
     public void onBindViewHolder(final BayNumItemViewHolder holder, int position) {
         holder.textView.setText(dataList.get(position));
+
+        int color = 0;
+        if (selectedItems.get(position, false)) {
+            color = Color.parseColor("#E0FFFF");
+        } else {
+            color = Color.parseColor("#FFFFFF");
+        }
+        holder.itemView.setBackgroundColor(color);
 
         if (onItemClickListener != null) {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
