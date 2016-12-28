@@ -15,6 +15,9 @@
     <color name="chart_line_orange_color">#FFFF9432</color>
 
     <color name="light_gray_background">#EAEAEE</color>
+    <color name="grey_50">#fffafafa</color>
+
+    <color name="light_gray_white">#F6F6F6</color>
 
     <color name="login_background_color">#E1EFFC</color>
 

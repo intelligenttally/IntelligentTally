@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:stretchColumns="1,3,5,7">
+
+    <TableRow>
+
+        <TextView android:text="贝位："/>
+
+        <TextView
+            android:id="@+id/layout_bottom_sheet_info_bay_textView"/>
+
+        <TextView
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:text="箱号："/>
+
+        <TextView
+            android:id="@+id/layout_bottom_sheet_info_box_number_textView"
+            android:layout_span="3"/>
+
+        <TextView
+            android:id="@+id/layout_bottom_sheet_info_inverted_textView"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"/>
+
+    </TableRow>
+
+    <TableRow android:layout_marginTop="@dimen/layout_default_spacing">
+
+        <TextView android:text="重量："/>
+
+        <TextView
+            android:id="@+id/layout_bottom_sheet_info_weight_textView"/>
+
+        <TextView
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:text="尺寸："/>
+
+        <TextView
+            android:id="@+id/layout_bottom_sheet_info_size_textView"/>
+
+        <TextView
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:text="箱型："/>
+
+        <TextView
+            android:id="@+id/layout_bottom_sheet_info_type_textView"/>
+
+        <TextView
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:text="空重："/>
+
+        <TextView
+            android:id="@+id/layout_bottom_sheet_info_empty_textView"/>
+    </TableRow>
+
+</TableLayout>

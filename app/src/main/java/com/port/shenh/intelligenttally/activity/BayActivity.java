@@ -1,8 +1,12 @@
 package com.port.shenh.intelligenttally.activity;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -10,12 +14,12 @@ import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.TableLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.port.shenh.intelligenttally.R;
 import com.port.shenh.intelligenttally.adapter.BayGridAdapter;
 import com.port.shenh.intelligenttally.bean.Bay;
 import com.port.shenh.intelligenttally.bean.ShipImage;
+import com.port.shenh.intelligenttally.fragment.BayNormalBottomFragment;
 import com.port.shenh.intelligenttally.function.ShipImageListFunction;
 import com.port.shenh.intelligenttally.util.StaticValue;
 import com.port.shenh.intelligenttally.view.FreedomScrollView;
@@ -64,14 +68,39 @@ public class BayActivity extends AppCompatActivity {
     private TextView titleTextView = null;
 
     /**
-     * 当前贝号
+     * 内容滚动布局
      */
-    private int bayNumber = 1;
+    private FreedomScrollView scrollView = null;
 
     /**
-     * 最大贝号
+     * 当前贝号索引
      */
-    private int maxBayNumber = 1;
+    private int bayNumberPosition = 0;
+
+    /**
+     * 贝号列表
+     */
+    private List<String> bayNumberList = null;
+
+    /**
+     * 内容布局原始高度
+     */
+    private int bottom = 0;
+
+    /**
+     * 上一个选中的贝位
+     */
+    private BayGridAdapter.ViewHolder beforeHolder = null;
+
+    /**
+     * 底部布局
+     */
+    private View bottomLayout = null;
+
+    /**
+     * 常规底部布局
+     */
+    private BayNormalBottomFragment bayNormalBottomFragment = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,9 +119,29 @@ public class BayActivity extends AppCompatActivity {
         ToolbarInitialize.initToolbar(this, R.string.bay, true, true);
         titleTextView = (TextView) findViewById(R.id.toolbar_title);
 
-        initLayout();
-
+        initContentLayout();
+        initBottomLayout();
         initBay();
+    }
+
+    /**
+     * 初始化底部布局
+     */
+    private void initBottomLayout() {
+        bottomLayout = findViewById(R.id.layout_bottom_parent_layout);
+        bayNormalBottomFragment = new BayNormalBottomFragment();
+
+        onChangeBottomFragment(bayNormalBottomFragment);
+    }
+
+    /**
+     * 替换底部布局
+     *
+     * @param fragment 要替换的布局
+     */
+    private void onChangeBottomFragment(Fragment fragment) {
+        getSupportFragmentManager().beginTransaction().replace(R.id
+                .layout_bottom_parent_content_layout, fragment).commit();
     }
 
     /**
@@ -104,7 +153,30 @@ public class BayActivity extends AppCompatActivity {
         adapter.setOnGridItemClickListener(new BayGridAdapter.OnGridItemClickListener() {
             @Override
             public void onClick(BayGridAdapter.ViewHolder holder, ShipImage data) {
-                Toast.makeText(BayActivity.this, data.getBayno(), Toast.LENGTH_SHORT).show();
+                if (bottom == 0) {
+                    bottom = scrollView.getBottom();
+                }
+
+                if (beforeHolder != null) {
+                    beforeHolder.itemView.setSelected(false);
+                }
+
+                if (holder != beforeHolder) {
+                    holder.itemView.setSelected(true);
+                    beforeHolder = holder;
+
+                    if (!TextUtils.isEmpty(data.getBayno()) && bayNormalBottomFragment.isVisible
+                            ()) {
+                        bayNormalBottomFragment.setBayData(data);
+                        showBottomLayout();
+                    } else {
+                        hideBottomLayout();
+                    }
+
+                } else {
+                    beforeHolder = null;
+                    hideBottomLayout();
+                }
             }
         });
     }
@@ -113,12 +185,11 @@ public class BayActivity extends AppCompatActivity {
      * 初始化内容布局
      */
     @SuppressWarnings("ConstantConditions")
-    private void initLayout() {
+    private void initContentLayout() {
 
         final TableLayout layout = (TableLayout) findViewById(R.id.activity_bay_content_layout);
 
-        final FreedomScrollView scrollView = (FreedomScrollView) findViewById(R.id
-                .activity_bay_scrollView);
+        scrollView = (FreedomScrollView) findViewById(R.id.activity_bay_scrollView);
 
         scrollView.setScrollableOutsideChile(true);
 
@@ -160,11 +231,9 @@ public class BayActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         shipId = intent.getStringExtra(StaticValue.IntentTag.VOYAGE_TAG);
-        String bayNumber = intent.getStringExtra(StaticValue.IntentTag.BAYNUM_SELECT_TAG);
+        bayNumberPosition = intent.getIntExtra(StaticValue.IntentTag.BAYNUM_SELECT_TAG, 0);
 
-        this.bayNumber = Integer.parseInt(bayNumber);
-
-        maxBayNumber = intent.getIntExtra(StaticValue.IntentTag.MAX_BAY_NUMBER_TAG, this.bayNumber);
+        bayNumberList = function.onLoadBayNumListFromDataBase(shipId);
 
         loadBay();
     }
@@ -174,8 +243,21 @@ public class BayActivity extends AppCompatActivity {
      */
     private void loadBay() {
 
-        String bayNumber = this.bayNumber >= 10 ? String.valueOf(this.bayNumber) : "0" + this
-                .bayNumber;
+        if (bottom != 0) {
+            hideBottomLayout();
+            bottom = 0;
+        }
+
+        if (beforeHolder != null) {
+            beforeHolder.itemView.setSelected(false);
+            beforeHolder = null;
+        }
+
+        if (bayNumberList == null || bayNumberList.isEmpty()) {
+            return;
+        }
+
+        String bayNumber = bayNumberList.get(bayNumberPosition);
 
         Bay bay = function.onLoadBayFromDataBase(shipId, bayNumber);
 
@@ -212,8 +294,8 @@ public class BayActivity extends AppCompatActivity {
      * 上一贝
      */
     private void doLastBay() {
-        if (bayNumber > 1) {
-            bayNumber -= 2;
+        if (bayNumberPosition > 0) {
+            bayNumberPosition--;
             loadBay();
         }
     }
@@ -222,10 +304,37 @@ public class BayActivity extends AppCompatActivity {
      * 下一贝
      */
     private void doNextBay() {
-        if (bayNumber < maxBayNumber) {
-            bayNumber += 2;
+        if (bayNumberList != null && bayNumberPosition < bayNumberList.size() - 1) {
+            bayNumberPosition++;
             loadBay();
         }
     }
 
+    /**
+     * 显示布局
+     */
+    private void showBottomLayout() {
+        bottomLayout.animate().translationY(0).setDuration(200).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if (bottom != 0 && scrollView.getBottom() != bottom - bottomLayout.getHeight()) {
+                    scrollView.setBottom(bottom - bottomLayout.getHeight());
+                }
+            }
+        }).start();
+    }
+
+    /**
+     * 隐藏布局
+     */
+    private void hideBottomLayout() {
+        bottomLayout.animate().translationY(bottomLayout.getHeight()).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if (bottom != 0 && scrollView.getBottom() != bottom) {
+                    scrollView.setBottom(bottom);
+                }
+            }
+        }).start();
+    }
 }

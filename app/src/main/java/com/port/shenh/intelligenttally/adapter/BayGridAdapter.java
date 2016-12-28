@@ -51,11 +51,6 @@ public class BayGridAdapter {
     private int[] textColors = null;
 
     /**
-     * 上一个选中的控件
-     */
-    private ViewHolder beforeHolder = null;
-
-    /**
      * 区分卸货港颜色的索引
      */
     private Map<String, Integer> colorMap = null;
@@ -227,7 +222,6 @@ public class BayGridAdapter {
         downGridLayout.removeAllViews();
         downLeftGridLayout.removeAllViews();
 
-        beforeHolder = null;
         dataMap.clear();
         colorMap.clear();
 
@@ -511,11 +505,6 @@ public class BayGridAdapter {
             if (onGridItemClickListener != null) {
                 int index = (int) v.getTag();
                 ViewHolder holder = viewHolderList.get(index);
-                if (beforeHolder != null) {
-                    beforeHolder.itemView.setSelected(false);
-                }
-                holder.itemView.setSelected(true);
-                beforeHolder = holder;
                 String tag = (holder.itemGrid == 1 ? UP : DOWN) + holder.rowIndex + holder
                         .columnIndex;
                 onGridItemClickListener.onClick(holder, dataMap.get(tag));

@@ -151,11 +151,8 @@ public class BayNumSelectActivity extends AppCompatActivity {
 
                     // 跳转意图
                     Intent intent = new Intent(BayNumSelectActivity.this, BayActivity.class);
-                    intent.putExtra(StaticValue.IntentTag.BAYNUM_SELECT_TAG, dataSource.get
-                            (position));
+                    intent.putExtra(StaticValue.IntentTag.BAYNUM_SELECT_TAG, position);
                     intent.putExtra(StaticValue.IntentTag.VOYAGE_TAG, viewHolder.ship_id);
-                    intent.putExtra(StaticValue.IntentTag.MAX_BAY_NUMBER_TAG, dataSource.size() *
-                            2 - 1);
 
                     // 跳转到详情页面
                     startActivity(intent);
