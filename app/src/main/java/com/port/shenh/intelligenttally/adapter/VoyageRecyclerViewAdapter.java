@@ -40,7 +40,10 @@ public class VoyageRecyclerViewAdapter extends RecyclerView.Adapter<VoyageItemVi
      */
     private List<Voyage> dataList = null;
 
-    private SparseBooleanArray selectedItems;//记录选中的position
+    /**
+     * 记录选中的position
+     */
+    private SparseBooleanArray selectedItems;
 
     /**
      * item点击事件监听器

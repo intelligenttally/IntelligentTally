@@ -4,12 +4,14 @@ package com.port.shenh.intelligenttally.activity;
  */
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 
 import com.port.shenh.intelligenttally.R;
 import com.port.shenh.intelligenttally.adapter.BayNumRecyclerViewAdapter;
@@ -36,7 +38,6 @@ public class BayNumSelectActivity extends AppCompatActivity {
      * 日志标签前缀
      */
     private static final String LOG_TAG = "BayNumSelectActivity1.";
-
 
     /**
      * 控件集
@@ -148,6 +149,8 @@ public class BayNumSelectActivity extends AppCompatActivity {
                 public void onClick(List<String> dataSource, BayNumItemViewHolder holder) {
 
                     int position = holder.getAdapterPosition();
+
+                    viewHolder.recyclerViewAdapter.switchSelectedState(holder);
 
                     // 跳转意图
                     Intent intent = new Intent(BayNumSelectActivity.this, BayActivity.class);
