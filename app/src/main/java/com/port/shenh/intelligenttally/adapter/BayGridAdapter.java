@@ -289,6 +289,7 @@ public class BayGridAdapter {
 
                 onBindViewHolder(holder);
 
+                onResetViewLayoutParams(holder.itemView);
                 downGridLayout.addView(holder.itemView);
             }
         }
@@ -304,6 +305,7 @@ public class BayGridAdapter {
             holder.labelTextView.setText(onHorizontalNumberCompute(i,
                     currentDownGridIndexMaxColumn));
 
+            onResetViewLayoutParams(holder.itemView);
             downGridLayout.addView(holder.itemView);
         }
     }
@@ -323,6 +325,7 @@ public class BayGridAdapter {
             holder.itemView.getBackground().setLevel(0);
             holder.labelTextView.setText(onHorizontalNumberCompute(i, currentUpGridIndexMaxColumn));
 
+            onResetViewLayoutParams(holder.itemView);
             upGridLayout.addView(holder.itemView);
         }
 
@@ -336,6 +339,7 @@ public class BayGridAdapter {
 
                 onBindViewHolder(holder);
 
+                onResetViewLayoutParams(holder.itemView);
                 upGridLayout.addView(holder.itemView);
             }
         }
@@ -389,6 +393,7 @@ public class BayGridAdapter {
             holder.labelTextView.setText(String.valueOf((i - currentUpGridIndexMinRow + 1) * 2 +
                     80));
 
+            onResetViewLayoutParams(holder.itemView);
             upLeftGridLayout.addView(holder.itemView);
         }
 
@@ -404,7 +409,26 @@ public class BayGridAdapter {
             String value = i < 5 ? "0" + String.valueOf(i * 2) : String.valueOf(i * 2);
             holder.labelTextView.setText(value);
 
+            onResetViewLayoutParams(holder.itemView);
             downLeftGridLayout.addView(holder.itemView);
+        }
+    }
+
+    /**
+     * 重置item索引的默认序号
+     */
+    private static final GridLayout.Spec UNDEFINED_SPEC = GridLayout.spec(GridLayout.UNDEFINED);
+
+    /**
+     * 重置item控件参数
+     *
+     * @param view item控件
+     */
+    private void onResetViewLayoutParams(View view) {
+        if (view.getLayoutParams() instanceof GridLayout.LayoutParams) {
+            GridLayout.LayoutParams layoutParams = (GridLayout.LayoutParams) view.getLayoutParams();
+            layoutParams.rowSpec = UNDEFINED_SPEC;
+            layoutParams.columnSpec = UNDEFINED_SPEC;
         }
     }
 

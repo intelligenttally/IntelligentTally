@@ -43,7 +43,8 @@
                         android:id="@+id/activity_bay_up_gridLayout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"/>
+                        android:layout_gravity="center_horizontal"
+                        app:orientation="horizontal"/>
 
                 </TableRow>
 
@@ -70,7 +71,8 @@
                         android:id="@+id/activity_bay_down_gridLayout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"/>
+                        android:layout_gravity="center_horizontal"
+                        app:orientation="horizontal"/>
                 </TableRow>
 
             </TableLayout>
