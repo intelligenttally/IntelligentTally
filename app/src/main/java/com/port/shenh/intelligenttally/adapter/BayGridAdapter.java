@@ -256,7 +256,6 @@ public class BayGridAdapter {
     private void initResource(Bay bay) {
 
         viewHolderCursor = 0;
-        currentColorIndex = 0;
 
         currentUpGridIndexMaxRow = bay.getSumScreenRow_board();
         currentUpGridIndexMinRow = bay.getMinScreenRow_board();
