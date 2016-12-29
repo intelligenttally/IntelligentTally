@@ -12,6 +12,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.SparseBooleanArray;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.port.shenh.intelligenttally.R;
 import com.port.shenh.intelligenttally.adapter.BayNumRecyclerViewAdapter;
@@ -136,6 +138,8 @@ public class BayNumSelectActivity extends AppCompatActivity {
                 dataList = new ArrayList<>();
             }
 
+            viewHolder.shipImageListFunction.onLoadCodeUnloadPortSubListFromDataBase(viewHolder.ship_id);
+
             Log.i(LOG_TAG + "loadData", "dataList count is " + dataList.size());
 
             viewHolder.recyclerViewAdapter = new BayNumRecyclerViewAdapter(dataList);
@@ -163,5 +167,30 @@ public class BayNumSelectActivity extends AppCompatActivity {
             });
 
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_bay_upload, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.menu_upload:
+                // 上传
+                doUpload();
+                break;
+        }
+        return true;
+    }
+
+    /**
+     * 上传操作
+     */
+    private void doUpload() {
+
     }
 }

@@ -15,6 +15,7 @@ import org.mobile.library.model.database.BaseOperator;
 import org.mobile.library.model.work.WorkBack;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 船图数据功能类
@@ -273,6 +274,25 @@ public class ShipImageListFunction {
         Log.i(LOG_TAG + "onLoadBayNumListFromDataBase", "query shipId is " + shipId);
 
         return operator.queryBayNumList(shipId);
+    }
+
+
+
+    /**
+     * 从数据库获取卸货港简写列表
+     *
+     * @param shipId 航次编码
+     * @return 数据集合
+     */
+    public Map<String, String> onLoadCodeUnloadPortSubListFromDataBase(String shipId) {
+        if (operator == null || operator.isEmpty()) {
+            Log.i(LOG_TAG + "onLoadFromDataBase", "database null");
+            return null;
+        }
+
+        Log.i(LOG_TAG + "onLoadCodeUnloadPortSubListFromDataBase", "query shipId is " + shipId);
+
+        return operator.queryCodeUnloadPortSubList(shipId);
     }
 
 

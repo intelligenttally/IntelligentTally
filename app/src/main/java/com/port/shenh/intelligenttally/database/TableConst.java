@@ -251,6 +251,23 @@ public interface TableConst {
          * 理货员
          */
         String NAME = "name";
+
+        /**
+         * 数据修改标志
+         */
+        String MARK_MODIFY = "mark_modify";
+
+        /**
+         * 修改人（工号）
+         */
+        String MODIFIER = "modifier";
+
+        /**
+         * 修改时间
+         */
+        String MODIFYTIME = "modifytime";
+
+
     }
 
     /**

@@ -9,11 +9,16 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
 import com.port.shenh.intelligenttally.bean.Bay;
 import com.port.shenh.intelligenttally.bean.ShipImage;
+import com.port.shenh.intelligenttally.function.CodeUnloadPortSubListFunction;
+
 import org.mobile.library.model.database.BaseOperator;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 船图数据库操作工具
@@ -106,6 +111,9 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
                         "%s TEXT," +
                         "%s TEXT," +
                         "%s TEXT," +
+                        "%s TEXT," +
+                        "%s TEXT DEFAULT '0'," +
+                        "%s TEXT," +
                         "%s TEXT)", tableName, CommonConst._ID,
 
                 TableConst.ShipImage.SHIP_ID, TableConst.ShipImage.V_ID, TableConst.ShipImage
@@ -127,7 +135,8 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
                         .ShipImage.CODE_EMPTY, TableConst.ShipImage.WEIGHT, TableConst.ShipImage
                         .WORK_DATE, TableConst.ShipImage.SEALNO, TableConst.ShipImage.MOVED_NAME,
                 TableConst.ShipImage.INOUTMARK, TableConst.ShipImage.TRANSMARK, TableConst
-                        .ShipImage.HOLIDAYS, TableConst.ShipImage.NIGHT, TableConst.ShipImage.NAME);
+                        .ShipImage.HOLIDAYS, TableConst.ShipImage.NIGHT, TableConst.ShipImage.NAME,
+                TableConst.ShipImage.MARK_MODIFY, TableConst.ShipImage.MODIFIER, TableConst.ShipImage.MODIFYTIME);
 
 
         Log.i(LOG_TAG + "onCreateTable", "sql is " + createTableSql);
@@ -395,7 +404,6 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
      * 根据航次编码查询单号列表
      *
      * @param shipId 航次编码
-     *
      * @return 数据对象，没有返回null
      */
     public List<String> queryBayNumList(String shipId) {
@@ -422,6 +430,42 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
         close(sqLiteHelper);
 
         return bayList;
+    }
+
+    /**
+     * 根据航次编码查询卸货港简写列表
+     * @param shipId 航次编码
+     * @return 数据对象，没有返回null
+     */
+    public Map<String, String> queryCodeUnloadPortSubList(String shipId){
+        Log.i(LOG_TAG + "queryCodeUnloadPortSubList", "query shipId is " + shipId);
+
+        List<String> codeUnloadPortList = new ArrayList<>();
+
+        // 查询语句
+        String sql = String.format("select distinct code_unload_port from %s where %s=%s  and code_unload_port is not null and ltrim(code_unload_port) <> ''", tableName, "ship_id", shipId);
+        Log.i(LOG_TAG + "queryCodeUnloadPortSubList", "sql is " + sql);
+        // 查询数据
+        Cursor cursor = sqLiteHelper.getReadableDatabase().rawQuery(sql, null);
+
+        // 列索引
+        int code_unload_port = cursor.getColumnIndex("code_unload_port");
+
+        while (cursor.moveToNext()) {
+            codeUnloadPortList.add(cursor.getString(code_unload_port));
+        }
+
+        // 关闭数据库
+        cursor.close();
+        close(sqLiteHelper);
+
+        if (codeUnloadPortList.size() >0){
+            return  CodeUnloadPortSubListFunction.GetCodeUnloadPortSubList(codeUnloadPortList);
+        }else {
+            return null;
+        }
+
+
     }
 
     /**
@@ -507,15 +551,14 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
         int joint = cursor.getColumnIndex(TableConst.Bay.JOINT);
 
         while (cursor.moveToNext()) {
-            if (cursor.getString(joint).equals("1") == true)
-            {
+            if (cursor.getString(joint).equals("1") == true) {
                 int tempBayNum = Integer.parseInt(bayNum) + 1;
                 Log.i(LOG_TAG + "queryBay", "tempBayNum is " + tempBayNum);
 
-                if (tempBayNum < 10){
+                if (tempBayNum < 10) {
                     bay_num = bayNum + "(" + "0" + Integer.toString(tempBayNum) + ")";
-                }else {
-                    bay_num =  bayNum + "(" + Integer.toString(tempBayNum) + ")";
+                } else {
+                    bay_num = bayNum + "(" + Integer.toString(tempBayNum) + ")";
                 }
                 break;
             }

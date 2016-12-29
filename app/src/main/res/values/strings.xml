@@ -6,6 +6,7 @@
 
     <string name="clear_cache">清除缓存</string>
     <string name="download">下载</string>
+    <string name="upload">上传</string>
     <string name="bay">贝位图</string>
     <string name="baynum">贝号</string>
     <string name="last_bay">上一贝</string>
