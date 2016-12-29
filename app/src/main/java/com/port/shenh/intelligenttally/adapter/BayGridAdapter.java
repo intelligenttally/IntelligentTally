@@ -246,7 +246,6 @@ public class BayGridAdapter {
         downLeftGridLayout.removeAllViews();
 
         dataMap.clear();
-        colorMap.clear();
     }
 
     /**
