@@ -46,6 +46,11 @@ public class BayGridAdapter {
     private static final int BACKGROUND_COLOR_INDEX_OFFSET = 3;
 
     /**
+     * 默认文本控件字体颜色
+     */
+    private int defaultTextColor = 0;
+
+    /**
      * item填充文本色
      */
     private int[] textColors = null;
@@ -89,6 +94,11 @@ public class BayGridAdapter {
      * 船图数据表
      */
     private Map<String, ShipImage> dataMap = null;
+
+    /**
+     * 卸货港简拼
+     */
+    private Map<String, String> unloadSort = null;
 
     /**
      * item点击事件
@@ -154,7 +164,6 @@ public class BayGridAdapter {
         colorMap = new HashMap<>();
 
         TypedArray typedArray = activity.getResources().obtainTypedArray(R.array.box_text_colors);
-
         textColors = new int[typedArray.length()];
 
         for (int i = 0; i < typedArray.length(); i++) {
@@ -162,6 +171,20 @@ public class BayGridAdapter {
         }
 
         typedArray.recycle();
+
+        typedArray = activity.obtainStyledAttributes(new int[]{android.R.attr.textColorSecondary});
+
+        defaultTextColor = typedArray.getColor(0, Color.DKGRAY);
+        typedArray.recycle();
+    }
+
+    /**
+     * 设置卸货港简拼
+     *
+     * @param unloadSort 简拼集合
+     */
+    public void setUnloadSort(Map<String, String> unloadSort) {
+        this.unloadSort = unloadSort == null ? new HashMap<String, String>() : unloadSort;
     }
 
     /**
@@ -224,10 +247,6 @@ public class BayGridAdapter {
 
         dataMap.clear();
         colorMap.clear();
-
-        for (ViewHolder holder : viewHolderList) {
-            holder.itemView.setOnClickListener(null);
-        }
     }
 
     /**
@@ -287,9 +306,8 @@ public class BayGridAdapter {
                 holder.columnIndex = j;
                 holder.itemGrid = 2;
 
-                onBindViewHolder(holder);
-
                 onResetViewLayoutParams(holder.itemView);
+                onBindViewHolder(holder);
                 downGridLayout.addView(holder.itemView);
             }
         }
@@ -301,9 +319,7 @@ public class BayGridAdapter {
             holder.itemGrid = 6;
 
             // 设置编号和样式
-            holder.itemView.getBackground().setLevel(0);
-            holder.labelTextView.setText(onHorizontalNumberCompute(i,
-                    currentDownGridIndexMaxColumn));
+            onSetNumberView(holder, onHorizontalNumberCompute(i, currentDownGridIndexMaxColumn));
 
             onResetViewLayoutParams(holder.itemView);
             downGridLayout.addView(holder.itemView);
@@ -322,8 +338,7 @@ public class BayGridAdapter {
             holder.itemGrid = 4;
 
             // 设置编号和样式
-            holder.itemView.getBackground().setLevel(0);
-            holder.labelTextView.setText(onHorizontalNumberCompute(i, currentUpGridIndexMaxColumn));
+            onSetNumberView(holder, onHorizontalNumberCompute(i, currentUpGridIndexMaxColumn));
 
             onResetViewLayoutParams(holder.itemView);
             upGridLayout.addView(holder.itemView);
@@ -337,9 +352,8 @@ public class BayGridAdapter {
                 holder.columnIndex = j;
                 holder.itemGrid = 1;
 
-                onBindViewHolder(holder);
-
                 onResetViewLayoutParams(holder.itemView);
+                onBindViewHolder(holder);
                 upGridLayout.addView(holder.itemView);
             }
         }
@@ -389,9 +403,7 @@ public class BayGridAdapter {
             holder.itemGrid = 3;
 
             // 设置编号和样式
-            holder.itemView.getBackground().setLevel(0);
-            holder.labelTextView.setText(String.valueOf((i - currentUpGridIndexMinRow + 1) * 2 +
-                    80));
+            onSetNumberView(holder, String.valueOf((i - currentUpGridIndexMinRow + 1) * 2 + 80));
 
             onResetViewLayoutParams(holder.itemView);
             upLeftGridLayout.addView(holder.itemView);
@@ -405,13 +417,24 @@ public class BayGridAdapter {
             holder.itemGrid = 5;
 
             // 设置编号和样式
-            holder.itemView.getBackground().setLevel(0);
             String value = i < 5 ? "0" + String.valueOf(i * 2) : String.valueOf(i * 2);
-            holder.labelTextView.setText(value);
+            onSetNumberView(holder, value);
 
             onResetViewLayoutParams(holder.itemView);
             downLeftGridLayout.addView(holder.itemView);
         }
+    }
+
+    /**
+     * 设置一个编号item
+     *
+     * @param holder 控件管理器
+     * @param number 编号
+     */
+    private void onSetNumberView(ViewHolder holder, String number) {
+        holder.itemView.getBackground().setLevel(0);
+        holder.labelTextView.setText(number);
+        holder.labelTextView.setTextColor(defaultTextColor);
     }
 
     /**
@@ -425,6 +448,7 @@ public class BayGridAdapter {
      * @param view item控件
      */
     private void onResetViewLayoutParams(View view) {
+        view.setOnClickListener(null);
         if (view.getLayoutParams() instanceof GridLayout.LayoutParams) {
             GridLayout.LayoutParams layoutParams = (GridLayout.LayoutParams) view.getLayoutParams();
             layoutParams.rowSpec = UNDEFINED_SPEC;
@@ -510,8 +534,14 @@ public class BayGridAdapter {
                 container = "*";
             }
 
-            holder.labelTextView.setText(String.format("%s%s", data.getCode_unload_port(),
-                    container));
+            // 卸货港简拼
+            String unloadPort = unloadSort.get(data.getCode_unload_port());
+
+            if (unloadPort == null) {
+                unloadPort = data.getCode_unload_port();
+            }
+
+            holder.labelTextView.setText(String.format("%s%s", unloadPort, container));
         }
 
         int index = getDataViewHolderIndex(holder.rowIndex, holder.columnIndex, holder.itemGrid

@@ -233,6 +233,7 @@ public class BayActivity extends AppCompatActivity {
         shipId = intent.getStringExtra(StaticValue.IntentTag.VOYAGE_TAG);
         bayNumberPosition = intent.getIntExtra(StaticValue.IntentTag.BAYNUM_SELECT_TAG, 0);
 
+        adapter.setUnloadSort(function.onLoadCodeUnloadPortSubListFromDataBase(shipId));
         bayNumberList = function.onLoadBayNumListFromDataBase(shipId);
 
         loadBay();
