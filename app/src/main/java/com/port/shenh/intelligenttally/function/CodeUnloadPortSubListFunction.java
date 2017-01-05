@@ -54,7 +54,7 @@ public class CodeUnloadPortSubListFunction {
      * @param codeUnloadPortList 卸货港列表
      * @return 数据集合
      */
-    public static Map<String, String> GetCodeUnloadPortSubList(List<String> codeUnloadPortList) {
+    public static Map<String, String> getCodeUnloadPortSubList(List<String> codeUnloadPortList) {
 
         List<UnloadPort> unloadPortList = new ArrayList<>();
         for (int i = 0; i < codeUnloadPortList.size(); i++) {
@@ -76,11 +76,7 @@ public class CodeUnloadPortSubListFunction {
             unloadPortList.add(unloadPort);
         }
 
-        SortByASCII(unloadPortList);
-
-        for (int i = 0; i < unloadPortList.size(); i++) {
-            Log.i(LOG_TAG + "queryCodeUnloadPortSubList", "unloadPort sort is " + unloadPortList.get(i).unload);
-        }
+        sortByASCII(unloadPortList);
 
         List<UnloadPort> newUnloadPortList = new ArrayList<>();
         for (int i = 0; i < unloadPortList.size(); i++) {
@@ -88,7 +84,7 @@ public class CodeUnloadPortSubListFunction {
             String substitute = unloadPortList.get(i).substitute;
             boolean isExit = false;
             for (int j = 0; j < i; j++) {
-                if (substitute.equals(unloadPortList.get(j))) {
+                if (substitute.equals(unloadPortList.get(j).substitute)) {
                     isExit = true;
                     break;
                 }
@@ -102,8 +98,8 @@ public class CodeUnloadPortSubListFunction {
                 }
 
                 do {
-                    substitute = String.valueOf(substitute.charAt(0) + 1);
-                    isExit = IsExit(substitute, unloadPortList, newUnloadPortList);
+                    substitute = String.valueOf((char)(substitute.charAt(0) + 1));
+                    isExit = isExit(substitute, unloadPortList, newUnloadPortList);
                 } while (isExit);
             }
 
@@ -120,10 +116,6 @@ public class CodeUnloadPortSubListFunction {
             map.put(newUnloadPortList.get(i).codeUnloadPort, newUnloadPortList.get(i).substitute);
         }
 
-        for (int i = 0; i < newUnloadPortList.size(); i++) {
-            Log.i(LOG_TAG + "queryCodeUnloadPortSubList", "newUnloadPort sort is " + newUnloadPortList.get(i).unload);
-        }
-
         return map;
     }
 
@@ -135,7 +127,7 @@ public class CodeUnloadPortSubListFunction {
      * @param newUnloadPortList new
      * @return true/flase
      */
-    private static boolean IsExit(String substitute, List<UnloadPort> oldUnloadPortList, List<UnloadPort> newUnloadPortList) {
+    private static boolean isExit(String substitute, List<UnloadPort> oldUnloadPortList, List<UnloadPort> newUnloadPortList) {
 
         //已经转换的字符中是否存在
         for (int i = 0; i < oldUnloadPortList.size(); i++) {
@@ -160,7 +152,7 @@ public class CodeUnloadPortSubListFunction {
      * @param unloadPortList
      * @return
      */
-    private static void SortByASCII(List<UnloadPort> unloadPortList) {
+    private static void sortByASCII(List<UnloadPort> unloadPortList) {
 
         for (int i = 0; i < unloadPortList.size(); i++) {
             for (int j = i + 1; j < unloadPortList.size(); j++) {

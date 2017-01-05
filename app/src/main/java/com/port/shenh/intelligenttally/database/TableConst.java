@@ -301,6 +301,11 @@ public interface TableConst {
         String SUM_SCREEN_ROW_CABIN = "sum_screen_row_cabin";
 
         /**
+         * 屏幕船舱最小行数
+         */
+        String MIN_SCREEN_ROW_CABIN = "min_screen_row_cabin";
+
+        /**
          * 屏幕船舱最大列数
          */
         String SUM_SCREEN_COL_CABIN = "sum_screen_col_cabin";

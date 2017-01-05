@@ -5,15 +5,19 @@ package com.port.shenh.intelligenttally.function;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.port.shenh.intelligenttally.R;
 import com.port.shenh.intelligenttally.bean.Bay;
 import com.port.shenh.intelligenttally.bean.ShipImage;
 import com.port.shenh.intelligenttally.database.ShipImageOperator;
+import com.port.shenh.intelligenttally.database.TableConst;
 import com.port.shenh.intelligenttally.work.PullShipImageList;
 
 import org.mobile.library.model.database.BaseOperator;
 import org.mobile.library.model.work.WorkBack;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -86,7 +90,7 @@ public class ShipImageListFunction {
      *
      * @param onLoadEndListener
      */
-    public void SetOnLoadEndListener(OnLoadEndListener onLoadEndListener) {
+    public void setOnLoadEndListener(OnLoadEndListener onLoadEndListener) {
         this.onLoadEndListener = onLoadEndListener;
     }
 
@@ -95,7 +99,7 @@ public class ShipImageListFunction {
      *
      * @param onClearEndListener
      */
-    public void SetOnClearEndListener(OnClearEndListener onClearEndListener) {
+    public void setOnClearEndListener(OnClearEndListener onClearEndListener) {
         this.onClearEndListener = onClearEndListener;
     }
 
@@ -277,7 +281,6 @@ public class ShipImageListFunction {
     }
 
 
-
     /**
      * 从数据库获取卸货港简写列表
      *
@@ -330,5 +333,175 @@ public class ShipImageListFunction {
         Log.i(LOG_TAG + "onLoadShipImageFromDataBase", "query param is " + shipId + " " + bayNum);
 
         return operator.queryBay(shipId, bayNum);
+    }
+
+    /**
+     * 移贝
+     *
+     * @param b1 贝位1
+     * @param sbayno2 贝位号2
+     * @return 错误消息，正确返回null
+     */
+    public String moveBay(ShipImage b1, String sbayno2) {
+        if (operator == null || operator.isEmpty()) {
+            Log.i(LOG_TAG + "onLoadFromDataBase", "database null");
+            return "false";
+        }
+
+        Log.i(LOG_TAG + "MoveBay", "query param is " + b1.getSbayno() + " " + sbayno2);
+
+        List<ShipImage> shipImages = GetShipImageList(b1.getShip_id(), sbayno2);
+
+        if (shipImages.size() == 0){
+
+            return String.format(sbayno2 + "贝位不存在，请重新操作");
+
+        }
+
+        //判断b2是否是一贝多箱
+        if (shipImages.size()>1){
+
+            return String.format(sbayno2 + "贝位存在多箱，请重新操作");
+
+        }
+
+        ShipImage b2 = shipImages.get(0);
+
+        //贝位1箱子尺寸
+        if (b1.getSize_con().equals("20")) {
+
+            //贝位2是否有箱子
+            if (!b2.getBayno().isEmpty()) {
+
+                if (b2.getSize_con().equals("20")) {
+
+                    //对调处理
+                    swapBayFor20(b1, b2);
+
+                } else {
+
+                    if (operator.IsJoint(b1.getShip_id(), b1.getBay_num())) {
+
+                        ShipImage b1Next = isContainerOfNextBayNo(b1);
+
+                        if (b1Next != null) {
+
+                            return String.format(b1Next.getSbayno() + "贝位存在多箱，请重新操作");
+
+                        } else {
+
+                            //对调处理
+                            swapBayFor40(b1, b2);
+
+                        }
+
+                    }else{
+
+                        return String.format(b1.getSbayno() + "贝位放不下大箱子，请重新操作");
+
+                    }
+
+                }
+
+            } else {
+
+                //对调处理
+                swapBayFor20(b1, b2);
+
+            }
+
+        } else {
+
+            if(operator.IsJoint(b2.getShip_id(), b2.getBay_num())){
+
+                ShipImage b2Next = isContainerOfNextBayNo(b2);
+
+                if (b2Next != null) {
+
+                    return String.format(b2Next.getSbayno() + "贝位存在箱子，请重新操作");
+
+                } else {
+
+                    //对调处理
+                    swapBayFor40(b1, b2);
+
+                }
+
+            }else{
+
+                return String.format(b2.getSbayno() + "贝位放不下大箱子，请重新操作");
+            }
+
+        }
+
+        return null;
+    }
+
+    /**
+     *  对调贝位b1，贝位b2
+     * @param b1 贝位b1
+     * @param b2 贝位b2
+     */
+    private void swapBayFor20(ShipImage b1, ShipImage b2){
+
+    }
+
+    private void  swapBayFor40(ShipImage b1, ShipImage b2){
+
+    }
+
+    /**
+     * 判断下一贝贝位是否有箱子
+     *
+     * @param b 当前贝位
+     * @return 有，返回下一贝位；无返回null
+     */
+    private ShipImage isContainerOfNextBayNo(ShipImage b) {
+
+        List<String> bayList = onLoadBayNumListFromDataBase(b.getShip_id());
+
+        String bayNumNext = null;
+        //获取下一贝号
+        for (int i = 0; i < bayList.size() - 1; i++) {
+            if (bayList.get(i).equals(b.getBay_num())) {
+                bayNumNext = bayList.get(i + 1);
+                break;
+            }
+        }
+
+        if (bayNumNext == null) {
+            return null;
+        }
+
+        String sbaynoNext = bayNumNext + b.getBay_col() + b.getBay_row();
+
+        ShipImage shipImage = null;
+        List<ShipImage> shipImageList = onLoadShipImageFromDataBase(b.getShip_id(), bayNumNext);
+
+        for (int i = 0; i < shipImageList.size(); i++) {
+            if (shipImageList.get(i).getSbayno().equals(sbaynoNext)) {
+                if (!shipImageList.get(i).getBayno().isEmpty()) {
+                    shipImage = shipImageList.get(i);
+                    break;
+                }
+            }
+        }
+
+        return shipImage;
+    }
+
+
+    /**
+     * 根据航次编码和标准贝位号查询船图数据
+     *
+     * @param shipId 航次编码
+     * @param sbayno 标准贝位号
+     * @return 数据对象
+     */
+    private List<ShipImage> GetShipImageList(String shipId, String sbayno) {
+        Log.i(LOG_TAG + "isDownloaded", "isDownloaded is invoked");
+
+        return operator.GetShipImageList(shipId, sbayno);
+
     }
 }

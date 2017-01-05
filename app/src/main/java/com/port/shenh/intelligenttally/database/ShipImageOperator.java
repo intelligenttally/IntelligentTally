@@ -9,7 +9,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.port.shenh.intelligenttally.R;
 import com.port.shenh.intelligenttally.bean.Bay;
 import com.port.shenh.intelligenttally.bean.ShipImage;
 import com.port.shenh.intelligenttally.function.CodeUnloadPortSubListFunction;
@@ -299,7 +301,7 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
             data.setBaycol(cursor.getString(baycol));
             data.setBayrow(cursor.getString(bayrow));
             data.setContainer_no(cursor.getString(container_no));
-            data.setSealno(cursor.getString(size_con));
+            data.setSize_con(cursor.getString(size_con));
             data.setContainer_type(cursor.getString(container_type));
             data.setCode_empty(cursor.getString(code_empty));
             data.setWeight(cursor.getString(weight));
@@ -434,10 +436,11 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
 
     /**
      * 根据航次编码查询卸货港简写列表
+     *
      * @param shipId 航次编码
      * @return 数据对象，没有返回null
      */
-    public Map<String, String> queryCodeUnloadPortSubList(String shipId){
+    public Map<String, String> queryCodeUnloadPortSubList(String shipId) {
         Log.i(LOG_TAG + "queryCodeUnloadPortSubList", "query shipId is " + shipId);
 
         List<String> codeUnloadPortList = new ArrayList<>();
@@ -459,9 +462,9 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
         cursor.close();
         close(sqLiteHelper);
 
-        if (codeUnloadPortList.size() >0){
-            return  CodeUnloadPortSubListFunction.GetCodeUnloadPortSubList(codeUnloadPortList);
-        }else {
+        if (codeUnloadPortList.size() > 0) {
+            return CodeUnloadPortSubListFunction.getCodeUnloadPortSubList(codeUnloadPortList);
+        } else {
             return null;
         }
 
@@ -524,7 +527,7 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
         }
 
         // 查询语句
-        sql = String.format("select Max(SCREEN_ROW) as sum_screen_row_cabin,Max(SCREEN_COL) as " +
+        sql = String.format("select Max(SCREEN_ROW) as sum_screen_row_cabin,Min(SCREEN_ROW) as min_screen_row_cabin,Max(SCREEN_COL) as " +
                         "sum_screen_col_cabin from %s where %s='%s' and %s='%s' and %s='%s'", tableName,
                 "ship_id", shipId, "bay_num", bayNum, "location", "cabin");
         Log.i(LOG_TAG + "queryBay", "sql is " + sql);
@@ -534,33 +537,24 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
         // 列索引
         int sumScreenRow_cabin = cursor.getColumnIndex(TableConst.Bay.SUM_SCREEN_ROW_CABIN);
         int sumScreenCol_cabin = cursor.getColumnIndex(TableConst.Bay.SUM_SCREEN_COL_CABIN);
+        int minScreenCol_cabin = cursor.getColumnIndex(TableConst.Bay.MIN_SCREEN_ROW_CABIN);
 
         while (cursor.moveToNext()) {
             bay.setSumScreenRow_cabin(cursor.getInt(sumScreenRow_cabin));
             bay.setSumScreenCol_cabin(cursor.getInt(sumScreenCol_cabin));
+            bay.setMinScreenRow_cabin(cursor.getInt(minScreenCol_cabin));
         }
 
-        // 查询语句
-        sql = String.format("select joint from %s where %s='%s' and %s='%s' and %s='%s'", tableName,
-                "ship_id", shipId, "bay_num", bayNum, "location", "cabin");
-        Log.i(LOG_TAG + "queryBay", "sql is " + sql);
-        // 查询数据
-        cursor = sqLiteDatabase.rawQuery(sql, null);
+//        Log.i(LOG_TAG + "queryBay", "cabin is " + bayNum + " " + bay.getSumScreenRow_cabin() + " " + bay.getSumScreenCol_cabin());
 
-        // 列索引
-        int joint = cursor.getColumnIndex(TableConst.Bay.JOINT);
+        if (IsJoint(shipId, bayNum)) {
+            int tempBayNum = Integer.parseInt(bayNum) + 1;
+            Log.i(LOG_TAG + "queryBay", "tempBayNum is " + tempBayNum);
 
-        while (cursor.moveToNext()) {
-            if (cursor.getString(joint).equals("1") == true) {
-                int tempBayNum = Integer.parseInt(bayNum) + 1;
-                Log.i(LOG_TAG + "queryBay", "tempBayNum is " + tempBayNum);
-
-                if (tempBayNum < 10) {
-                    bay_num = bayNum + "(" + "0" + Integer.toString(tempBayNum) + ")";
-                } else {
-                    bay_num = bayNum + "(" + Integer.toString(tempBayNum) + ")";
-                }
-                break;
+            if (tempBayNum < 10) {
+                bay_num = bayNum + "(" + "0" + Integer.toString(tempBayNum) + ")";
+            } else {
+                bay_num = bayNum + "(" + Integer.toString(tempBayNum) + ")";
             }
         }
 
@@ -572,4 +566,66 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
 
         return bay;
     }
+
+
+    /**
+     * 根据航次编码、贝号判断是否通贝
+     *
+     * @param shipId 航次编码
+     * @param bayNum 贝号
+     * @return false/true
+     */
+    public boolean IsJoint(String shipId, String bayNum) {
+
+        Log.i(LOG_TAG + "queryBay", "query param is " + shipId + " " + bayNum);
+
+        boolean isJoint = false;
+
+        // 查询语句
+        String sql = String.format("select joint from %s where %s='%s' and %s='%s' and %s='%s'", tableName,
+                "ship_id", shipId, "bay_num", bayNum, "location", "cabin");
+        Log.i(LOG_TAG + "queryBay", "sql is " + sql);
+        // 查询数据
+        Cursor cursor = sqLiteHelper.getReadableDatabase().rawQuery(sql, null);
+
+        // 列索引
+        int joint = cursor.getColumnIndex(TableConst.Bay.JOINT);
+
+        while (cursor.moveToNext()) {
+            if (cursor.getString(joint).equals("1") == true) {
+
+                isJoint = true;
+
+            }
+        }
+
+        // 关闭数据库
+        cursor.close();
+        close(sqLiteHelper);
+
+        return isJoint;
+    }
+
+    /**
+     * 根据航次编码和标准贝位号查询船图数据
+     *
+     * @param shipId 航次编码
+     * @param sbayno 标准贝位号
+     * @return 数据对象
+     */
+    public List<ShipImage> GetShipImageList(String shipId, String sbayno) {
+        Log.i(LOG_TAG + "GetShipImageList", "query param is " + sbayno);
+
+        // 查询语句
+        String sql = String.format("select * from %s where %s=%s and %s='%s'", tableName,
+                "ship_id", shipId, "sbayno", sbayno);
+
+        Log.i(LOG_TAG + "queryShipImage", "query sql is " + sql);
+
+        List<ShipImage> list = query(sql);
+
+        return list;
+    }
+
+
 }

@@ -17,4 +17,8 @@
     <string name="download_success">下载成功</string>
     <string name="not_download">未下载</string>
     <string name="clear_success">清除成功</string>
+
+    <string name="error_bayno">此贝位号不存在</string>
+    <string name="exist_container">已存在箱子</string>
+    <string name="not_match_container">箱子尺寸不匹配</string>
 </resources>

@@ -340,7 +340,7 @@ public class VoyageDownloadActivity extends AppCompatActivity {
 
                 final AtomicInteger count = new AtomicInteger(1);
 
-                viewHolder.shipImageListFunction.SetOnLoadEndListener(new ShipImageListFunction
+                viewHolder.shipImageListFunction.setOnLoadEndListener(new ShipImageListFunction
                         .OnLoadEndListener() {
                     @Override
                     public void OnLoadEnd() {
@@ -365,6 +365,7 @@ public class VoyageDownloadActivity extends AppCompatActivity {
 
                     Log.i(LOG_TAG + "doDownload", "Ship_Id is" + voyage.getShip_id());
 
+                    //此处需要返回是否有加载数据
                     viewHolder.shipImageListFunction.onLoad(voyage.getShip_id());
                 }
                 count.decrementAndGet();

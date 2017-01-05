@@ -44,6 +44,11 @@ public class Bay {
     private int sumScreenRow_cabin = 0;
 
     /**
+     * 屏幕船舱最小行数
+     */
+    private int minScreenRow_cabin = 0;
+
+    /**
      * 屏幕船舱最大列数
      */
     private int sumScreenCol_cabin = 0;
@@ -143,6 +148,24 @@ public class Bay {
      */
     public void setSumScreenRow_cabin(int sumScreenRow_cabin) {
         this.sumScreenRow_cabin = sumScreenRow_cabin;
+    }
+
+    /**
+     * 获取屏幕船舱最小行数
+     *
+     * @return 屏幕船舱最大行数
+     */
+    public int getMinScreenRow_cabin() {
+        return minScreenRow_cabin;
+    }
+
+    /**
+     * 设置屏幕船舱最小行数
+     *
+     * @param minScreenRow_cabin 屏幕船舱最大行数
+     */
+    public void setMinScreenRow_cabin(int minScreenRow_cabin) {
+        this.minScreenRow_cabin = minScreenRow_cabin;
     }
 
     /**

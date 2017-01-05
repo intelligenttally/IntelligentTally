@@ -167,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
         startProgressDialog();
 
         ShipImageListFunction shipImageListFunction = new ShipImageListFunction(getBaseContext());
-        shipImageListFunction.SetOnClearEndListener(new ShipImageListFunction.OnClearEndListener() {
+        shipImageListFunction.setOnClearEndListener(new ShipImageListFunction.OnClearEndListener() {
             @Override
             public void OnClearEnd() {
                 stopProgressDialog();
