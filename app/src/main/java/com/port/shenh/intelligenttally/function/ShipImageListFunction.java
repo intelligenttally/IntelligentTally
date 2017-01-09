@@ -350,7 +350,9 @@ public class ShipImageListFunction {
 
         Log.i(LOG_TAG + "MoveBay", "query param is " + b1.getSbayno() + " " + sbayno2);
 
-        List<ShipImage> shipImages = GetShipImageList(b1.getShip_id(), sbayno2);
+        List<ShipImage> shipImages = getShipImageList(b1.getShip_id(), sbayno2);
+
+        Log.i(LOG_TAG + "MoveBay", "贝位箱子数量：shipImages is " + shipImages.size());
 
         if (shipImages.size() == 0){
 
@@ -375,28 +377,34 @@ public class ShipImageListFunction {
 
                 if (b2.getSize_con().equals("20")) {
 
+                    Log.i(LOG_TAG + "MoveBay", "贝位1箱子20，贝位2有箱子，箱子20");
+
                     //对调处理
-                    swapBayFor20(b1, b2);
+                    swapBay(b1, b2);
 
                 } else {
 
-                    if (operator.IsJoint(b1.getShip_id(), b1.getBay_num())) {
+                    if (operator.isJoint(b1.getShip_id(), b1.getBay_num())) {
 
                         ShipImage b1Next = isContainerOfNextBayNo(b1);
 
                         if (b1Next != null) {
 
-                            return String.format(b1Next.getSbayno() + "贝位存在多箱，请重新操作");
+                            Log.i(LOG_TAG + "MoveBay", "贝位1箱子20，贝位2有箱子，箱子40，贝位1通贝，贝位1Next有箱子");
+                            return String.format(b1Next.getSbayno() + "贝位存在箱子，请重新操作");
 
                         } else {
 
+                            Log.i(LOG_TAG + "MoveBay", "贝位1箱子20，贝位2有箱子，箱子40，贝位1通贝，贝位1Next无箱子");
+
                             //对调处理
-                            swapBayFor40(b1, b2);
+                            swapBay(b1, b2);
 
                         }
 
                     }else{
 
+                        Log.i(LOG_TAG + "MoveBay", "贝位1箱子20，贝位2有箱子，箱子40，贝位1不通贝");
                         return String.format(b1.getSbayno() + "贝位放不下大箱子，请重新操作");
 
                     }
@@ -405,29 +413,37 @@ public class ShipImageListFunction {
 
             } else {
 
+                Log.i(LOG_TAG + "MoveBay", "贝位1箱子20，贝位2无箱子");
+
                 //对调处理
-                swapBayFor20(b1, b2);
+                swapBay(b1, b2);
 
             }
 
         } else {
 
-            if(operator.IsJoint(b2.getShip_id(), b2.getBay_num())){
+            if(operator.isJoint(b2.getShip_id(), b2.getBay_num())){
 
                 ShipImage b2Next = isContainerOfNextBayNo(b2);
 
                 if (b2Next != null) {
 
+                    Log.i(LOG_TAG + "MoveBay", "贝位1箱子40，贝位2通贝，贝位2Next有箱子");
+
                     return String.format(b2Next.getSbayno() + "贝位存在箱子，请重新操作");
 
                 } else {
 
+                    Log.i(LOG_TAG + "MoveBay", "贝位1箱子40，贝位2通贝，贝位2Next无箱子");
+
                     //对调处理
-                    swapBayFor40(b1, b2);
+                    swapBay(b1, b2);
 
                 }
 
             }else{
+
+                Log.i(LOG_TAG + "MoveBay", "贝位1箱子40，贝位2不通贝");
 
                 return String.format(b2.getSbayno() + "贝位放不下大箱子，请重新操作");
             }
@@ -438,15 +454,15 @@ public class ShipImageListFunction {
     }
 
     /**
-     *  对调贝位b1，贝位b2
-     * @param b1 贝位b1
-     * @param b2 贝位b2
+     *  对调贝位1，贝位2
+     * @param b1 贝位1
+     * @param b2 贝位2
      */
-    private void swapBayFor20(ShipImage b1, ShipImage b2){
+    private void swapBay(ShipImage b1, ShipImage b2){
 
-    }
+        Log.i(LOG_TAG + "swapBayFor40", "swapBayFor40 is invoked");
 
-    private void  swapBayFor40(ShipImage b1, ShipImage b2){
+        operator.swapBay(b1, b2);
 
     }
 
@@ -498,10 +514,10 @@ public class ShipImageListFunction {
      * @param sbayno 标准贝位号
      * @return 数据对象
      */
-    private List<ShipImage> GetShipImageList(String shipId, String sbayno) {
-        Log.i(LOG_TAG + "isDownloaded", "isDownloaded is invoked");
+    private List<ShipImage> getShipImageList(String shipId, String sbayno) {
+        Log.i(LOG_TAG + "getShipImageList", "getShipImageList is invoked");
 
-        return operator.GetShipImageList(shipId, sbayno);
+        return operator.getShipImageList(shipId, sbayno);
 
     }
 }
