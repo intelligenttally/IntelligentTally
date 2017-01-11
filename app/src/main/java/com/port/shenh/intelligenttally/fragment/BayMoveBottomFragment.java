@@ -57,6 +57,11 @@ public class BayMoveBottomFragment extends Fragment implements BottomBayCommonOp
      */
     private BayActivity activity = null;
 
+    /**
+     * 要移动的船图数据
+     */
+    private ShipImage data = null;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable
@@ -74,12 +79,21 @@ public class BayMoveBottomFragment extends Fragment implements BottomBayCommonOp
      * @param rootView 根布局
      */
     private void initView(View rootView) {
-        function = new BottomBayInfoFunction(rootView);
         activity = (BayActivity) getActivity();
         shipFunction = new ShipImageListFunction(getActivity());
         initEditText(rootView);
-
         initMove(rootView);
+        initShip(rootView);
+    }
+
+    /**
+     * 初始化要移动的船图数据
+     *
+     * @param rootView 根布局
+     */
+    private void initShip(View rootView) {
+        function = new BottomBayInfoFunction(rootView);
+        function.bindData(data);
     }
 
     /**
@@ -157,8 +171,14 @@ public class BayMoveBottomFragment extends Fragment implements BottomBayCommonOp
             return;
         }
 
-        onMoveListener.onInvoke();
-        activity.loadBay();
+        String result = shipFunction.moveBay(data, bayNumberEditText.getText().toString());
+
+        if (result == null) {
+            onMoveListener.onInvoke();
+            activity.loadBay();
+        } else {
+            bayNumberEditText.setError(result);
+        }
     }
 
     /**
@@ -176,7 +196,7 @@ public class BayMoveBottomFragment extends Fragment implements BottomBayCommonOp
      * @param data 贝数据
      */
     public void setBayData(ShipImage data) {
-        function.bindData(data);
+        this.data = data;
     }
 
     @Override

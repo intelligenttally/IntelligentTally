@@ -173,14 +173,14 @@ public class BayActivity extends AppCompatActivity {
                     beforeHolder.itemView.setSelected(false);
                 }
 
+                operator.onBayClick(holder, data);
+
                 if (holder != beforeHolder) {
                     holder.itemView.setSelected(true);
                     beforeHolder = holder;
                 } else {
                     beforeHolder = null;
                 }
-
-                operator.onBayClick(holder, data);
             }
         });
     }

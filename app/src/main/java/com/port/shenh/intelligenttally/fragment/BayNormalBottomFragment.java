@@ -120,6 +120,8 @@ public class BayNormalBottomFragment extends Fragment implements BottomBayCommon
 
     @Override
     public void onBaySwitch() {
-        activity.hideBottomLayout();
+        if (activity != null) {
+            activity.hideBottomLayout();
+        }
     }
 }
