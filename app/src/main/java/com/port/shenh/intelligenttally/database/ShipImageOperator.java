@@ -158,7 +158,7 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
         cv.put(TableConst.ShipImage.BAY_NUM, data.getBay_num());
         cv.put(TableConst.ShipImage.BAY_COL, data.getBay_col());
         cv.put(TableConst.ShipImage.BAY_ROW, data.getBay_row());
-        cv.put(TableConst.ShipImage.SBAYNO, data.getSealno());
+        cv.put(TableConst.ShipImage.SBAYNO, data.getSbayno());
         cv.put(TableConst.ShipImage.TBAYNO, data.getTbayno());
         cv.put(TableConst.ShipImage.JBAYNO, data.getJbayno());
         cv.put(TableConst.ShipImage.USER_CHAR, data.getUser_char());
