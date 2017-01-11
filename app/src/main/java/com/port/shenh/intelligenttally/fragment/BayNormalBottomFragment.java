@@ -77,20 +77,34 @@ public class BayNormalBottomFragment extends Fragment implements BottomBayCommon
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (moveBottomFragment == null) {
-                    moveBottomFragment = new BayMoveBottomFragment();
-                    moveBottomFragment.setOnMoveListener(new EmptyParameterListener() {
-                        @Override
-                        public void onInvoke() {
-                            activity.onChangeBottomFragment(BayNormalBottomFragment.this);
+                activity.hideBottomLayout(new EmptyParameterListener() {
+                    @Override
+                    public void onInvoke() {
+                        if (moveBottomFragment == null) {
+                            moveBottomFragment = new BayMoveBottomFragment();
+                            moveBottomFragment.setOnMoveListener(new EmptyParameterListener() {
+                                @Override
+                                public void onInvoke() {
+                                    onBackMe();
+                                }
+                            });
                         }
-                    });
-                }
 
-                activity.onChangeBottomFragment(moveBottomFragment);
-                moveBottomFragment.setBayData(function.getData());
+                        moveBottomFragment.setBayData(function.getData());
+                        activity.onChangeBottomFragment(moveBottomFragment);
+                        activity.showBottomLayout();
+                    }
+                });
             }
         });
+    }
+
+    /**
+     * 从子功能片段返回自身
+     */
+    private void onBackMe() {
+        activity.onChangeBottomFragment(BayNormalBottomFragment.this);
+        activity.hideBottomLayout();
     }
 
     /**

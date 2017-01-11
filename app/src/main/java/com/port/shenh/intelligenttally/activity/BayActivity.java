@@ -3,14 +3,19 @@ package com.port.shenh.intelligenttally.activity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.widget.FrameLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
@@ -25,6 +30,7 @@ import com.port.shenh.intelligenttally.util.StaticValue;
 import com.port.shenh.intelligenttally.view.FreedomScrollView;
 
 import org.mobile.library.common.function.ToolbarInitialize;
+import org.mobile.library.model.operate.EmptyParameterListener;
 
 import java.util.List;
 
@@ -136,6 +142,31 @@ public class BayActivity extends AppCompatActivity {
         initContentLayout();
         initBottomLayout();
         initBay();
+
+        initSoftInput();
+    }
+
+    /**
+     * 初始化软键盘监听
+     */
+    private void initSoftInput() {
+        FrameLayout content = (FrameLayout) findViewById(android.R.id.content);
+        final View child = content.getChildAt(0);
+        child.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver
+                .OnGlobalLayoutListener() {
+            public void onGlobalLayout() {
+                Rect r = new Rect();
+                child.getWindowVisibleDisplayFrame(r);
+
+                Log.v(LOG_TAG + "initSoftInput", "root height:" + child.getRootView().getHeight()
+                        + ";" +
+                        " child height:" + child.getHeight() + "; frame top:" + r.top + "; frame " +
+                        "bottom:" + r.bottom + "; frame height:" + r.height() + "; old bottom:" +
+                        bottom + ";" +
+                        " new bottom:" + scrollView.getBottom());
+
+            }
+        });
     }
 
     /**
@@ -153,11 +184,21 @@ public class BayActivity extends AppCompatActivity {
      * @param fragment 要替换的布局
      */
     public void onChangeBottomFragment(Fragment fragment) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+        if (operator instanceof Fragment) {
+            transaction.hide((Fragment) operator);
+        }
+
+        if (!fragment.isAdded()) {
+            transaction.add(R.id.layout_bottom_parent_content_layout, fragment);
+        } else {
+            transaction.show(fragment);
+        }
+        transaction.commit();
         if (fragment instanceof BottomBayCommonOperator) {
             operator = (BottomBayCommonOperator) fragment;
         }
-        getSupportFragmentManager().beginTransaction().replace(R.id
-                .layout_bottom_parent_content_layout, fragment).commit();
     }
 
     /**
@@ -316,6 +357,22 @@ public class BayActivity extends AppCompatActivity {
      * 显示布局
      */
     public void showBottomLayout() {
+        showBottomLayout(null);
+    }
+
+    /**
+     * 隐藏布局
+     */
+    public void hideBottomLayout() {
+        hideBottomLayout(null);
+    }
+
+    /**
+     * 显示布局
+     *
+     * @param listener 动画完成后的回调
+     */
+    public void showBottomLayout(final EmptyParameterListener listener) {
         if (!isBottomShow) {
             isBottomShow = true;
             bottomLayout.animate().translationY(0).setDuration(200).setListener(new AnimatorListenerAdapter() {
@@ -326,6 +383,10 @@ public class BayActivity extends AppCompatActivity {
                             ()) {
                         scrollView.setBottom(bottom - bottomLayout.getHeight());
                     }
+
+                    if (listener != null) {
+                        listener.onInvoke();
+                    }
                 }
             }).start();
         }
@@ -333,8 +394,10 @@ public class BayActivity extends AppCompatActivity {
 
     /**
      * 隐藏布局
+     *
+     * @param listener 动画完成后的回调
      */
-    public void hideBottomLayout() {
+    public void hideBottomLayout(final EmptyParameterListener listener) {
         if (isBottomShow) {
             isBottomShow = false;
             bottomLayout.animate().translationY(bottomLayout.getHeight()).setListener(new AnimatorListenerAdapter() {
@@ -342,6 +405,10 @@ public class BayActivity extends AppCompatActivity {
                 public void onAnimationEnd(Animator animation) {
                     if (bottom != 0 && scrollView.getBottom() != bottom) {
                         scrollView.setBottom(bottom);
+                    }
+
+                    if (listener != null) {
+                        listener.onInvoke();
                     }
                 }
             }).start();

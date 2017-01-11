@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.port.shenh.intelligenttally">
+<manifest package="com.port.shenh.intelligenttally"
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application
         android:name=".util.MyApplication"
@@ -13,23 +13,25 @@
             android:name=".activity.SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".activity.MainActivity" />
-        <activity android:name=".activity.LoginActivity" />
-        <activity android:name=".activity.VoyageDownloadActivity" />
-        <activity android:name=".activity.VoyageSelectActivity" />
-        <activity android:name=".activity.BayActivity" />
+        <activity android:name=".activity.MainActivity"/>
+        <activity android:name=".activity.LoginActivity"/>
+        <activity android:name=".activity.VoyageDownloadActivity"/>
+        <activity android:name=".activity.VoyageSelectActivity"/>
+        <activity
+            android:name=".activity.BayActivity"
+            android:windowSoftInputMode="adjustResize"/>
         <!--
  ATTENTION: This was auto-generated to add Google Play services to your project for
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
         -->
         <meta-data
             android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
+            android:value="@integer/google_play_services_version"/>
 
         <activity android:name=".activity.BayNumSelectActivity"></activity>
     </application>
