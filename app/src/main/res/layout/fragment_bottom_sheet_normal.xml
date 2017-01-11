@@ -24,7 +24,7 @@
         android:orientation="horizontal">
 
         <LinearLayout
-            android:id="@+id/layout_bottom_sheet_normal_move_bay_layout"
+            android:id="@+id/fragment_bottom_sheet_normal_move_bay_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"

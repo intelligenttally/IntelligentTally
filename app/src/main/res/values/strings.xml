@@ -3,7 +3,6 @@
     <string name="voyage_download">航次下载</string>
     <string name="vayage">航次</string>
 
-
     <string name="clear_cache">清除缓存</string>
     <string name="download">下载</string>
     <string name="upload">上传</string>
@@ -17,4 +16,6 @@
     <string name="download_success">下载成功</string>
     <string name="not_download">未下载</string>
     <string name="clear_success">清除成功</string>
+    <string name="hint_input_bay_number_text">选择或输入一个目标贝</string>
+
 </resources>

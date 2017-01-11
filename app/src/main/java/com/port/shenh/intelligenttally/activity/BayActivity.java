@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -20,6 +19,7 @@ import com.port.shenh.intelligenttally.adapter.BayGridAdapter;
 import com.port.shenh.intelligenttally.bean.Bay;
 import com.port.shenh.intelligenttally.bean.ShipImage;
 import com.port.shenh.intelligenttally.fragment.BayNormalBottomFragment;
+import com.port.shenh.intelligenttally.function.BottomBayCommonOperator;
 import com.port.shenh.intelligenttally.function.ShipImageListFunction;
 import com.port.shenh.intelligenttally.util.StaticValue;
 import com.port.shenh.intelligenttally.view.FreedomScrollView;
@@ -83,14 +83,14 @@ public class BayActivity extends AppCompatActivity {
     private List<String> bayNumberList = null;
 
     /**
+     * 上一个选中的贝位
+     */
+    public BayGridAdapter.ViewHolder beforeHolder = null;
+
+    /**
      * 内容布局原始高度
      */
     private int bottom = 0;
-
-    /**
-     * 上一个选中的贝位
-     */
-    private BayGridAdapter.ViewHolder beforeHolder = null;
 
     /**
      * 底部布局
@@ -98,9 +98,14 @@ public class BayActivity extends AppCompatActivity {
     private View bottomLayout = null;
 
     /**
-     * 常规底部布局
+     * 底部布局是否为显示状态
      */
-    private BayNormalBottomFragment bayNormalBottomFragment = null;
+    private boolean isBottomShow = false;
+
+    /**
+     * 当前底部布局
+     */
+    private BottomBayCommonOperator operator = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +114,15 @@ public class BayActivity extends AppCompatActivity {
 
         initView();
         initData();
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+
+        if (bottom == 0) {
+            bottom = scrollView.getBottom();
+        }
     }
 
     /**
@@ -129,9 +143,8 @@ public class BayActivity extends AppCompatActivity {
      */
     private void initBottomLayout() {
         bottomLayout = findViewById(R.id.layout_bottom_parent_layout);
-        bayNormalBottomFragment = new BayNormalBottomFragment();
 
-        onChangeBottomFragment(bayNormalBottomFragment);
+        onChangeBottomFragment(new BayNormalBottomFragment());
     }
 
     /**
@@ -139,7 +152,10 @@ public class BayActivity extends AppCompatActivity {
      *
      * @param fragment 要替换的布局
      */
-    private void onChangeBottomFragment(Fragment fragment) {
+    public void onChangeBottomFragment(Fragment fragment) {
+        if (fragment instanceof BottomBayCommonOperator) {
+            operator = (BottomBayCommonOperator) fragment;
+        }
         getSupportFragmentManager().beginTransaction().replace(R.id
                 .layout_bottom_parent_content_layout, fragment).commit();
     }
@@ -153,10 +169,6 @@ public class BayActivity extends AppCompatActivity {
         adapter.setOnGridItemClickListener(new BayGridAdapter.OnGridItemClickListener() {
             @Override
             public void onClick(BayGridAdapter.ViewHolder holder, ShipImage data) {
-                if (bottom == 0) {
-                    bottom = scrollView.getBottom();
-                }
-
                 if (beforeHolder != null) {
                     beforeHolder.itemView.setSelected(false);
                 }
@@ -164,19 +176,11 @@ public class BayActivity extends AppCompatActivity {
                 if (holder != beforeHolder) {
                     holder.itemView.setSelected(true);
                     beforeHolder = holder;
-
-                    if (!TextUtils.isEmpty(data.getBayno()) && bayNormalBottomFragment.isVisible
-                            ()) {
-                        bayNormalBottomFragment.setBayData(data);
-                        showBottomLayout();
-                    } else {
-                        hideBottomLayout();
-                    }
-
                 } else {
                     beforeHolder = null;
-                    hideBottomLayout();
                 }
+
+                operator.onBayClick(holder, data);
             }
         });
     }
@@ -242,12 +246,9 @@ public class BayActivity extends AppCompatActivity {
     /**
      * 加载贝图
      */
-    private void loadBay() {
+    public void loadBay() {
 
-        if (bottom != 0) {
-            hideBottomLayout();
-            bottom = 0;
-        }
+        operator.onBaySwitch();
 
         if (beforeHolder != null) {
             beforeHolder.itemView.setSelected(false);
@@ -314,28 +315,36 @@ public class BayActivity extends AppCompatActivity {
     /**
      * 显示布局
      */
-    private void showBottomLayout() {
-        bottomLayout.animate().translationY(0).setDuration(200).setListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                if (bottom != 0 && scrollView.getBottom() != bottom - bottomLayout.getHeight()) {
-                    scrollView.setBottom(bottom - bottomLayout.getHeight());
+    public void showBottomLayout() {
+        if (!isBottomShow) {
+            isBottomShow = true;
+            bottomLayout.animate().translationY(0).setDuration(200).setListener(new AnimatorListenerAdapter() {
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    if (bottom != 0 && scrollView.getBottom() != bottom - bottomLayout.getHeight
+                            ()) {
+                        scrollView.setBottom(bottom - bottomLayout.getHeight());
+                    }
                 }
-            }
-        }).start();
+            }).start();
+        }
     }
 
     /**
      * 隐藏布局
      */
-    private void hideBottomLayout() {
-        bottomLayout.animate().translationY(bottomLayout.getHeight()).setListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                if (bottom != 0 && scrollView.getBottom() != bottom) {
-                    scrollView.setBottom(bottom);
+    public void hideBottomLayout() {
+        if (isBottomShow) {
+            isBottomShow = false;
+            bottomLayout.animate().translationY(bottomLayout.getHeight()).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    if (bottom != 0 && scrollView.getBottom() != bottom) {
+                        scrollView.setBottom(bottom);
+                    }
                 }
-            }
-        }).start();
+            }).start();
+        }
     }
 }
