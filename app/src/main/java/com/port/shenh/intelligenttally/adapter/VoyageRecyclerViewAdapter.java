@@ -195,7 +195,7 @@ public class VoyageRecyclerViewAdapter extends RecyclerView.Adapter<VoyageItemVi
         // 数据绑定
         Voyage voyage = this.dataList.get(position);
         holder.berthnoTextView.setText(voyage.getBerthno());
-        holder.inOutTextView.setText(voyage.getCodeInOut().equals("1") == true ? "进" : "出");
+        holder.inOutTextView.setText(voyage.getCodeInOut().equals("1") == true ? "出" : "进");
         holder.voyageTextView.setText(voyage.getVoyage());
         holder.chi_VesselTextView.setText(voyage.getChi_vessel());
         holder.downloadedTextView.setText(voyage.isDownloaded() == true ? "已下载" : "");

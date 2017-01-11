@@ -3,6 +3,7 @@
     <string name="voyage_download">航次下载</string>
     <string name="vayage">航次</string>
 
+
     <string name="clear_cache">清除缓存</string>
     <string name="download">下载</string>
     <string name="upload">上传</string>
@@ -18,4 +19,8 @@
     <string name="clear_success">清除成功</string>
     <string name="hint_input_bay_number_text">选择或输入一个目标贝</string>
 
+
+    <string name="error_bayno">此贝位号不存在</string>
+    <string name="exist_container">已存在箱子</string>
+    <string name="not_match_container">箱子尺寸不匹配</string>
 </resources>
