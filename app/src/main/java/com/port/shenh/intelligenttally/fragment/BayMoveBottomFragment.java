@@ -21,6 +21,7 @@ import com.port.shenh.intelligenttally.function.BottomBayCommonOperator;
 import com.port.shenh.intelligenttally.function.BottomBayInfoFunction;
 import com.port.shenh.intelligenttally.function.ShipImageListFunction;
 
+import org.mobile.library.common.function.InputMethodController;
 import org.mobile.library.model.operate.EmptyParameterListener;
 
 /**
@@ -159,6 +160,8 @@ public class BayMoveBottomFragment extends Fragment implements BottomBayCommonOp
             activity.beforeHolder = null;
         }
 
+        InputMethodController.CloseInputMethod(getActivity());
+        bayNumberEditText.setText(null);
         onMoveListener.onInvoke();
     }
 
@@ -174,6 +177,7 @@ public class BayMoveBottomFragment extends Fragment implements BottomBayCommonOp
         String result = shipFunction.moveBay(data, bayNumberEditText.getText().toString());
 
         if (result == null) {
+            bayNumberEditText.setText(null);
             onMoveListener.onInvoke();
             activity.loadBay();
         } else {
