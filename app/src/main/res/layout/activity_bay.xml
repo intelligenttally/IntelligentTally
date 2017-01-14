@@ -20,64 +20,79 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.port.shenh.intelligenttally.view.FreedomScrollView
-            android:id="@+id/activity_bay_scrollView"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <TableLayout
-                android:id="@+id/activity_bay_content_layout"
+            <com.port.shenh.intelligenttally.view.FreedomScrollView
+                android:id="@+id/activity_bay_scrollView"
                 android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <TableLayout
+                    android:id="@+id/activity_bay_content_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/activity_horizontal_margin">
+
+                    <TableRow android:gravity="bottom">
+
+                        <android.support.v7.widget.GridLayout
+                            android:id="@+id/activity_bay_up_left_gridLayout"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:columnCount="1"/>
+
+                        <android.support.v7.widget.GridLayout
+                            android:id="@+id/activity_bay_up_gridLayout"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            app:orientation="horizontal"/>
+
+                    </TableRow>
+
+                    <TableRow>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginBottom="@dimen/layout_default_spacing"
+                            android:layout_marginTop="@dimen/layout_default_spacing"
+                            android:layout_span="2"
+                            android:background="@android:color/darker_gray"/>
+                    </TableRow>
+
+                    <TableRow android:gravity="top">
+
+                        <android.support.v7.widget.GridLayout
+                            android:id="@+id/activity_bay_down_left_gridLayout"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:columnCount="1"/>
+
+                        <android.support.v7.widget.GridLayout
+                            android:id="@+id/activity_bay_down_gridLayout"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            app:orientation="horizontal"/>
+                    </TableRow>
+
+                </TableLayout>
+
+            </com.port.shenh.intelligenttally.view.FreedomScrollView>
+
+            <View
+                android:id="@+id/activity_bay_bottom_background_view"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/activity_horizontal_margin">
+                android:background="@android:color/transparent"
+                android:visibility="gone"/>
 
-                <TableRow android:gravity="bottom">
-
-                    <android.support.v7.widget.GridLayout
-                        android:id="@+id/activity_bay_up_left_gridLayout"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:columnCount="1"/>
-
-                    <android.support.v7.widget.GridLayout
-                        android:id="@+id/activity_bay_up_gridLayout"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        app:orientation="horizontal"/>
-
-                </TableRow>
-
-                <TableRow>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginBottom="@dimen/layout_default_spacing"
-                        android:layout_marginTop="@dimen/layout_default_spacing"
-                        android:layout_span="2"
-                        android:background="@android:color/darker_gray"/>
-                </TableRow>
-
-                <TableRow android:gravity="top">
-
-                    <android.support.v7.widget.GridLayout
-                        android:id="@+id/activity_bay_down_left_gridLayout"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:columnCount="1"/>
-
-                    <android.support.v7.widget.GridLayout
-                        android:id="@+id/activity_bay_down_gridLayout"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        app:orientation="horizontal"/>
-                </TableRow>
-
-            </TableLayout>
-
-        </com.port.shenh.intelligenttally.view.FreedomScrollView>
+        </LinearLayout>
 
         <include layout="@layout/layout_bottom_parent"/>
 

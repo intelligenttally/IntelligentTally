@@ -9,6 +9,12 @@
               android:paddingRight="@dimen/activity_horizontal_margin"
               android:paddingTop="@dimen/layout_default_spacing">
 
+    <TextView
+        android:text="@string/name_wait_move_bay_text"
+        android:layout_width="wrap_content"
+        android:layout_marginBottom="@dimen/layout_default_spacing"
+        android:layout_height="wrap_content"/>
+
     <include layout="@layout/layout_bottom_sheet_info"/>
 
     <View

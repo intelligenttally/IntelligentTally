@@ -3,19 +3,16 @@ package com.port.shenh.intelligenttally.activity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
-import android.view.ViewTreeObserver;
-import android.widget.FrameLayout;
+import android.view.ViewGroup;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
@@ -94,14 +91,14 @@ public class BayActivity extends AppCompatActivity {
     public BayGridAdapter.ViewHolder beforeHolder = null;
 
     /**
-     * 内容布局原始高度
-     */
-    private int bottom = 0;
-
-    /**
      * 底部布局
      */
     private View bottomLayout = null;
+
+    /**
+     * 底部背景布局（占位布局）
+     */
+    private View bottomBackgroundView = null;
 
     /**
      * 底部布局是否为显示状态
@@ -122,15 +119,6 @@ public class BayActivity extends AppCompatActivity {
         initData();
     }
 
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-
-        if (bottom == 0) {
-            bottom = scrollView.getBottom();
-        }
-    }
-
     /**
      * 初始化控件
      */
@@ -142,31 +130,6 @@ public class BayActivity extends AppCompatActivity {
         initContentLayout();
         initBottomLayout();
         initBay();
-
-        initSoftInput();
-    }
-
-    /**
-     * 初始化软键盘监听
-     */
-    private void initSoftInput() {
-        FrameLayout content = (FrameLayout) findViewById(android.R.id.content);
-        final View child = content.getChildAt(0);
-        child.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver
-                .OnGlobalLayoutListener() {
-            public void onGlobalLayout() {
-                Rect r = new Rect();
-                child.getWindowVisibleDisplayFrame(r);
-
-                Log.v(LOG_TAG + "initSoftInput", "root height:" + child.getRootView().getHeight()
-                        + ";" +
-                        " child height:" + child.getHeight() + "; frame top:" + r.top + "; frame " +
-                        "bottom:" + r.bottom + "; frame height:" + r.height() + "; old bottom:" +
-                        bottom + ";" +
-                        " new bottom:" + scrollView.getBottom());
-
-            }
-        });
     }
 
     /**
@@ -174,6 +137,7 @@ public class BayActivity extends AppCompatActivity {
      */
     private void initBottomLayout() {
         bottomLayout = findViewById(R.id.layout_bottom_parent_layout);
+        bottomBackgroundView = findViewById(R.id.activity_bay_bottom_background_view);
 
         onChangeBottomFragment(new BayNormalBottomFragment());
     }
@@ -379,10 +343,10 @@ public class BayActivity extends AppCompatActivity {
 
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    if (bottom != 0 && scrollView.getBottom() != bottom - bottomLayout.getHeight
-                            ()) {
-                        scrollView.setBottom(bottom - bottomLayout.getHeight());
-                    }
+                    ViewGroup.LayoutParams layoutParams = bottomBackgroundView.getLayoutParams();
+                    layoutParams.height = bottomLayout.getHeight();
+                    bottomBackgroundView.setLayoutParams(layoutParams);
+                    bottomBackgroundView.setVisibility(View.VISIBLE);
 
                     if (listener != null) {
                         listener.onInvoke();
@@ -403,13 +367,14 @@ public class BayActivity extends AppCompatActivity {
             bottomLayout.animate().translationY(bottomLayout.getHeight()).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    if (bottom != 0 && scrollView.getBottom() != bottom) {
-                        scrollView.setBottom(bottom);
-                    }
-
                     if (listener != null) {
                         listener.onInvoke();
                     }
+                }
+
+                @Override
+                public void onAnimationStart(Animator animation) {
+                    bottomBackgroundView.setVisibility(View.GONE);
                 }
             }).start();
         }

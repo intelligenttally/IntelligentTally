@@ -162,6 +162,7 @@ public class BayMoveBottomFragment extends Fragment implements BottomBayCommonOp
 
         InputMethodController.CloseInputMethod(getActivity());
         bayNumberEditText.setText(null);
+        bayNumberEditText.setError(null);
         onMoveListener.onInvoke();
     }
 
