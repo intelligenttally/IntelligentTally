@@ -89,9 +89,6 @@ public class BayNumSelectActivity extends AppCompatActivity {
     private void initViewHolder() {
         viewHolder = new LocalViewHolder();
 
-        // 堆存列表适配器
-        viewHolder.recyclerViewAdapter = new BayNumRecyclerViewAdapter();
-
         viewHolder.shipImageListFunction = new ShipImageListFunction(this);
 
         viewHolder.ship_id = (String) getIntent().getSerializableExtra(StaticValue.IntentTag

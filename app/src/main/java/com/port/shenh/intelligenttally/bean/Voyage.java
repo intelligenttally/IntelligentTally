@@ -13,6 +13,11 @@ package com.port.shenh.intelligenttally.bean;
 public class Voyage {
 
     /**
+     * 编码ID
+     */
+    private String id = null;
+
+    /**
      * 航次编码
      */
     private String ship_id = null;
@@ -56,6 +61,24 @@ public class Voyage {
      * 已下载
      */
     private boolean downloaded = false;
+
+    /**
+     * 获取编码ID
+     *
+     * @return 编码ID
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * 设置编码ID
+     *
+     * @param id 编码
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
 
 
     /**

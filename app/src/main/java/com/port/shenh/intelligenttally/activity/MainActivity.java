@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.port.shenh.intelligenttally.R;
 import com.port.shenh.intelligenttally.adapter.MainFunctionRecyclerViewAdapter;
 import com.port.shenh.intelligenttally.function.ShipImageListFunction;
+import com.port.shenh.intelligenttally.function.VoyageListFunction;
 import com.port.shenh.intelligenttally.holder.MainFunctionItemViewHolder;
 import org.mobile.library.common.function.CheckUpdate;
 import org.mobile.library.common.function.ToolbarInitialize;
@@ -164,17 +165,21 @@ public class MainActivity extends AppCompatActivity {
      */
     private void doClearCache() {
 
-        startProgressDialog();
+//        startProgressDialog();
 
-        ShipImageListFunction shipImageListFunction = new ShipImageListFunction(getBaseContext());
-        shipImageListFunction.setOnClearEndListener(new ShipImageListFunction.OnClearEndListener() {
-            @Override
-            public void OnClearEnd() {
-                stopProgressDialog();
-                Toast.makeText(getBaseContext(), R.string.clear_success, Toast.LENGTH_SHORT).show();
-            }
-        });
+        ShipImageListFunction shipImageListFunction = new ShipImageListFunction(getApplication());
+        VoyageListFunction voyageListFunction = new VoyageListFunction(getApplication());
+//        shipImageListFunction.setOnClearEndListener(new ShipImageListFunction.OnClearEndListener() {
+//            @Override
+//            public void OnClearEnd() {
+//                stopProgressDialog();
+//                Toast.makeText(getApplication(), R.string.clear_success, Toast.LENGTH_SHORT).show();
+//            }
+//        });
         shipImageListFunction.onClear();
+        voyageListFunction.onClear();
+
+        Toast.makeText(getApplication(), R.string.clear_success, Toast.LENGTH_SHORT).show();
     }
 
     /**

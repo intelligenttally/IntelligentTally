@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">智能理货</string>
     <string name="voyage_download">航次下载</string>
-    <string name="vayage">航次</string>
+    <string name="vayage_downloaded">已下载航次</string>
 
 
     <string name="clear_cache">清除缓存</string>

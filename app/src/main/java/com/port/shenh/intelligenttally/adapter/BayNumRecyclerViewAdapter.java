@@ -10,11 +10,13 @@ import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.port.shenh.intelligenttally.R;
 import com.port.shenh.intelligenttally.holder.BayNumItemViewHolder;
 import com.port.shenh.intelligenttally.holder.VoyageItemViewHolder;
 
 import org.mobile.library.model.operate.OnItemClickListenerForRecyclerViewItem;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,10 +50,7 @@ public class BayNumRecyclerViewAdapter extends RecyclerView.Adapter<BayNumItemVi
      */
     public BayNumRecyclerViewAdapter() {
 
-        if (this.dataList == null) {
-            this.dataList = new ArrayList<>();
-        }
-
+        this.dataList = new ArrayList<>();
         this.selectedItems = new SparseBooleanArray();
     }
 
@@ -61,12 +60,8 @@ public class BayNumRecyclerViewAdapter extends RecyclerView.Adapter<BayNumItemVi
      * @param dataList 数据源
      */
     public BayNumRecyclerViewAdapter(List<String> dataList) {
+
         this.dataList = dataList;
-
-        if (this.dataList == null) {
-            this.dataList = new ArrayList<>();
-        }
-
         this.selectedItems = new SparseBooleanArray();
     }
 
@@ -137,7 +132,7 @@ public class BayNumRecyclerViewAdapter extends RecyclerView.Adapter<BayNumItemVi
     /**
      * 切换选择状态
      *
-     * @param bayNumItemViewHolder 航次列表的ViewHolder
+     * @param bayNumItemViewHolder 贝位列表的ViewHolder
      */
     public void switchSelectedState(BayNumItemViewHolder bayNumItemViewHolder) {
 

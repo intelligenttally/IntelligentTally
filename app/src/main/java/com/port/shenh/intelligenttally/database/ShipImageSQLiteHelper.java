@@ -51,7 +51,7 @@ public class ShipImageSQLiteHelper extends SQLiteOpenHelper {
 
     public ShipImageSQLiteHelper(Context context) {
         super(context, CommonConst.DB_NAME, null, CommonConst.DB_VERSION);
-        Log.i(LOG_TAG + "TallySQLiteHelper", "TallySQLiteHelper is invoked");
+        Log.i(LOG_TAG + "ShipImageSQLiteHelper", "ShipImageSQLiteHelper is invoked");
     }
 
     @Override

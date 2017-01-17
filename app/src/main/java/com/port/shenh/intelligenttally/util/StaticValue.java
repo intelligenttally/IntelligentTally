@@ -57,9 +57,15 @@ public interface StaticValue {
         String HTTP_LOGIN_URL = HTTP_IP_URL + "M_Znlh/Entrance/Login.aspx";
 
         /**
-         * 航次
+         * 航次（在港）
          */
-        String HTTP_VOYAGE_LIST_URL = HTTP_IP_URL + "M_Znlh/Voyage/GetVoyage.aspx";
+        String HTTP_VOYAGE_LIST_OF_IN_PORT_URL = HTTP_IP_URL + "M_Znlh/Voyage/GetVoyageOfInPort.aspx";
+
+
+        /**
+         * 航次（已下载）
+         */
+        String HTTP_VOYAGE_LIST_OF_DOWNLOADED_URL = HTTP_IP_URL + "M_Znlh/Voyage/GetVoyage.aspx";
 
         /**
          * 船舶贝位规范

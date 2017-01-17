@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.port.shenh.intelligenttally.R;
 import com.port.shenh.intelligenttally.bean.Voyage;
+import com.port.shenh.intelligenttally.holder.BayNumItemViewHolder;
 import com.port.shenh.intelligenttally.holder.VoyageItemViewHolder;
 
 import org.mobile.library.model.operate.OnItemClickListenerForRecyclerViewItem;
@@ -22,7 +23,7 @@ import java.util.List;
 
 
 /**
- * 航次列表数据适配器
+ * 已下载航次列表数据适配器
  *
  * @author sh
  * @version 1.0 2016/1/15
@@ -45,6 +46,7 @@ public class VoyageRecyclerViewAdapter extends RecyclerView.Adapter<VoyageItemVi
      */
     private SparseBooleanArray selectedItems;
 
+
     /**
      * item点击事件监听器
      */
@@ -55,8 +57,11 @@ public class VoyageRecyclerViewAdapter extends RecyclerView.Adapter<VoyageItemVi
      * 构造函数
      */
     public VoyageRecyclerViewAdapter() {
+
         this.dataList = new ArrayList<>();
         this.selectedItems = new SparseBooleanArray();
+
+
     }
 
     /**
@@ -66,6 +71,8 @@ public class VoyageRecyclerViewAdapter extends RecyclerView.Adapter<VoyageItemVi
      */
     public VoyageRecyclerViewAdapter(List<Voyage> dataList) {
         this.dataList = dataList;
+        this.selectedItems = new SparseBooleanArray();
+
     }
 
     /**
@@ -101,7 +108,6 @@ public class VoyageRecyclerViewAdapter extends RecyclerView.Adapter<VoyageItemVi
         if (dataList.size() > 0) {
             int count = dataList.size();
             dataList.clear();
-            selectedItems.clear();
             notifyItemRangeRemoved(0, count);
         }
     }
@@ -115,57 +121,9 @@ public class VoyageRecyclerViewAdapter extends RecyclerView.Adapter<VoyageItemVi
 
         int position = voyageItemViewHolder.getLayoutPosition();
 
-        if (selectedItems.get(position, false)) {
-            selectedItems.delete(position);
-        } else {
-            selectedItems.put(position, true);
-        }
-        notifyItemChanged(position);
-    }
-
-    /**
-     * 获取选中item数目
-     */
-    public int getSelectedItemCount() {
-        return selectedItems.size();
-    }
-
-    /**
-     * 获取选中的Items
-     *
-     * @return Items
-     */
-    public List<Integer> getSelectedItems() {
-
-        if (selectedItems.size() == 0) {
-            return null;
-        }
-
-        List<Integer> items = new ArrayList<>(selectedItems.size());
-        for (int i = 0; i < selectedItems.size(); i++) {
-            items.add(selectedItems.keyAt(i));
-        }
-
-        return items;
-    }
-
-    /**
-     * 获取选中的数据列表
-     *
-     * @return 获取选中的数据列表
-     */
-    public List<Voyage> getSelectedDataList() {
-
-        if (selectedItems.size() == 0) {
-            return null;
-        }
-
-        List<Voyage> selectedDataList = new ArrayList<>(selectedItems.size());
-        for (int i = 0; i < selectedItems.size(); i++) {
-            selectedDataList.add(i, dataList.get(getSelectedItems().get(i)));
-        }
-
-        return selectedDataList;
+        selectedItems.clear();
+        selectedItems.put(position, true);
+        notifyDataSetChanged();
     }
 
 
@@ -198,7 +156,6 @@ public class VoyageRecyclerViewAdapter extends RecyclerView.Adapter<VoyageItemVi
         holder.inOutTextView.setText(voyage.getCodeInOut().equals("1") == true ? "出" : "进");
         holder.voyageTextView.setText(voyage.getVoyage());
         holder.chi_VesselTextView.setText(voyage.getChi_vessel());
-        holder.downloadedTextView.setText(voyage.isDownloaded() == true ? "已下载" : "");
 
         int color = 0;
         if (selectedItems.get(position, false)) {

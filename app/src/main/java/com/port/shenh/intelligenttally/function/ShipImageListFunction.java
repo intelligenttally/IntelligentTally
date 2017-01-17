@@ -247,7 +247,7 @@ public class ShipImageListFunction {
     public void onClear() {
         Log.i(LOG_TAG + "onClear", "clear is invoked");
         operator.clear();
-        onClearEndListener.OnClearEnd();
+//        onClearEndListener.OnClearEnd();
     }
 
     /**
@@ -340,9 +340,10 @@ public class ShipImageListFunction {
      *
      * @param b1 贝位1
      * @param sbayno2 贝位号2
+     * @param codeInOut 进出口编码
      * @return 错误消息，正确返回null
      */
-    public String moveBay(ShipImage b1, String sbayno2) {
+    public String moveBay(ShipImage b1, String sbayno2, String codeInOut) {
         if (operator == null || operator.isEmpty()) {
             Log.i(LOG_TAG + "onLoadFromDataBase", "database null");
             return "false";
@@ -380,7 +381,7 @@ public class ShipImageListFunction {
                     Log.i(LOG_TAG + "MoveBay", "贝位1箱子20，贝位2有箱子，箱子20");
 
                     //对调处理
-                    swapBay(b1, b2);
+                    swapBay(b1, b2, codeInOut);
 
                 } else {
 
@@ -398,7 +399,7 @@ public class ShipImageListFunction {
                             Log.i(LOG_TAG + "MoveBay", "贝位1箱子20，贝位2有箱子，箱子40，贝位1通贝，贝位1Next无箱子");
 
                             //对调处理
-                            swapBay(b1, b2);
+                            swapBay(b1, b2, codeInOut);
 
                         }
 
@@ -416,7 +417,7 @@ public class ShipImageListFunction {
                 Log.i(LOG_TAG + "MoveBay", "贝位1箱子20，贝位2无箱子");
 
                 //对调处理
-                swapBay(b1, b2);
+                swapBay(b1, b2, codeInOut);
 
             }
 
@@ -437,7 +438,7 @@ public class ShipImageListFunction {
                     Log.i(LOG_TAG + "MoveBay", "贝位1箱子40，贝位2通贝，贝位2Next无箱子");
 
                     //对调处理
-                    swapBay(b1, b2);
+                    swapBay(b1, b2, codeInOut);
 
                 }
 
@@ -457,12 +458,13 @@ public class ShipImageListFunction {
      *  对调贝位1，贝位2
      * @param b1 贝位1
      * @param b2 贝位2
+     * @param codeInOut 进出口编码
      */
-    private void swapBay(ShipImage b1, ShipImage b2){
+    private void swapBay(ShipImage b1, ShipImage b2, String codeInOut){
 
-        Log.i(LOG_TAG + "swapBayFor40", "swapBayFor40 is invoked");
+        Log.i(LOG_TAG + "swapBay", "swapBay is invoked");
 
-        operator.swapBay(b1, b2);
+        operator.swapBay(b1, b2, codeInOut);
 
     }
 

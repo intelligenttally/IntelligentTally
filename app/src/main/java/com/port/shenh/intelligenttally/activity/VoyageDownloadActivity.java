@@ -19,11 +19,12 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.port.shenh.intelligenttally.R;
-import com.port.shenh.intelligenttally.adapter.VoyageRecyclerViewAdapter;
+import com.port.shenh.intelligenttally.adapter.VoyageOfInPortRecyclerViewAdapter;
 import com.port.shenh.intelligenttally.bean.Voyage;
 import com.port.shenh.intelligenttally.function.ShipImageListFunction;
+import com.port.shenh.intelligenttally.function.VoyageListFunction;
 import com.port.shenh.intelligenttally.holder.VoyageItemViewHolder;
-import com.port.shenh.intelligenttally.work.PullVoyageList;
+import com.port.shenh.intelligenttally.work.PullVoyageListOfInPort;
 
 import org.mobile.library.common.function.ToolbarInitialize;
 import org.mobile.library.model.operate.OnItemClickListenerForRecyclerViewItem;
@@ -65,7 +66,7 @@ public class VoyageDownloadActivity extends AppCompatActivity {
         /**
          * 堆存列表数据适配器
          */
-        public VoyageRecyclerViewAdapter recyclerViewAdapter = null;
+        public VoyageOfInPortRecyclerViewAdapter recyclerViewAdapter = null;
 
         /**
          * 上一个执行的加载任务
@@ -91,6 +92,11 @@ public class VoyageDownloadActivity extends AppCompatActivity {
          * 船图数据功能类
          */
         public ShipImageListFunction shipImageListFunction = null;
+
+        /**
+         * 航次数据功能类
+         */
+        public VoyageListFunction voyageListFunction = null;
 
         /**
          * 下拉刷新控件
@@ -135,9 +141,11 @@ public class VoyageDownloadActivity extends AppCompatActivity {
         viewHolder = new LocalViewHolder();
 
         // 堆存列表适配器
-        viewHolder.recyclerViewAdapter = new VoyageRecyclerViewAdapter();
+        viewHolder.recyclerViewAdapter = new VoyageOfInPortRecyclerViewAdapter();
 
         viewHolder.shipImageListFunction = new ShipImageListFunction(this);
+
+        viewHolder.voyageListFunction = new VoyageListFunction(this);
 
         viewHolder.refreshLayout = (SwipeRefreshLayout) findViewById(R.id
                 .activity_voyage_download_swipeRefreshLayout);
@@ -244,7 +252,7 @@ public class VoyageDownloadActivity extends AppCompatActivity {
         }
 
         // 堆存列表任务
-        PullVoyageList pullVoyageList = new PullVoyageList();
+        PullVoyageListOfInPort pullVoyageList = new PullVoyageListOfInPort();
 
         pullVoyageList.setWorkEndListener(new WorkBack<List<Voyage>>() {
             @Override
@@ -359,6 +367,24 @@ public class VoyageDownloadActivity extends AppCompatActivity {
                     }
                 });
 
+                viewHolder.voyageListFunction.setOnLoadEndListener(new VoyageListFunction.OnLoadEndListener() {
+                    @Override
+                    public void OnLoadEnd() {
+                        Log.i(LOG_TAG + "OnLoadEnd", "count is" + count.get());
+                        if (count.decrementAndGet() == 0) {
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    loadData(true);
+                                    Toast.makeText(getBaseContext(), R.string.download_success,
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    }
+                });
+
                 for (int i = 0; i < selectedDataList.size(); i++) {
                     count.incrementAndGet();
                     Voyage voyage = selectedDataList.get(i);
@@ -368,7 +394,20 @@ public class VoyageDownloadActivity extends AppCompatActivity {
                     //此处需要返回是否有加载数据
                     viewHolder.shipImageListFunction.onLoad(voyage.getShip_id());
                 }
+
+                for (int i = 0; i < selectedDataList.size(); i++) {
+                    count.incrementAndGet();
+                    Voyage voyage = selectedDataList.get(i);
+
+                    Log.i(LOG_TAG + "doDownload", "Ship_Id is" + voyage.getShip_id());
+
+                    //此处需要返回是否有加载数据
+                    viewHolder.voyageListFunction.onLoad(voyage.getShip_id());
+                }
+
                 count.decrementAndGet();
+
+
 
             }
         }).setNegativeButton("取消", null).show();

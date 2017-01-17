@@ -56,7 +56,7 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
 
     @Override
     protected String onCreateTableName() {
-        return TableConst.ShipImage.TABLE_NAME;
+        return TableConst.ShipImage.TB_SHIP_IMAGE;
     }
 
     @Override
@@ -376,7 +376,7 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
         Log.i(LOG_TAG + "isExistByShipId", "isExist shipId is " + shipId);
 
         // 查询语句
-        String sql = String.format("select  count(*) from %s where %s=%s", tableName, "ship_id",
+        String sql = String.format("select  count(*) from %s a, %s b where a.%s=b.%s and a.%s=%s", "tb_voyage", tableName, "ship_id", "ship_id", "ship_id",
                 shipId);
 
         Log.i(LOG_TAG + "queryByShipId", "query sql is " + sql);
@@ -386,11 +386,14 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
             if (cursor.getInt(0) > 0) {
                 cursor.close();
                 close(sqLiteHelper);
+                Log.i(LOG_TAG + "isExistByShipId", "isExist shipId is " + shipId + " true");
                 return true;
             }
         }
         cursor.close();
         close(sqLiteHelper);
+
+        Log.i(LOG_TAG + "isExistByShipId", "isExist shipId is " + shipId + " false");
         return false;
     }
 
@@ -630,103 +633,127 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
      *
      * @param b1 贝位1
      * @param b2 贝位2
+     * @param codeInOut 进出口编码
      */
-    public void swapBay(ShipImage b1, ShipImage b2) {
+    public void swapBay(ShipImage b1, ShipImage b2, String codeInOut) {
 
         Log.i(LOG_TAG + "swapBay", "query param is " + b1.getSbayno() + " " + b2.getSbayno());
 
-        String moved1 = getMoved(b1);
-        String moved2 = getMoved(b2);
+        Log.i(LOG_TAG + "swapBay", "b1 getSbayno is " + b1.getSbayno());
+        Log.i(LOG_TAG + "swapBay", "b1 getBaynum is " + b1.getBaynum());
+        Log.i(LOG_TAG + "swapBay", "b1 getBaycol is " + b1.getBaycol());
+        Log.i(LOG_TAG + "swapBay", "b1 getBayrow is " + b1.getBayrow());
+
+        Log.i(LOG_TAG + "swapBay", "b2 getSbayno is " + b2.getSbayno());
+        Log.i(LOG_TAG + "swapBay", "b2 getBaynum is " + b2.getBaynum());
+        Log.i(LOG_TAG + "swapBay", "b2 getBaycol is " + b2.getBaycol());
+        Log.i(LOG_TAG + "swapBay", "b2 getBayrow is " + b2.getBayrow());
+
+
+        String moved1 = getMoved(b1, codeInOut);
+        String moved2 = getMoved(b2, codeInOut);
         String oldbayno1 = b2.getOldbayno().isEmpty() == true ? b2.getBayno() : "";
         String oldbayno2 = b1.getOldbayno().isEmpty() == true ? b1.getBayno() : "";
 
+        Log.i(LOG_TAG + "swapBay", "Size_con is " + b1.getSize_con() + " " + b2.getSize_con());
 
-        if (b1.getSize_con().equals("20") && b2.getSize_con().equals("20")) {
+        if (b1.getSize_con().equals("20") && (b2.getSize_con().equals("20") || b2.getSize_con().isEmpty())) {
 
-            String bayno1 = b2.getBayno();
-            String bayno2 = b1.getBayno();
+            String bayno1 = b2.getSbayno();
+            String bayno2 = b2.getBayno().isEmpty() == true ? "" : b1.getSbayno();
 
-            String bayNum1 = b2.getBaynum();
-            String bayNum2 = b1.getBaynum();
+            String bayNum1 = b2.getBay_num();
+            String bayNum2 = b2.getBayno().isEmpty() == true ? "" : b1.getBay_num();
+
+            String bayCol1 = b2.getBay_col();
+            String bayCol2 = b2.getBayno().isEmpty() == true ? "" : b1.getBay_col();
+
+            String bayRow1 = b2.getBay_row();
+            String bayRow2 = b2.getBayno().isEmpty() == true ? "" : b1.getBay_row();
 
             Log.i(LOG_TAG + "swapBay", "bayno1 is " + bayno1);
             Log.i(LOG_TAG + "swapBay", "bayno2 is " + bayno2);
             Log.i(LOG_TAG + "swapBay", "bayNum1 is " + bayNum1);
             Log.i(LOG_TAG + "swapBay", "bayNum2 is " + bayNum2);
+            Log.i(LOG_TAG + "swapBay", "bayCol1 is " + bayCol1);
+            Log.i(LOG_TAG + "swapBay", "bayCol2 is " + bayCol2);
+            Log.i(LOG_TAG + "swapBay", "bayRow1 is " + bayRow1);
+            Log.i(LOG_TAG + "swapBay", "bayRow2 is " + bayRow2);
 
-
-            String sql1 = String.format("update %s t set t.CODE_LOAD_PORT='%s'," +
-                            "t.CODE_UNLOAD_PORT='%s'," +
-                            "t.CODE_DELIVERY='%s'," +
-                            "t.MOVED='%s'," +
-                            "t.UNLOAD_MARK='%s'," +
-                            "t.WORK_NO='%s'," +
-                            "t.DANGER_GRADE='%s'," +
-                            "t.DEGREE_SETTING='%s'," +
-                            "t.DEGREE_UNIT='%s'," +
-                            "t.MIN_DEGREE='%s'," +
-                            "t.MAX_DEGREE='%s'," +
-                            "t.BAYNO='%s'," +
-                            "t.OLDBAYNO='%s'," +
-                            "t.CODE_CRANE='%s'," +
-                            "t.BAYNUM='%s'," +
-                            "t.BAYCOL='%s'," +
-                            "t.BAYROW=='%s'," +
-                            "t.CONTAINER_NO='%s'," +
-                            "t.SIZE_CON='%s'," +
-                            "t.CONTAINER_TYPE='%s'," +
-                            "t.CODE_EMPTY='%s'," +
-                            "t.WEIGHT='%s'," +
-                            "t.SEALNO='%s'," +
-                            "t.MOVED_NAME='%s'," +
-                            "t.INOUTMARK='%s'," +
-                            "t.TransMark='%s'," +
-                            "t.JJR='%s'," +
-                            "t.YB='%s'," +
-                            "t.NAME='%s' " +
-                            "where t.SHIP_ID='%s',t.SBAYNO='%s'",
+            String sql1 = String.format("update %s set CODE_LOAD_PORT='%s'," +
+                            "CODE_UNLOAD_PORT='%s'," +
+                            "DELIVERY='%s'," +
+                            "MOVED='%s'," +
+                            "UNLOAD_MARK='%s'," +
+                            "WORK_NO='%s'," +
+                            "DANGER_GRADE='%s'," +
+                            "DEGREE_SETTING='%s'," +
+                            "DEGREE_UNIT='%s'," +
+                            "MIN_DEGREE='%s'," +
+                            "MAX_DEGREE='%s'," +
+                            "BAYNO='%s'," +
+                            "OLDBAYNO='%s'," +
+                            "CODE_CRANE='%s'," +
+                            "BAYNUM='%s'," +
+                            "BAYCOL='%s'," +
+                            "BAYROW='%s'," +
+                            "CONTAINER_NO='%s'," +
+                            "SIZE_CON='%s'," +
+                            "CONTAINER_TYPE='%s'," +
+                            "CODE_EMPTY='%s'," +
+                            "WEIGHT='%s'," +
+                            "SEALNO='%s'," +
+                            "MOVED_NAME='%s'," +
+                            "INOUTMARK='%s'," +
+                            "TransMark='%s'," +
+                            "HOLIDAYS='%s'," +
+                            "NIGHT='%s'," +
+                            "NAME='%s' " +
+                            "where SHIP_ID='%s' and SBAYNO='%s'",
+                    tableName,
                     b2.getCode_load_port(), b2.getCode_unload_port(), b2.getDelivery(), moved2, b2.getUnload_mark(), b2.getWork_no(),
                     b2.getDanger_grade(), b2.getDegree_setting(), b2.getDegree_unit(), b2.getMin_degree(), b2.getMax_degree(), bayno2,
-                    oldbayno2, b2.getCode_crane(), bayNum2, b2.getBaycol(), b2.getBayrow(), b2.getContainer_no(), b2.getSize_con(),
+                    oldbayno2, b2.getCode_crane(), bayNum2, bayCol2, bayRow2, b2.getContainer_no(), b2.getSize_con(),
                     b2.getContainer_type(), b2.getCode_empty(), b2.getWeight(), b2.getSealno(), b2.getMoved_name(), b2.getInoutmark(),
                     b2.getTransmark(), b2.getHolidays(), b2.getNight(), b2.getName(),
                     b1.getShip_id(), b1.getSbayno());
 
             Log.i(LOG_TAG + "swapBay", "sql1 is " + sql1);
 
-            String sql2 = String.format("update %s t set t.CODE_LOAD_PORT='%s'," +
-                            "t.CODE_UNLOAD_PORT='%s'," +
-                            "t.CODE_DELIVERY='%s'," +
-                            "t.MOVED='%s'," +
-                            "t.UNLOAD_MARK='%s'," +
-                            "t.WORK_NO='%s'," +
-                            "t.DANGER_GRADE='%s'," +
-                            "t.DEGREE_SETTING='%s'," +
-                            "t.DEGREE_UNIT='%s'," +
-                            "t.MIN_DEGREE='%s'," +
-                            "t.MAX_DEGREE='%s'," +
-                            "t.BAYNO='%s'," +
-                            "t.OLDBAYNO='%s'," +
-                            "t.CODE_CRANE='%s'," +
-                            "t.BAYNUM='%s'," +
-                            "t.BAYCOL='%s'," +
-                            "t.BAYROW=='%s'," +
-                            "t.CONTAINER_NO='%s'," +
-                            "t.SIZE_CON='%s'," +
-                            "t.CONTAINER_TYPE='%s'," +
-                            "t.CODE_EMPTY='%s'," +
-                            "t.WEIGHT='%s'," +
-                            "t.SEALNO='%s'," +
-                            "t.MOVED_NAME='%s'," +
-                            "t.INOUTMARK='%s'," +
-                            "t.TransMark='%s'," +
-                            "t.JJR='%s'," +
-                            "t.YB='%s'," +
-                            "t.NAME='%s' " +
-                            "where t.SHIP_ID='%s',t.SBAYNO='%s'",
+            String sql2 = String.format("update %s set CODE_LOAD_PORT='%s'," +
+                            "CODE_UNLOAD_PORT='%s'," +
+                            "DELIVERY='%s'," +
+                            "MOVED='%s'," +
+                            "UNLOAD_MARK='%s'," +
+                            "WORK_NO='%s'," +
+                            "DANGER_GRADE='%s'," +
+                            "DEGREE_SETTING='%s'," +
+                            "DEGREE_UNIT='%s'," +
+                            "MIN_DEGREE='%s'," +
+                            "MAX_DEGREE='%s'," +
+                            "BAYNO='%s'," +
+                            "OLDBAYNO='%s'," +
+                            "CODE_CRANE='%s'," +
+                            "BAYNUM='%s'," +
+                            "BAYCOL='%s'," +
+                            "BAYROW='%s'," +
+                            "CONTAINER_NO='%s'," +
+                            "SIZE_CON='%s'," +
+                            "CONTAINER_TYPE='%s'," +
+                            "CODE_EMPTY='%s'," +
+                            "WEIGHT='%s'," +
+                            "SEALNO='%s'," +
+                            "MOVED_NAME='%s'," +
+                            "INOUTMARK='%s'," +
+                            "TransMark='%s'," +
+                            "HOLIDAYS='%s'," +
+                            "NIGHT='%s'," +
+                            "NAME='%s' " +
+                            "where SHIP_ID='%s' and SBAYNO='%s'",
+                    tableName,
                     b1.getCode_load_port(), b1.getCode_unload_port(), b1.getDelivery(), moved1, b1.getUnload_mark(), b1.getWork_no(),
                     b1.getDanger_grade(), b1.getDegree_setting(), b1.getDegree_unit(), b1.getMin_degree(), b1.getMax_degree(), bayno1,
-                    oldbayno1, b1.getCode_crane(), bayNum1, b1.getBaycol(), b1.getBayrow(), b1.getContainer_no(), b1.getSize_con(),
+                    oldbayno1, b1.getCode_crane(), bayNum1, bayCol1, bayRow1, b1.getContainer_no(), b1.getSize_con(),
                     b1.getContainer_type(), b1.getCode_empty(), b1.getWeight(), b1.getSealno(), b1.getMoved_name(), b1.getInoutmark(),
                     b1.getTransmark(), b1.getHolidays(), b1.getNight(), b1.getName(),
                     b2.getShip_id(), b2.getSbayno());
@@ -745,8 +772,8 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
             String bayno2 = "0" + Integer.toString(Integer.parseInt(b1.getBay_num()) + 1) + b1.getBay_col() + b1.getBay_row();
             String bayno2Next = bayno2;
 
-            String sbayno1Next = bayno1Next;
-            String sbayno2Next = "0" + Integer.toString(Integer.parseInt(b1.getBay_num()) + 2) + b1.getBay_col() + b1.getBay_row();
+            String sbayno1Next = "0" + Integer.toString(Integer.parseInt(b1.getBay_num()) + 2) + b1.getBay_col() + b1.getBay_row();
+            String sbayno2Next = "0" + Integer.toString(Integer.parseInt(b2.getBay_num()) + 2) + b2.getBay_col() + b2.getBay_row();
 
             String bayNum1 = b2.getBaynum();
             String bayNum1Next = "0" + Integer.toString(Integer.parseInt(b2.getBay_num()) + 2);
@@ -767,78 +794,80 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
             Log.i(LOG_TAG + "swapBay", "bayNum2Next is " + bayNum2Next);
 
 
-            String sql1 = String.format("update %s t set t.CODE_LOAD_PORT='%s'," +
-                            "t.CODE_UNLOAD_PORT='%s'," +
-                            "t.CODE_DELIVERY='%s'," +
-                            "t.MOVED='%s'," +
-                            "t.UNLOAD_MARK='%s'," +
-                            "t.WORK_NO='%s'," +
-                            "t.DANGER_GRADE='%s'," +
-                            "t.DEGREE_SETTING='%s'," +
-                            "t.DEGREE_UNIT='%s'," +
-                            "t.MIN_DEGREE='%s'," +
-                            "t.MAX_DEGREE='%s'," +
-                            "t.BAYNO='%s'," +
-                            "t.OLDBAYNO='%s'," +
-                            "t.CODE_CRANE='%s'," +
-                            "t.BAYNUM='%s'," +
-                            "t.BAYCOL='%s'," +
-                            "t.BAYROW=='%s'," +
-                            "t.CONTAINER_NO='%s'," +
-                            "t.SIZE_CON='%s'," +
-                            "t.CONTAINER_TYPE='%s'," +
-                            "t.CODE_EMPTY='%s'," +
-                            "t.WEIGHT='%s'," +
-                            "t.SEALNO='%s'," +
-                            "t.MOVED_NAME='%s'," +
-                            "t.INOUTMARK='%s'," +
-                            "t.TransMark='%s'," +
-                            "t.JJR='%s'," +
-                            "t.YB='%s'," +
-                            "t.NAME='%s' " +
-                            "where t.SHIP_ID='%s',t.SBAYNO='%s'",
+            String sql1 = String.format("update %s set CODE_LOAD_PORT='%s'," +
+                            "CODE_UNLOAD_PORT='%s'," +
+                            "DELIVERY='%s'," +
+                            "MOVED='%s'," +
+                            "UNLOAD_MARK='%s'," +
+                            "WORK_NO='%s'," +
+                            "DANGER_GRADE='%s'," +
+                            "DEGREE_SETTING='%s'," +
+                            "DEGREE_UNIT='%s'," +
+                            "MIN_DEGREE='%s'," +
+                            "MAX_DEGREE='%s'," +
+                            "BAYNO='%s'," +
+                            "OLDBAYNO='%s'," +
+                            "CODE_CRANE='%s'," +
+                            "BAYNUM='%s'," +
+                            "BAYCOL='%s'," +
+                            "BAYROW='%s'," +
+                            "CONTAINER_NO='%s'," +
+                            "SIZE_CON='%s'," +
+                            "CONTAINER_TYPE='%s'," +
+                            "CODE_EMPTY='%s'," +
+                            "WEIGHT='%s'," +
+                            "SEALNO='%s'," +
+                            "MOVED_NAME='%s'," +
+                            "INOUTMARK='%s'," +
+                            "TransMark='%s'," +
+                            "HOLIDAYS='%s'," +
+                            "NIGHT='%s'," +
+                            "NAME='%s' " +
+                            "where SHIP_ID='%s' and SBAYNO='%s'",
+                    tableName,
                     b2.getCode_load_port(), b2.getCode_unload_port(), b2.getDelivery(), moved2, b2.getUnload_mark(), b2.getWork_no(),
                     b2.getDanger_grade(), b2.getDegree_setting(), b2.getDegree_unit(), b2.getMin_degree(), b2.getMax_degree(), bayno2,
-                    oldbayno2, b2.getCode_crane(), bayNum2, b2.getBaycol(), b2.getBayrow(), b2.getContainer_no(), b2.getSize_con(),
+                    oldbayno2, b2.getCode_crane(), bayNum2, b2.getBay_col(), b2.getBay_row(), b2.getContainer_no(), b2.getSize_con(),
                     b2.getContainer_type(), b2.getCode_empty(), b2.getWeight(), b2.getSealno(), b2.getMoved_name(), b2.getInoutmark(),
                     b2.getTransmark(), b2.getHolidays(), b2.getNight(), b2.getName(),
                     b1.getShip_id(), b1.getSbayno());
 
             Log.i(LOG_TAG + "swapBay", "sql1 is " + sql1);
 
-            String sql2 = String.format("update %s t set t.CODE_LOAD_PORT='%s'," +
-                            "t.CODE_UNLOAD_PORT='%s'," +
-                            "t.CODE_DELIVERY='%s'," +
-                            "t.MOVED='%s'," +
-                            "t.UNLOAD_MARK='%s'," +
-                            "t.WORK_NO='%s'," +
-                            "t.DANGER_GRADE='%s'," +
-                            "t.DEGREE_SETTING='%s'," +
-                            "t.DEGREE_UNIT='%s'," +
-                            "t.MIN_DEGREE='%s'," +
-                            "t.MAX_DEGREE='%s'," +
-                            "t.BAYNO='%s'," +
-                            "t.OLDBAYNO='%s'," +
-                            "t.CODE_CRANE='%s'," +
-                            "t.BAYNUM='%s'," +
-                            "t.BAYCOL='%s'," +
-                            "t.BAYROW=='%s'," +
-                            "t.CONTAINER_NO='%s'," +
-                            "t.SIZE_CON='%s'," +
-                            "t.CONTAINER_TYPE='%s'," +
-                            "t.CODE_EMPTY='%s'," +
-                            "t.WEIGHT='%s'," +
-                            "t.SEALNO='%s'," +
-                            "t.MOVED_NAME='%s'," +
-                            "t.INOUTMARK='%s'," +
-                            "t.TransMark='%s'," +
-                            "t.JJR='%s'," +
-                            "t.YB='%s'," +
-                            "t.NAME='%s' " +
-                            "where t.SHIP_ID='%s',t.SBAYNO='%s'",
+            String sql2 = String.format("update %s set CODE_LOAD_PORT='%s'," +
+                            "CODE_UNLOAD_PORT='%s'," +
+                            "DELIVERY='%s'," +
+                            "MOVED='%s'," +
+                            "UNLOAD_MARK='%s'," +
+                            "WORK_NO='%s'," +
+                            "DANGER_GRADE='%s'," +
+                            "DEGREE_SETTING='%s'," +
+                            "DEGREE_UNIT='%s'," +
+                            "MIN_DEGREE='%s'," +
+                            "MAX_DEGREE='%s'," +
+                            "BAYNO='%s'," +
+                            "OLDBAYNO='%s'," +
+                            "CODE_CRANE='%s'," +
+                            "BAYNUM='%s'," +
+                            "BAYCOL='%s'," +
+                            "BAYROW='%s'," +
+                            "CONTAINER_NO='%s'," +
+                            "SIZE_CON='%s'," +
+                            "CONTAINER_TYPE='%s'," +
+                            "CODE_EMPTY='%s'," +
+                            "WEIGHT='%s'," +
+                            "SEALNO='%s'," +
+                            "MOVED_NAME='%s'," +
+                            "INOUTMARK='%s'," +
+                            "TransMark='%s'," +
+                            "HOLIDAYS='%s'," +
+                            "NIGHT='%s'," +
+                            "NAME='%s' " +
+                            "where SHIP_ID='%s' and SBAYNO='%s'",
+                    tableName,
                     b1.getCode_load_port(), b1.getCode_unload_port(), b1.getDelivery(), moved1, b1.getUnload_mark(), b1.getWork_no(),
                     b1.getDanger_grade(), b1.getDegree_setting(), b1.getDegree_unit(), b1.getMin_degree(), b1.getMax_degree(), bayno1,
-                    oldbayno1, b1.getCode_crane(), bayNum1, b1.getBaycol(), b1.getBayrow(), b1.getContainer_no(), b1.getSize_con(),
+                    oldbayno1, b1.getCode_crane(), bayNum1, b1.getBay_col(), b1.getBay_row(), b1.getContainer_no(), b1.getSize_con(),
                     b1.getContainer_type(), b1.getCode_empty(), b1.getWeight(), b1.getSealno(), b1.getMoved_name(), b1.getInoutmark(),
                     b1.getTransmark(), b1.getHolidays(), b1.getNight(), b1.getName(),
                     b2.getShip_id(), b2.getSbayno());
@@ -846,39 +875,40 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
             Log.i(LOG_TAG + "swapBay", "sql2 is " + sql2);
 
 
-            String sql1Next = String.format("update %s t set t.CODE_LOAD_PORT='%s'," +
-                            "t.CODE_UNLOAD_PORT='%s'," +
-                            "t.CODE_DELIVERY='%s'," +
-                            "t.MOVED='%s'," +
-                            "t.UNLOAD_MARK='%s'," +
-                            "t.WORK_NO='%s'," +
-                            "t.DANGER_GRADE='%s'," +
-                            "t.DEGREE_SETTING='%s'," +
-                            "t.DEGREE_UNIT='%s'," +
-                            "t.MIN_DEGREE='%s'," +
-                            "t.MAX_DEGREE='%s'," +
-                            "t.BAYNO='%s'," +
-                            "t.OLDBAYNO='%s'," +
-                            "t.CODE_CRANE='%s'," +
-                            "t.BAYNUM='%s'," +
-                            "t.BAYCOL='%s'," +
-                            "t.BAYROW=='%s'," +
-                            "t.CONTAINER_NO='%s'," +
-                            "t.SIZE_CON='%s'," +
-                            "t.CONTAINER_TYPE='%s'," +
-                            "t.CODE_EMPTY='%s'," +
-                            "t.WEIGHT='%s'," +
-                            "t.SEALNO='%s'," +
-                            "t.MOVED_NAME='%s'," +
-                            "t.INOUTMARK='%s'," +
-                            "t.TransMark='%s'," +
-                            "t.JJR='%s'," +
-                            "t.YB='%s'," +
-                            "t.NAME='%s' " +
-                            "where t.SHIP_ID='%s',t.SBAYNO='%s'",
+            String sql1Next = String.format("update %s set CODE_LOAD_PORT='%s'," +
+                            "CODE_UNLOAD_PORT='%s'," +
+                            "DELIVERY='%s'," +
+                            "MOVED='%s'," +
+                            "UNLOAD_MARK='%s'," +
+                            "WORK_NO='%s'," +
+                            "DANGER_GRADE='%s'," +
+                            "DEGREE_SETTING='%s'," +
+                            "DEGREE_UNIT='%s'," +
+                            "MIN_DEGREE='%s'," +
+                            "MAX_DEGREE='%s'," +
+                            "BAYNO='%s'," +
+                            "OLDBAYNO='%s'," +
+                            "CODE_CRANE='%s'," +
+                            "BAYNUM='%s'," +
+                            "BAYCOL='%s'," +
+                            "BAYROW='%s'," +
+                            "CONTAINER_NO='%s'," +
+                            "SIZE_CON='%s'," +
+                            "CONTAINER_TYPE='%s'," +
+                            "CODE_EMPTY='%s'," +
+                            "WEIGHT='%s'," +
+                            "SEALNO='%s'," +
+                            "MOVED_NAME='%s'," +
+                            "INOUTMARK='%s'," +
+                            "TransMark='%s'," +
+                            "HOLIDAYS='%s'," +
+                            "NIGHT='%s'," +
+                            "NAME='%s' " +
+                            "where SHIP_ID='%s' and SBAYNO='%s'",
+                    tableName,
                     b2.getCode_load_port(), b2.getCode_unload_port(), b2.getDelivery(), moved2, b2.getUnload_mark(), b2.getWork_no(),
                     b2.getDanger_grade(), b2.getDegree_setting(), b2.getDegree_unit(), b2.getMin_degree(), b2.getMax_degree(), bayno2Next,
-                    oldbayno2, b2.getCode_crane(), bayNum2Next, b2.getBaycol(), b2.getBayrow(), b2.getContainer_no(), b2.getSize_con(),
+                    oldbayno2, b2.getCode_crane(), bayNum2Next, b2.getBay_col(), b2.getBay_row(), b2.getContainer_no(), b2.getSize_con(),
                     b2.getContainer_type(), b2.getCode_empty(), b2.getWeight(), b2.getSealno(), b2.getMoved_name(), b2.getInoutmark(),
                     b2.getTransmark(), b2.getHolidays(), b2.getNight(), b2.getName(),
                     b1.getShip_id(), sbayno1Next);
@@ -886,39 +916,40 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
             Log.i(LOG_TAG + "swapBay", "sql1Next is " + sql1Next);
 
 
-            String sql2Next = String.format("update %s t set t.CODE_LOAD_PORT='%s'," +
-                            "t.CODE_UNLOAD_PORT='%s'," +
-                            "t.CODE_DELIVERY='%s'," +
-                            "t.MOVED='%s'," +
-                            "t.UNLOAD_MARK='%s'," +
-                            "t.WORK_NO='%s'," +
-                            "t.DANGER_GRADE='%s'," +
-                            "t.DEGREE_SETTING='%s'," +
-                            "t.DEGREE_UNIT='%s'," +
-                            "t.MIN_DEGREE='%s'," +
-                            "t.MAX_DEGREE='%s'," +
-                            "t.BAYNO='%s'," +
-                            "t.OLDBAYNO='%s'," +
-                            "t.CODE_CRANE='%s'," +
-                            "t.BAYNUM='%s'," +
-                            "t.BAYCOL='%s'," +
-                            "t.BAYROW=='%s'," +
-                            "t.CONTAINER_NO='%s'," +
-                            "t.SIZE_CON='%s'," +
-                            "t.CONTAINER_TYPE='%s'," +
-                            "t.CODE_EMPTY='%s'," +
-                            "t.WEIGHT='%s'," +
-                            "t.SEALNO='%s'," +
-                            "t.MOVED_NAME='%s'," +
-                            "t.INOUTMARK='%s'," +
-                            "t.TransMark='%s'," +
-                            "t.JJR='%s'," +
-                            "t.YB='%s'," +
-                            "t.NAME='%s' " +
-                            "where t.SHIP_ID='%s',t.SBAYNO='%s'",
+            String sql2Next = String.format("update %s set CODE_LOAD_PORT='%s'," +
+                            "CODE_UNLOAD_PORT='%s'," +
+                            "DELIVERY='%s'," +
+                            "MOVED='%s'," +
+                            "UNLOAD_MARK='%s'," +
+                            "WORK_NO='%s'," +
+                            "DANGER_GRADE='%s'," +
+                            "DEGREE_SETTING='%s'," +
+                            "DEGREE_UNIT='%s'," +
+                            "MIN_DEGREE='%s'," +
+                            "MAX_DEGREE='%s'," +
+                            "BAYNO='%s'," +
+                            "OLDBAYNO='%s'," +
+                            "CODE_CRANE='%s'," +
+                            "BAYNUM='%s'," +
+                            "BAYCOL='%s'," +
+                            "BAYROW='%s'," +
+                            "CONTAINER_NO='%s'," +
+                            "SIZE_CON='%s'," +
+                            "CONTAINER_TYPE='%s'," +
+                            "CODE_EMPTY='%s'," +
+                            "WEIGHT='%s'," +
+                            "SEALNO='%s'," +
+                            "MOVED_NAME='%s'," +
+                            "INOUTMARK='%s'," +
+                            "TransMark='%s'," +
+                            "HOLIDAYS='%s'," +
+                            "NIGHT='%s'," +
+                            "NAME='%s' " +
+                            "where SHIP_ID='%s' and SBAYNO='%s'",
+                    tableName,
                     b1.getCode_load_port(), b1.getCode_unload_port(), b1.getDelivery(), moved1, b1.getUnload_mark(), b1.getWork_no(),
                     b1.getDanger_grade(), b1.getDegree_setting(), b1.getDegree_unit(), b1.getMin_degree(), b1.getMax_degree(), bayno1Next,
-                    oldbayno1, b1.getCode_crane(), bayNum1Next, b1.getBaycol(), b1.getBayrow(), b1.getContainer_no(), b1.getSize_con(),
+                    oldbayno1, b1.getCode_crane(), bayNum1Next, b1.getBay_col(), b1.getBay_row(), b1.getContainer_no(), b1.getSize_con(),
                     b1.getContainer_type(), b1.getCode_empty(), b1.getWeight(), b1.getSealno(), b1.getMoved_name(), b1.getInoutmark(),
                     b1.getTransmark(), b1.getHolidays(), b1.getNight(), b1.getName(),
                     b2.getShip_id(), sbayno2Next);
@@ -936,16 +967,26 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
 
             String bayno1 = "0" + Integer.toString(Integer.parseInt(b2.getBay_num()) + 1) + b2.getBay_col() + b2.getBay_row();
             String bayno1Next = bayno1;
-            String bayno2 = b1.getSbayno();
-            String bayno2Next = "0" + Integer.toString(Integer.parseInt(b1.getBay_num()) + 2) + b1.getBay_col() + b1.getBay_row();
+            String bayno2 = b2.getBayno().isEmpty() == true ? "" : b1.getSbayno();
+            String bayno2Next = "";
 
-            String sbayno1Next = "0" + Integer.toString(Integer.parseInt(b2.getBay_num()) + 2) + b2.getBay_col() + b2.getBay_row();
-            String sbayno2Next = bayno2Next;
+            String sbayno1Next = "0" + Integer.toString(Integer.parseInt(b1.getBay_num()) + 2) + b1.getBay_col() + b1.getBay_row();
+            String sbayno2Next = "0" + Integer.toString(Integer.parseInt(b2.getBay_num()) + 2) + b2.getBay_col() + b2.getBay_row();
 
             String bayNum1 = "0" + Integer.toString(Integer.parseInt(b2.getBay_num()) + 1);
             String bayNum1Next = bayNum1;
-            String bayNum2 = b1.getBaynum();
-            String bayNum2Next = bayNum2;
+            String bayNum2 = b2.getBayno().isEmpty() == true ? "" : b1.getBaynum();
+            String bayNum2Next = "";
+
+            String bayCol1 =b2.getBay_col();
+            String bayCol1Next = bayCol1;
+            String bayCol2 = b2.getBayno().isEmpty() == true ? "" : b1.getBay_col();
+            String bayCol2Next = "";
+
+            String bayRow1 =b2.getBay_row();
+            String bayRow1Next = bayRow1;
+            String bayRow2 = b2.getBayno().isEmpty() == true ? "" : b1.getBay_row();
+            String bayRow2Next = "";
 
             Log.i(LOG_TAG + "swapBay", "bayno1 is " + bayno1);
             Log.i(LOG_TAG + "swapBay", "bayno1Next is " + bayno1Next);
@@ -960,78 +1001,90 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
             Log.i(LOG_TAG + "swapBay", "bayNum2 is " + bayNum2);
             Log.i(LOG_TAG + "swapBay", "bayNum2Next is " + bayNum2Next);
 
-            String sql1 = String.format("update %s t set t.CODE_LOAD_PORT='%s'," +
-                            "t.CODE_UNLOAD_PORT='%s'," +
-                            "t.CODE_DELIVERY='%s'," +
-                            "t.MOVED='%s'," +
-                            "t.UNLOAD_MARK='%s'," +
-                            "t.WORK_NO='%s'," +
-                            "t.DANGER_GRADE='%s'," +
-                            "t.DEGREE_SETTING='%s'," +
-                            "t.DEGREE_UNIT='%s'," +
-                            "t.MIN_DEGREE='%s'," +
-                            "t.MAX_DEGREE='%s'," +
-                            "t.BAYNO='%s'," +
-                            "t.OLDBAYNO='%s'," +
-                            "t.CODE_CRANE='%s'," +
-                            "t.BAYNUM='%s'," +
-                            "t.BAYCOL='%s'," +
-                            "t.BAYROW=='%s'," +
-                            "t.CONTAINER_NO='%s'," +
-                            "t.SIZE_CON='%s'," +
-                            "t.CONTAINER_TYPE='%s'," +
-                            "t.CODE_EMPTY='%s'," +
-                            "t.WEIGHT='%s'," +
-                            "t.SEALNO='%s'," +
-                            "t.MOVED_NAME='%s'," +
-                            "t.INOUTMARK='%s'," +
-                            "t.TransMark='%s'," +
-                            "t.JJR='%s'," +
-                            "t.YB='%s'," +
-                            "t.NAME='%s' " +
-                            "where t.SHIP_ID='%s',t.SBAYNO='%s'",
+            Log.i(LOG_TAG + "swapBay", "bayCol1 is " + bayCol1);
+            Log.i(LOG_TAG + "swapBay", "bayCol1Next is " + bayCol1Next);
+            Log.i(LOG_TAG + "swapBay", "bayCol2 is " + bayCol2);
+            Log.i(LOG_TAG + "swapBay", "bayCol2Next is " + bayCol2Next);
+
+            Log.i(LOG_TAG + "swapBay", "bayRow1 is " + bayRow1);
+            Log.i(LOG_TAG + "swapBay", "bayRow1Next is " + bayRow1Next);
+            Log.i(LOG_TAG + "swapBay", "bayRow2 is " + bayRow2);
+            Log.i(LOG_TAG + "swapBay", "bayRow2Next is " + bayRow2Next);
+
+            String sql1 = String.format("update %s set CODE_LOAD_PORT='%s'," +
+                            "CODE_UNLOAD_PORT='%s'," +
+                            "DELIVERY='%s'," +
+                            "MOVED='%s'," +
+                            "UNLOAD_MARK='%s'," +
+                            "WORK_NO='%s'," +
+                            "DANGER_GRADE='%s'," +
+                            "DEGREE_SETTING='%s'," +
+                            "DEGREE_UNIT='%s'," +
+                            "MIN_DEGREE='%s'," +
+                            "MAX_DEGREE='%s'," +
+                            "BAYNO='%s'," +
+                            "OLDBAYNO='%s'," +
+                            "CODE_CRANE='%s'," +
+                            "BAYNUM='%s'," +
+                            "BAYCOL='%s'," +
+                            "BAYROW='%s'," +
+                            "CONTAINER_NO='%s'," +
+                            "SIZE_CON='%s'," +
+                            "CONTAINER_TYPE='%s'," +
+                            "CODE_EMPTY='%s'," +
+                            "WEIGHT='%s'," +
+                            "SEALNO='%s'," +
+                            "MOVED_NAME='%s'," +
+                            "INOUTMARK='%s'," +
+                            "TransMark='%s'," +
+                            "HOLIDAYS='%s'," +
+                            "NIGHT='%s'," +
+                            "NAME='%s' " +
+                            "where SHIP_ID='%s' and SBAYNO='%s'",
+                    tableName,
                     b2.getCode_load_port(), b2.getCode_unload_port(), b2.getDelivery(), moved2, b2.getUnload_mark(), b2.getWork_no(),
                     b2.getDanger_grade(), b2.getDegree_setting(), b2.getDegree_unit(), b2.getMin_degree(), b2.getMax_degree(), bayno2,
-                    oldbayno2, b2.getCode_crane(), bayNum2, b2.getBaycol(), b2.getBayrow(), b2.getContainer_no(), b2.getSize_con(),
+                    oldbayno2, b2.getCode_crane(), bayNum2, bayCol2, b2.getBay_row(), b2.getContainer_no(), b2.getSize_con(),
                     b2.getContainer_type(), b2.getCode_empty(), b2.getWeight(), b2.getSealno(), b2.getMoved_name(), b2.getInoutmark(),
                     b2.getTransmark(), b2.getHolidays(), b2.getNight(), b2.getName(),
                     b1.getShip_id(), b1.getSbayno());
 
             Log.i(LOG_TAG + "swapBay", "sql1 is " + sql1);
 
-            String sql2 = String.format("update %s t set t.CODE_LOAD_PORT='%s'," +
-                            "t.CODE_UNLOAD_PORT='%s'," +
-                            "t.CODE_DELIVERY='%s'," +
-                            "t.MOVED='%s'," +
-                            "t.UNLOAD_MARK='%s'," +
-                            "t.WORK_NO='%s'," +
-                            "t.DANGER_GRADE='%s'," +
-                            "t.DEGREE_SETTING='%s'," +
-                            "t.DEGREE_UNIT='%s'," +
-                            "t.MIN_DEGREE='%s'," +
-                            "t.MAX_DEGREE='%s'," +
-                            "t.BAYNO='%s'," +
-                            "t.OLDBAYNO='%s'," +
-                            "t.CODE_CRANE='%s'," +
-                            "t.BAYNUM='%s'," +
-                            "t.BAYCOL='%s'," +
-                            "t.BAYROW=='%s'," +
-                            "t.CONTAINER_NO='%s'," +
-                            "t.SIZE_CON='%s'," +
-                            "t.CONTAINER_TYPE='%s'," +
-                            "t.CODE_EMPTY='%s'," +
-                            "t.WEIGHT='%s'," +
-                            "t.SEALNO='%s'," +
-                            "t.MOVED_NAME='%s'," +
-                            "t.INOUTMARK='%s'," +
-                            "t.TransMark='%s'," +
-                            "t.JJR='%s'," +
-                            "t.YB='%s'," +
-                            "t.NAME='%s' " +
-                            "where t.SHIP_ID='%s',t.SBAYNO='%s'",
+            String sql2 = String.format("update %s set CODE_LOAD_PORT='%s'," +
+                            "CODE_UNLOAD_PORT='%s'," +
+                            "DELIVERY='%s'," +
+                            "MOVED='%s'," +
+                            "UNLOAD_MARK='%s'," +
+                            "WORK_NO='%s'," +
+                            "DANGER_GRADE='%s'," +
+                            "DEGREE_SETTING='%s'," +
+                            "DEGREE_UNIT='%s'," +
+                            "MIN_DEGREE='%s'," +
+                            "MAX_DEGREE='%s'," +
+                            "BAYNO='%s'," +
+                            "OLDBAYNO='%s'," +
+                            "CODE_CRANE='%s'," +
+                            "BAYNUM='%s'," +
+                            "BAYCOL='%s'," +
+                            "BAYROW='%s'," +
+                            "CONTAINER_NO='%s'," +
+                            "SIZE_CON='%s'," +
+                            "CONTAINER_TYPE='%s'," +
+                            "CODE_EMPTY='%s'," +
+                            "WEIGHT='%s'," +
+                            "SEALNO='%s'," +
+                            "MOVED_NAME='%s'," +
+                            "INOUTMARK='%s'," +
+                            "TransMark='%s'," +
+                            "HOLIDAYS='%s'," +
+                            "NIGHT='%s'," +
+                            "NAME='%s' " +
+                            "where SHIP_ID='%s' and SBAYNO='%s'",
+                    tableName,
                     b1.getCode_load_port(), b1.getCode_unload_port(), b1.getDelivery(), moved1, b1.getUnload_mark(), b1.getWork_no(),
                     b1.getDanger_grade(), b1.getDegree_setting(), b1.getDegree_unit(), b1.getMin_degree(), b1.getMax_degree(), bayno1,
-                    oldbayno1, b1.getCode_crane(), bayNum1, b1.getBaycol(), b1.getBayrow(), b1.getContainer_no(), b1.getSize_con(),
+                    oldbayno1, b1.getCode_crane(), bayNum1, b1.getBay_col(), b1.getBay_row(), b1.getContainer_no(), b1.getSize_con(),
                     b1.getContainer_type(), b1.getCode_empty(), b1.getWeight(), b1.getSealno(), b1.getMoved_name(), b1.getInoutmark(),
                     b1.getTransmark(), b1.getHolidays(), b1.getNight(), b1.getName(),
                     b2.getShip_id(), b2.getSbayno());
@@ -1039,39 +1092,40 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
             Log.i(LOG_TAG + "swapBay", "sql2 is " + sql2);
 
 
-            String sql1Next = String.format("update %s t set t.CODE_LOAD_PORT='%s'," +
-                            "t.CODE_UNLOAD_PORT='%s'," +
-                            "t.CODE_DELIVERY='%s'," +
-                            "t.MOVED='%s'," +
-                            "t.UNLOAD_MARK='%s'," +
-                            "t.WORK_NO='%s'," +
-                            "t.DANGER_GRADE='%s'," +
-                            "t.DEGREE_SETTING='%s'," +
-                            "t.DEGREE_UNIT='%s'," +
-                            "t.MIN_DEGREE='%s'," +
-                            "t.MAX_DEGREE='%s'," +
-                            "t.BAYNO='%s'," +
-                            "t.OLDBAYNO='%s'," +
-                            "t.CODE_CRANE='%s'," +
-                            "t.BAYNUM='%s'," +
-                            "t.BAYCOL='%s'," +
-                            "t.BAYROW=='%s'," +
-                            "t.CONTAINER_NO='%s'," +
-                            "t.SIZE_CON='%s'," +
-                            "t.CONTAINER_TYPE='%s'," +
-                            "t.CODE_EMPTY='%s'," +
-                            "t.WEIGHT='%s'," +
-                            "t.SEALNO='%s'," +
-                            "t.MOVED_NAME='%s'," +
-                            "t.INOUTMARK='%s'," +
-                            "t.TransMark='%s'," +
-                            "t.JJR='%s'," +
-                            "t.YB='%s'," +
-                            "t.NAME='%s' " +
-                            "where t.SHIP_ID='%s',t.SBAYNO='%s'",
+            String sql1Next = String.format("update %s set CODE_LOAD_PORT='%s'," +
+                            "CODE_UNLOAD_PORT='%s'," +
+                            "DELIVERY='%s'," +
+                            "MOVED='%s'," +
+                            "UNLOAD_MARK='%s'," +
+                            "WORK_NO='%s'," +
+                            "DANGER_GRADE='%s'," +
+                            "DEGREE_SETTING='%s'," +
+                            "DEGREE_UNIT='%s'," +
+                            "MIN_DEGREE='%s'," +
+                            "MAX_DEGREE='%s'," +
+                            "BAYNO='%s'," +
+                            "OLDBAYNO='%s'," +
+                            "CODE_CRANE='%s'," +
+                            "BAYNUM='%s'," +
+                            "BAYCOL='%s'," +
+                            "BAYROW='%s'," +
+                            "CONTAINER_NO='%s'," +
+                            "SIZE_CON='%s'," +
+                            "CONTAINER_TYPE='%s'," +
+                            "CODE_EMPTY='%s'," +
+                            "WEIGHT='%s'," +
+                            "SEALNO='%s'," +
+                            "MOVED_NAME='%s'," +
+                            "INOUTMARK='%s'," +
+                            "TransMark='%s'," +
+                            "HOLIDAYS='%s'," +
+                            "NIGHT='%s'," +
+                            "NAME='%s' " +
+                            "where SHIP_ID='%s' and SBAYNO='%s'",
+                    tableName,
                     b2.getCode_load_port(), b2.getCode_unload_port(), b2.getDelivery(), moved2, b2.getUnload_mark(), b2.getWork_no(),
                     b2.getDanger_grade(), b2.getDegree_setting(), b2.getDegree_unit(), b2.getMin_degree(), b2.getMax_degree(), bayno2Next,
-                    oldbayno2, b2.getCode_crane(), bayNum2Next, b2.getBaycol(), b2.getBayrow(), b2.getContainer_no(), b2.getSize_con(),
+                    oldbayno2, b2.getCode_crane(), bayNum2Next, b2.getBay_col(), b2.getBay_row(), b2.getContainer_no(), b2.getSize_con(),
                     b2.getContainer_type(), b2.getCode_empty(), b2.getWeight(), b2.getSealno(), b2.getMoved_name(), b2.getInoutmark(),
                     b2.getTransmark(), b2.getHolidays(), b2.getNight(), b2.getName(),
                     b1.getShip_id(), sbayno1Next);
@@ -1079,39 +1133,40 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
             Log.i(LOG_TAG + "swapBay", "sql1Next is " + sql1Next);
 
 
-            String sql2Next = String.format("update %s t set t.CODE_LOAD_PORT='%s'," +
-                            "t.CODE_UNLOAD_PORT='%s'," +
-                            "t.CODE_DELIVERY='%s'," +
-                            "t.MOVED='%s'," +
-                            "t.UNLOAD_MARK='%s'," +
-                            "t.WORK_NO='%s'," +
-                            "t.DANGER_GRADE='%s'," +
-                            "t.DEGREE_SETTING='%s'," +
-                            "t.DEGREE_UNIT='%s'," +
-                            "t.MIN_DEGREE='%s'," +
-                            "t.MAX_DEGREE='%s'," +
-                            "t.BAYNO='%s'," +
-                            "t.OLDBAYNO='%s'," +
-                            "t.CODE_CRANE='%s'," +
-                            "t.BAYNUM='%s'," +
-                            "t.BAYCOL='%s'," +
-                            "t.BAYROW=='%s'," +
-                            "t.CONTAINER_NO='%s'," +
-                            "t.SIZE_CON='%s'," +
-                            "t.CONTAINER_TYPE='%s'," +
-                            "t.CODE_EMPTY='%s'," +
-                            "t.WEIGHT='%s'," +
-                            "t.SEALNO='%s'," +
-                            "t.MOVED_NAME='%s'," +
-                            "t.INOUTMARK='%s'," +
-                            "t.TransMark='%s'," +
-                            "t.JJR='%s'," +
-                            "t.YB='%s'," +
-                            "t.NAME='%s' " +
-                            "where t.SHIP_ID='%s',t.SBAYNO='%s'",
+            String sql2Next = String.format("update %s set CODE_LOAD_PORT='%s'," +
+                            "CODE_UNLOAD_PORT='%s'," +
+                            "DELIVERY='%s'," +
+                            "MOVED='%s'," +
+                            "UNLOAD_MARK='%s'," +
+                            "WORK_NO='%s'," +
+                            "DANGER_GRADE='%s'," +
+                            "DEGREE_SETTING='%s'," +
+                            "DEGREE_UNIT='%s'," +
+                            "MIN_DEGREE='%s'," +
+                            "MAX_DEGREE='%s'," +
+                            "BAYNO='%s'," +
+                            "OLDBAYNO='%s'," +
+                            "CODE_CRANE='%s'," +
+                            "BAYNUM='%s'," +
+                            "BAYCOL='%s'," +
+                            "BAYROW='%s'," +
+                            "CONTAINER_NO='%s'," +
+                            "SIZE_CON='%s'," +
+                            "CONTAINER_TYPE='%s'," +
+                            "CODE_EMPTY='%s'," +
+                            "WEIGHT='%s'," +
+                            "SEALNO='%s'," +
+                            "MOVED_NAME='%s'," +
+                            "INOUTMARK='%s'," +
+                            "TransMark='%s'," +
+                            "HOLIDAYS='%s'," +
+                            "NIGHT='%s'," +
+                            "NAME='%s' " +
+                            "where SHIP_ID='%s' and SBAYNO='%s'",
+                    tableName,
                     b1.getCode_load_port(), b1.getCode_unload_port(), b1.getDelivery(), moved1, b1.getUnload_mark(), b1.getWork_no(),
                     b1.getDanger_grade(), b1.getDegree_setting(), b1.getDegree_unit(), b1.getMin_degree(), b1.getMax_degree(), bayno1Next,
-                    oldbayno1, b1.getCode_crane(), bayNum1Next, b1.getBaycol(), b1.getBayrow(), b1.getContainer_no(), b1.getSize_con(),
+                    oldbayno1, b1.getCode_crane(), bayNum1Next, b1.getBay_col(), b1.getBay_row(), b1.getContainer_no(), b1.getSize_con(),
                     b1.getContainer_type(), b1.getCode_empty(), b1.getWeight(), b1.getSealno(), b1.getMoved_name(), b1.getInoutmark(),
                     b1.getTransmark(), b1.getHolidays(), b1.getNight(), b1.getName(),
                     b2.getShip_id(), sbayno2Next);
@@ -1138,7 +1193,7 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
             //开始设置事物
             sqLiteDatabase.beginTransaction();
 
-            for (int i=0;i<sqlList.size();i++){
+            for (int i = 0; i < sqlList.size(); i++) {
 
                 Log.i(LOG_TAG + "execSQL", "sql is " + sqlList.get(i));
                 sqLiteDatabase.execSQL(sqlList.get(i));
@@ -1149,12 +1204,12 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
             sqLiteDatabase.setTransactionSuccessful();
 
 
-        }catch (Exception e){
+        } catch (Exception e) {
 
             Log.e(LOG_TAG + "execSQL", "exception type is " + e);
             Log.e(LOG_TAG + "execSQL", "exception message is " + e.getMessage());
 
-        }finally {
+        } finally {
 
             Log.v(LOG_TAG + "execSQL", "parse end");
 
@@ -1168,18 +1223,25 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
      *
      * @param b 贝位
      * @return 捣箱
+     * @param codeInOut 进出口编码
      */
-    private String getMoved(ShipImage b) {
+    private String getMoved(ShipImage b, String codeInOut) {
         String moved = "0";
-        if (b.getInoutmark().equals("0") && !b.getCode_unload_port().equals("CNLYG")) {
+
+        Log.e(LOG_TAG + "getMoved", "params is " + codeInOut + " " + b.getCode_unload_port()+ " " + b.getCode_load_port());
+
+        if (codeInOut.equals("0") && !b.getCode_unload_port().equals("CNLYG")) {
 
             moved = "1";
 
-        } else if (b.getInoutmark().equals("1") && !b.getCode_load_port().equals("CNLYG")) {
+        } else if (codeInOut.equals("1") && !b.getCode_load_port().equals("CNLYG")) {
 
             moved = "1";
 
         }
+
+        Log.e(LOG_TAG + "getMoved", "moved is " + moved);
+
 
         return moved;
 

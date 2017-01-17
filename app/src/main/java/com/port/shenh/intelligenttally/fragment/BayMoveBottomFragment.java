@@ -17,9 +17,11 @@ import com.port.shenh.intelligenttally.R;
 import com.port.shenh.intelligenttally.activity.BayActivity;
 import com.port.shenh.intelligenttally.adapter.BayGridAdapter;
 import com.port.shenh.intelligenttally.bean.ShipImage;
+import com.port.shenh.intelligenttally.bean.Voyage;
 import com.port.shenh.intelligenttally.function.BottomBayCommonOperator;
 import com.port.shenh.intelligenttally.function.BottomBayInfoFunction;
 import com.port.shenh.intelligenttally.function.ShipImageListFunction;
+import com.port.shenh.intelligenttally.function.VoyageListFunction;
 
 import org.mobile.library.common.function.InputMethodController;
 import org.mobile.library.model.operate.EmptyParameterListener;
@@ -37,6 +39,11 @@ public class BayMoveBottomFragment extends Fragment implements BottomBayCommonOp
      * 数据加载工具
      */
     private ShipImageListFunction shipFunction = null;
+
+    /**
+     * 航次加载工具
+     */
+    private VoyageListFunction voyageFunction = null;
 
     /**
      * 信息布局填充工具
@@ -63,6 +70,12 @@ public class BayMoveBottomFragment extends Fragment implements BottomBayCommonOp
      */
     private ShipImage data = null;
 
+    /**
+     * 进出口编码
+     */
+    private String codeInOut = null;
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable
@@ -82,6 +95,8 @@ public class BayMoveBottomFragment extends Fragment implements BottomBayCommonOp
     private void initView(View rootView) {
         activity = (BayActivity) getActivity();
         shipFunction = new ShipImageListFunction(getActivity());
+        voyageFunction = new VoyageListFunction(getActivity());
+        codeInOut = voyageFunction.onLoadCodeInOutOfVoyageFromDataBase(this.data.getShip_id());
         initEditText(rootView);
         initMove(rootView);
         initShip(rootView);
@@ -175,7 +190,7 @@ public class BayMoveBottomFragment extends Fragment implements BottomBayCommonOp
             return;
         }
 
-        String result = shipFunction.moveBay(data, bayNumberEditText.getText().toString());
+        String result = shipFunction.moveBay(data, bayNumberEditText.getText().toString(), codeInOut);
 
         if (result == null) {
             bayNumberEditText.setText(null);

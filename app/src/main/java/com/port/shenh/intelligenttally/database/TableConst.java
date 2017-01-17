@@ -13,13 +13,64 @@ package com.port.shenh.intelligenttally.database;
 public interface TableConst {
 
     /**
+     * 航次
+     */
+    interface Voyage{
+
+        /**
+         * 表名
+         */
+        String TB_VOYAGE = "tb_voyage";
+
+        /**
+         * 航次编码
+         */
+        String SHIP_ID = "ship_id";
+
+        /**
+         * 船舶编码
+         */
+        String V_ID = "v_id";
+
+        /**
+         * 泊位号
+         */
+        String BERTHNO = "berthno";
+
+        /**
+         * 航次
+         */
+        String VOYAGE = "voyage";
+
+        /**
+         * 中文船名
+         */
+        String CHI_VESSEL = "chi_vessel";
+
+        /**
+         * 进出口编码
+         */
+        String CODEINOUT = "codeInOut";
+
+        /**
+         * 内外贸
+         */
+        String TRADE = "trade";
+
+        /**
+         * 国外轮
+         */
+        String WHEEL = "wheel";
+    }
+
+    /**
      * 船图
      */
     interface ShipImage {
         /**
          * 表名
          */
-        String TABLE_NAME = "tb_ship_Image";
+        String TB_SHIP_IMAGE = "tb_ship_Image";
 
         /**
          * 航次编码
@@ -175,7 +226,7 @@ public interface TableConst {
         /**
          * 贝
          */
-        String BAYNUM = "bayum";
+        String BAYNUM = "baynum";
 
         /**
          * 列
