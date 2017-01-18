@@ -286,6 +286,10 @@ public class BayActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
+            case R.id.menu_refresh_bay:
+                //清楚缓存
+                doRefresh_bay();
+                break;
             case R.id.menu_last_bay:
                 // 退出操作
                 doLastBay();
@@ -331,6 +335,13 @@ public class BayActivity extends AppCompatActivity {
         });
 
         function.onUpdate(shipId, bayNumber);
+    }
+
+    /**
+     * 刷新贝
+     */
+    private void doRefresh_bay(){
+
     }
 
     /**
