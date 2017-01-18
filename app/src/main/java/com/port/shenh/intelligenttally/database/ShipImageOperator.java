@@ -14,8 +14,10 @@ import com.port.shenh.intelligenttally.bean.Bay;
 import com.port.shenh.intelligenttally.bean.ShipImage;
 import com.port.shenh.intelligenttally.function.CodeUnloadPortSubListFunction;
 
+import org.mobile.library.global.Global;
 import org.mobile.library.model.database.BaseOperator;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -404,6 +406,71 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
     }
 
     /**
+     * 删除数据（航次船图数据）
+     *
+     * @param shipId 航次编码
+     * @return 删除的记录数
+     */
+    public int deleteShipImage(String shipId) {
+        Log.v(LOG_TAG + "delete", "delete is invoked");
+
+        if (shipId == null) {
+            Log.v(LOG_TAG + "delete", "data is null");
+            return 0;
+        }
+
+        // 得到数据库写对象
+        SQLiteDatabase dbWriter = writeSqLiteHelper.getWritableDatabase();
+
+        // where子句
+        String whereSql = String.format("%s='%s'", TableConst.ShipImage.SHIP_ID, shipId);
+
+        Log.v(LOG_TAG + "delete", "where sql is " + whereSql);
+
+        // 执行删除
+        int rowCount = dbWriter.delete(tableName, whereSql, null);
+
+        Log.v(LOG_TAG + "delete", "delete row count is " + rowCount);
+
+        close(writeSqLiteHelper);
+
+        return rowCount;
+    }
+
+    /**
+     * 删除数据（贝船图数据）
+     *
+     * @param shipId 航次编码
+     * @param bayNum 贝号
+     * @return 删除的记录数
+     */
+    public int deleteShipImage(String shipId, String bayNum) {
+        Log.v(LOG_TAG + "delete", "delete is invoked");
+
+        if (shipId == null) {
+            Log.v(LOG_TAG + "delete", "data is null");
+            return 0;
+        }
+
+        // 得到数据库写对象
+        SQLiteDatabase dbWriter = writeSqLiteHelper.getWritableDatabase();
+
+        // where子句
+        String whereSql = String.format("%s='%s' and %s='%s' ", TableConst.ShipImage.SHIP_ID, shipId, TableConst.ShipImage.BAY_NUM, bayNum);
+
+        Log.v(LOG_TAG + "delete", "where sql is " + whereSql);
+
+        // 执行删除
+        int rowCount = dbWriter.delete(tableName, whereSql, null);
+
+        Log.v(LOG_TAG + "delete", "delete row count is " + rowCount);
+
+        close(writeSqLiteHelper);
+
+        return rowCount;
+    }
+
+    /**
      * 根据航次编码查询单号列表
      *
      * @param shipId 航次编码
@@ -631,8 +698,8 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
     /**
      * 对调贝位
      *
-     * @param b1 贝位1
-     * @param b2 贝位2
+     * @param b1        贝位1
+     * @param b2        贝位2
      * @param codeInOut 进出口编码
      */
     public void swapBay(ShipImage b1, ShipImage b2, String codeInOut) {
@@ -654,6 +721,12 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
         String moved2 = getMoved(b2, codeInOut);
         String oldbayno1 = b2.getOldbayno().isEmpty() == true ? b2.getBayno() : "";
         String oldbayno2 = b1.getOldbayno().isEmpty() == true ? b1.getBayno() : "";
+
+        SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
+        String date = sDateFormat.format(new java.util.Date());
+
+        Log.i(LOG_TAG + "swapBay", "date is " +date);
+
 
         Log.i(LOG_TAG + "swapBay", "Size_con is " + b1.getSize_con() + " " + b2.getSize_con());
 
@@ -708,14 +781,17 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
                             "TransMark='%s'," +
                             "HOLIDAYS='%s'," +
                             "NIGHT='%s'," +
-                            "NAME='%s' " +
+                            "NAME='%s'," +
+                            "MARK_MODIFY='%s'," +
+                            "MODIFIER='%s'," +
+                            "MODIFYTIME='%s'" +
                             "where SHIP_ID='%s' and SBAYNO='%s'",
                     tableName,
                     b2.getCode_load_port(), b2.getCode_unload_port(), b2.getDelivery(), moved2, b2.getUnload_mark(), b2.getWork_no(),
                     b2.getDanger_grade(), b2.getDegree_setting(), b2.getDegree_unit(), b2.getMin_degree(), b2.getMax_degree(), bayno2,
                     oldbayno2, b2.getCode_crane(), bayNum2, bayCol2, bayRow2, b2.getContainer_no(), b2.getSize_con(),
                     b2.getContainer_type(), b2.getCode_empty(), b2.getWeight(), b2.getSealno(), b2.getMoved_name(), b2.getInoutmark(),
-                    b2.getTransmark(), b2.getHolidays(), b2.getNight(), b2.getName(),
+                    b2.getTransmark(), b2.getHolidays(), b2.getNight(), b2.getName(), "1", "admin", date,
                     b1.getShip_id(), b1.getSbayno());
 
             Log.i(LOG_TAG + "swapBay", "sql1 is " + sql1);
@@ -748,14 +824,17 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
                             "TransMark='%s'," +
                             "HOLIDAYS='%s'," +
                             "NIGHT='%s'," +
-                            "NAME='%s' " +
+                            "NAME='%s'," +
+                            "MARK_MODIFY='%s'," +
+                            "MODIFIER='%s'," +
+                            "MODIFYTIME='%s'" +
                             "where SHIP_ID='%s' and SBAYNO='%s'",
                     tableName,
                     b1.getCode_load_port(), b1.getCode_unload_port(), b1.getDelivery(), moved1, b1.getUnload_mark(), b1.getWork_no(),
                     b1.getDanger_grade(), b1.getDegree_setting(), b1.getDegree_unit(), b1.getMin_degree(), b1.getMax_degree(), bayno1,
                     oldbayno1, b1.getCode_crane(), bayNum1, bayCol1, bayRow1, b1.getContainer_no(), b1.getSize_con(),
                     b1.getContainer_type(), b1.getCode_empty(), b1.getWeight(), b1.getSealno(), b1.getMoved_name(), b1.getInoutmark(),
-                    b1.getTransmark(), b1.getHolidays(), b1.getNight(), b1.getName(),
+                    b1.getTransmark(), b1.getHolidays(), b1.getNight(), b1.getName(), "1", "admin", date,
                     b2.getShip_id(), b2.getSbayno());
 
             Log.i(LOG_TAG + "swapBay", "sql2 is " + sql2);
@@ -822,14 +901,17 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
                             "TransMark='%s'," +
                             "HOLIDAYS='%s'," +
                             "NIGHT='%s'," +
-                            "NAME='%s' " +
+                            "NAME='%s'," +
+                            "MARK_MODIFY='%s'," +
+                            "MODIFIER='%s'," +
+                            "MODIFYTIME='%s'" +
                             "where SHIP_ID='%s' and SBAYNO='%s'",
                     tableName,
                     b2.getCode_load_port(), b2.getCode_unload_port(), b2.getDelivery(), moved2, b2.getUnload_mark(), b2.getWork_no(),
                     b2.getDanger_grade(), b2.getDegree_setting(), b2.getDegree_unit(), b2.getMin_degree(), b2.getMax_degree(), bayno2,
                     oldbayno2, b2.getCode_crane(), bayNum2, b2.getBay_col(), b2.getBay_row(), b2.getContainer_no(), b2.getSize_con(),
                     b2.getContainer_type(), b2.getCode_empty(), b2.getWeight(), b2.getSealno(), b2.getMoved_name(), b2.getInoutmark(),
-                    b2.getTransmark(), b2.getHolidays(), b2.getNight(), b2.getName(),
+                    b2.getTransmark(), b2.getHolidays(), b2.getNight(), b2.getName(), "1", Global.getLoginStatus().getUserID(), date,
                     b1.getShip_id(), b1.getSbayno());
 
             Log.i(LOG_TAG + "swapBay", "sql1 is " + sql1);
@@ -862,14 +944,17 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
                             "TransMark='%s'," +
                             "HOLIDAYS='%s'," +
                             "NIGHT='%s'," +
-                            "NAME='%s' " +
+                            "NAME='%s'," +
+                            "MARK_MODIFY='%s'," +
+                            "MODIFIER='%s'," +
+                            "MODIFYTIME='%s'" +
                             "where SHIP_ID='%s' and SBAYNO='%s'",
                     tableName,
                     b1.getCode_load_port(), b1.getCode_unload_port(), b1.getDelivery(), moved1, b1.getUnload_mark(), b1.getWork_no(),
                     b1.getDanger_grade(), b1.getDegree_setting(), b1.getDegree_unit(), b1.getMin_degree(), b1.getMax_degree(), bayno1,
                     oldbayno1, b1.getCode_crane(), bayNum1, b1.getBay_col(), b1.getBay_row(), b1.getContainer_no(), b1.getSize_con(),
                     b1.getContainer_type(), b1.getCode_empty(), b1.getWeight(), b1.getSealno(), b1.getMoved_name(), b1.getInoutmark(),
-                    b1.getTransmark(), b1.getHolidays(), b1.getNight(), b1.getName(),
+                    b1.getTransmark(), b1.getHolidays(), b1.getNight(), b1.getName(), "1", Global.getLoginStatus().getUserID(), date,
                     b2.getShip_id(), b2.getSbayno());
 
             Log.i(LOG_TAG + "swapBay", "sql2 is " + sql2);
@@ -903,14 +988,17 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
                             "TransMark='%s'," +
                             "HOLIDAYS='%s'," +
                             "NIGHT='%s'," +
-                            "NAME='%s' " +
+                            "NAME='%s'," +
+                            "MARK_MODIFY='%s'," +
+                            "MODIFIER='%s'," +
+                            "MODIFYTIME='%s'" +
                             "where SHIP_ID='%s' and SBAYNO='%s'",
                     tableName,
                     b2.getCode_load_port(), b2.getCode_unload_port(), b2.getDelivery(), moved2, b2.getUnload_mark(), b2.getWork_no(),
                     b2.getDanger_grade(), b2.getDegree_setting(), b2.getDegree_unit(), b2.getMin_degree(), b2.getMax_degree(), bayno2Next,
                     oldbayno2, b2.getCode_crane(), bayNum2Next, b2.getBay_col(), b2.getBay_row(), b2.getContainer_no(), b2.getSize_con(),
                     b2.getContainer_type(), b2.getCode_empty(), b2.getWeight(), b2.getSealno(), b2.getMoved_name(), b2.getInoutmark(),
-                    b2.getTransmark(), b2.getHolidays(), b2.getNight(), b2.getName(),
+                    b2.getTransmark(), b2.getHolidays(), b2.getNight(), b2.getName(), "1", Global.getLoginStatus().getUserID(), date,
                     b1.getShip_id(), sbayno1Next);
 
             Log.i(LOG_TAG + "swapBay", "sql1Next is " + sql1Next);
@@ -944,14 +1032,17 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
                             "TransMark='%s'," +
                             "HOLIDAYS='%s'," +
                             "NIGHT='%s'," +
-                            "NAME='%s' " +
+                            "NAME='%s'," +
+                            "MARK_MODIFY='%s'," +
+                            "MODIFIER='%s'," +
+                            "MODIFYTIME='%s'" +
                             "where SHIP_ID='%s' and SBAYNO='%s'",
                     tableName,
                     b1.getCode_load_port(), b1.getCode_unload_port(), b1.getDelivery(), moved1, b1.getUnload_mark(), b1.getWork_no(),
                     b1.getDanger_grade(), b1.getDegree_setting(), b1.getDegree_unit(), b1.getMin_degree(), b1.getMax_degree(), bayno1Next,
                     oldbayno1, b1.getCode_crane(), bayNum1Next, b1.getBay_col(), b1.getBay_row(), b1.getContainer_no(), b1.getSize_con(),
                     b1.getContainer_type(), b1.getCode_empty(), b1.getWeight(), b1.getSealno(), b1.getMoved_name(), b1.getInoutmark(),
-                    b1.getTransmark(), b1.getHolidays(), b1.getNight(), b1.getName(),
+                    b1.getTransmark(), b1.getHolidays(), b1.getNight(), b1.getName(), "1", Global.getLoginStatus().getUserID(), date,
                     b2.getShip_id(), sbayno2Next);
 
             Log.i(LOG_TAG + "swapBay", "sql2Next is " + sql2Next);
@@ -978,12 +1069,12 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
             String bayNum2 = b2.getBayno().isEmpty() == true ? "" : b1.getBaynum();
             String bayNum2Next = "";
 
-            String bayCol1 =b2.getBay_col();
+            String bayCol1 = b2.getBay_col();
             String bayCol1Next = bayCol1;
             String bayCol2 = b2.getBayno().isEmpty() == true ? "" : b1.getBay_col();
             String bayCol2Next = "";
 
-            String bayRow1 =b2.getBay_row();
+            String bayRow1 = b2.getBay_row();
             String bayRow1Next = bayRow1;
             String bayRow2 = b2.getBayno().isEmpty() == true ? "" : b1.getBay_row();
             String bayRow2Next = "";
@@ -1039,14 +1130,17 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
                             "TransMark='%s'," +
                             "HOLIDAYS='%s'," +
                             "NIGHT='%s'," +
-                            "NAME='%s' " +
+                            "NAME='%s'," +
+                            "MARK_MODIFY='%s'," +
+                            "MODIFIER='%s'," +
+                            "MODIFYTIME='%s'" +
                             "where SHIP_ID='%s' and SBAYNO='%s'",
                     tableName,
                     b2.getCode_load_port(), b2.getCode_unload_port(), b2.getDelivery(), moved2, b2.getUnload_mark(), b2.getWork_no(),
                     b2.getDanger_grade(), b2.getDegree_setting(), b2.getDegree_unit(), b2.getMin_degree(), b2.getMax_degree(), bayno2,
                     oldbayno2, b2.getCode_crane(), bayNum2, bayCol2, b2.getBay_row(), b2.getContainer_no(), b2.getSize_con(),
                     b2.getContainer_type(), b2.getCode_empty(), b2.getWeight(), b2.getSealno(), b2.getMoved_name(), b2.getInoutmark(),
-                    b2.getTransmark(), b2.getHolidays(), b2.getNight(), b2.getName(),
+                    b2.getTransmark(), b2.getHolidays(), b2.getNight(), b2.getName(), "1", Global.getLoginStatus().getUserID(), date,
                     b1.getShip_id(), b1.getSbayno());
 
             Log.i(LOG_TAG + "swapBay", "sql1 is " + sql1);
@@ -1079,14 +1173,17 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
                             "TransMark='%s'," +
                             "HOLIDAYS='%s'," +
                             "NIGHT='%s'," +
-                            "NAME='%s' " +
+                            "NAME='%s'," +
+                            "MARK_MODIFY='%s'," +
+                            "MODIFIER='%s'," +
+                            "MODIFYTIME='%s'" +
                             "where SHIP_ID='%s' and SBAYNO='%s'",
                     tableName,
                     b1.getCode_load_port(), b1.getCode_unload_port(), b1.getDelivery(), moved1, b1.getUnload_mark(), b1.getWork_no(),
                     b1.getDanger_grade(), b1.getDegree_setting(), b1.getDegree_unit(), b1.getMin_degree(), b1.getMax_degree(), bayno1,
                     oldbayno1, b1.getCode_crane(), bayNum1, b1.getBay_col(), b1.getBay_row(), b1.getContainer_no(), b1.getSize_con(),
                     b1.getContainer_type(), b1.getCode_empty(), b1.getWeight(), b1.getSealno(), b1.getMoved_name(), b1.getInoutmark(),
-                    b1.getTransmark(), b1.getHolidays(), b1.getNight(), b1.getName(),
+                    b1.getTransmark(), b1.getHolidays(), b1.getNight(), b1.getName(), "1", Global.getLoginStatus().getUserID(), date,
                     b2.getShip_id(), b2.getSbayno());
 
             Log.i(LOG_TAG + "swapBay", "sql2 is " + sql2);
@@ -1120,14 +1217,17 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
                             "TransMark='%s'," +
                             "HOLIDAYS='%s'," +
                             "NIGHT='%s'," +
-                            "NAME='%s' " +
+                            "NAME='%s'," +
+                            "MARK_MODIFY='%s'," +
+                            "MODIFIER='%s'," +
+                            "MODIFYTIME='%s'" +
                             "where SHIP_ID='%s' and SBAYNO='%s'",
                     tableName,
                     b2.getCode_load_port(), b2.getCode_unload_port(), b2.getDelivery(), moved2, b2.getUnload_mark(), b2.getWork_no(),
                     b2.getDanger_grade(), b2.getDegree_setting(), b2.getDegree_unit(), b2.getMin_degree(), b2.getMax_degree(), bayno2Next,
                     oldbayno2, b2.getCode_crane(), bayNum2Next, b2.getBay_col(), b2.getBay_row(), b2.getContainer_no(), b2.getSize_con(),
                     b2.getContainer_type(), b2.getCode_empty(), b2.getWeight(), b2.getSealno(), b2.getMoved_name(), b2.getInoutmark(),
-                    b2.getTransmark(), b2.getHolidays(), b2.getNight(), b2.getName(),
+                    b2.getTransmark(), b2.getHolidays(), b2.getNight(), b2.getName(), "1", Global.getLoginStatus().getUserID(), date,
                     b1.getShip_id(), sbayno1Next);
 
             Log.i(LOG_TAG + "swapBay", "sql1Next is " + sql1Next);
@@ -1161,14 +1261,17 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
                             "TransMark='%s'," +
                             "HOLIDAYS='%s'," +
                             "NIGHT='%s'," +
-                            "NAME='%s' " +
+                            "NAME='%s'," +
+                            "MARK_MODIFY='%s'," +
+                            "MODIFIER='%s'," +
+                            "MODIFYTIME='%s'" +
                             "where SHIP_ID='%s' and SBAYNO='%s'",
                     tableName,
                     b1.getCode_load_port(), b1.getCode_unload_port(), b1.getDelivery(), moved1, b1.getUnload_mark(), b1.getWork_no(),
                     b1.getDanger_grade(), b1.getDegree_setting(), b1.getDegree_unit(), b1.getMin_degree(), b1.getMax_degree(), bayno1Next,
                     oldbayno1, b1.getCode_crane(), bayNum1Next, b1.getBay_col(), b1.getBay_row(), b1.getContainer_no(), b1.getSize_con(),
                     b1.getContainer_type(), b1.getCode_empty(), b1.getWeight(), b1.getSealno(), b1.getMoved_name(), b1.getInoutmark(),
-                    b1.getTransmark(), b1.getHolidays(), b1.getNight(), b1.getName(),
+                    b1.getTransmark(), b1.getHolidays(), b1.getNight(), b1.getName(), "1", Global.getLoginStatus().getUserID(), date,
                     b2.getShip_id(), sbayno2Next);
 
             Log.i(LOG_TAG + "swapBay", "sql2Next is " + sql2Next);
@@ -1221,14 +1324,14 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
     /**
      * 获取捣箱
      *
-     * @param b 贝位
-     * @return 捣箱
+     * @param b         贝位
      * @param codeInOut 进出口编码
+     * @return 捣箱
      */
     private String getMoved(ShipImage b, String codeInOut) {
         String moved = "0";
 
-        Log.e(LOG_TAG + "getMoved", "params is " + codeInOut + " " + b.getCode_unload_port()+ " " + b.getCode_load_port());
+        Log.e(LOG_TAG + "getMoved", "params is " + codeInOut + " " + b.getCode_unload_port() + " " + b.getCode_load_port());
 
         if (codeInOut.equals("0") && !b.getCode_unload_port().equals("CNLYG")) {
 

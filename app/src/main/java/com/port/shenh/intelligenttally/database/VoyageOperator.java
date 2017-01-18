@@ -59,7 +59,7 @@ public class VoyageOperator extends BaseOperator<Voyage> {
          */
         String createTableSql = String.format("CREATE TABLE IF NOT EXISTS %s ( %s INTEGER PRIMARY" +
                         " KEY, " +
-                        "%s TEXT," +
+                        "%s INTEGER," +
                         "%s TEXT," +
                         "%s TEXT," +
                         "%s TEXT," +
@@ -115,11 +115,12 @@ public class VoyageOperator extends BaseOperator<Voyage> {
         int trade = cursor.getColumnIndex(TableConst.Voyage.TRADE);
         int wheel = cursor.getColumnIndex(TableConst.Voyage.WHEEL);
 
-
         // 数据填充
         List<Voyage> list = new ArrayList<>();
 
         while (cursor.moveToNext()) {
+
+            Log.i(LOG_TAG + "query", "ship_id is " + cursor.getString(ship_id));
             // 一条记录
             Voyage data = new Voyage();
             data.setId(cursor.getString(_id));
@@ -178,8 +179,11 @@ public class VoyageOperator extends BaseOperator<Voyage> {
         // 查询语句
         String sql = String.format("select * from %s order by ship_id desc", tableName);
 
+        Log.i(LOG_TAG + "queryAllVoyageList", "sql is " + sql);
+
         return query(sql);
     }
+
 
     /**
      * 查询航次进出口

@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 获取船图列表
+ * 获取船图列表（航次）
  *
  * @author sh
  * @version 1.0 2016/10/13

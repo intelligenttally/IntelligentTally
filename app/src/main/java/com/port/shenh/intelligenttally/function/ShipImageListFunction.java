@@ -5,19 +5,13 @@ package com.port.shenh.intelligenttally.function;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
-
-import com.port.shenh.intelligenttally.R;
 import com.port.shenh.intelligenttally.bean.Bay;
 import com.port.shenh.intelligenttally.bean.ShipImage;
 import com.port.shenh.intelligenttally.database.ShipImageOperator;
-import com.port.shenh.intelligenttally.database.TableConst;
 import com.port.shenh.intelligenttally.work.PullShipImageList;
-
+import com.port.shenh.intelligenttally.work.PullShipImageListOfBay;
 import org.mobile.library.model.database.BaseOperator;
 import org.mobile.library.model.work.WorkBack;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -155,6 +149,53 @@ public class ShipImageListFunction {
     }
 
     /**
+     * 升级数据（贝船图数据）
+     *
+     * @param shipId  航次编码
+     * @param bayNum  贝号
+     */
+    public void onUpdate(String shipId, String bayNum) {
+        Log.i(LOG_TAG + "onUpdate", "getDataList is invoked");
+        // 加载开始
+        loading = true;
+
+        if (!canceled) {
+            // 从网络拉取
+            Log.i(LOG_TAG + "onCreate", "from network");
+            onLoadFromNetWork(shipId, bayNum);
+        }
+    }
+
+    /**
+     * 从网络加载数据(加载贝船图数据)，
+     * 完成请求后要调用{@link #netWorkEndSetData(boolean, List)}继续执行后续任务
+     *
+     * @param shipId  航次编码
+     * @param bayNum  贝号
+     */
+    private void onLoadFromNetWork(String shipId, String bayNum) {
+        Log.i(LOG_TAG + "onLoadFromNetWork", "shipId parameter is " + shipId);
+        Log.i(LOG_TAG + "onLoadFromNetWork", "bayNum parameter is " + bayNum);
+
+        final PullShipImageListOfBay workModel = new PullShipImageListOfBay();
+
+        workModel.setWorkEndListener(new WorkBack<List<ShipImage>>() {
+            @Override
+            public void doEndWork(boolean state, List<ShipImage> data) {
+                if (state && data != null) {
+
+                    Log.i(LOG_TAG + "netWorkEndSetData", "getResult is invoked");
+                    netWorkEndSetDataOfBay(state, data);
+                }
+
+            }
+        }, false);
+
+        Log.i(LOG_TAG + "netWorkEndSetData", "beginExecute is invoked");
+        workModel.beginExecute(shipId, bayNum);
+    }
+
+    /**
      * 从网络加载数据，
      * 完成请求后要调用{@link #netWorkEndSetData(boolean, List)}继续执行后续任务
      *
@@ -212,6 +253,36 @@ public class ShipImageListFunction {
     }
 
     /**
+     * 网络请求结束后调用
+     *
+     * @param state 网络任务执行结果
+     * @param data  结果数据
+     */
+    private void netWorkEndSetDataOfBay(boolean state, List<ShipImage> data) {
+        Log.i(LOG_TAG + "netWorkEndSetData", "result is " + state);
+
+        if (!canceled) {
+            // 提取结果
+            Log.i(LOG_TAG + "netWorkEndSetData", "onNetworkEnd is invoked");
+            dataList = onNetworkEnd(state, data);
+        }
+
+        if (!canceled) {
+            // 保存数据
+            Log.i(LOG_TAG + "netWorkEndSetData", "onSaveData is invoked");
+            onSaveDataOfBay(operator, dataList);
+        }
+
+        if (!canceled) {
+            onNotify(context);
+        }
+        // 加载结束
+        loading = false;
+
+        onLoadEndListener.OnLoadEnd();
+    }
+
+    /**
      * 整理从服务器取回的数据
      *
      * @param state 执行结果
@@ -230,7 +301,20 @@ public class ShipImageListFunction {
      */
     private void onSaveData(BaseOperator<ShipImage> operator, List<ShipImage> dataList) {
         if (!canceled && operator != null && dataList != null) {
-            operator.delete(dataList.get(0));
+            this.operator.deleteShipImage(dataList.get(0).getShip_id());
+            operator.insert(dataList);
+        }
+    }
+
+    /**
+     * 将服务器取回的数据持久化到本地
+     *
+     * @param operator 数据库操作类
+     * @param dataList 数据集
+     */
+    private void onSaveDataOfBay(BaseOperator<ShipImage> operator, List<ShipImage> dataList) {
+        if (!canceled && operator != null && dataList != null) {
+            this.operator.deleteShipImage(dataList.get(0).getShip_id(), dataList.get(0).getBay_num());
             operator.insert(dataList);
         }
     }
