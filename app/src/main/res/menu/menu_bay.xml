@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_refresh_bay"
+        android:title="@string/refresh_bay"
+        android:icon="@mipmap/refresh"
+        app:showAsAction="never"/>
     <item
         android:id="@+id/menu_last_bay"
         android:title="@string/last_bay"
         android:icon="@mipmap/last"
-        app:showAsAction="always"/>
+        app:showAsAction="never"/>
     <item
         android:id="@+id/menu_next_bay"
         android:title="@string/next_bay"
         android:icon="@mipmap/next"
-        app:showAsAction="always"/>
+        app:showAsAction="never"/>
 </menu>
