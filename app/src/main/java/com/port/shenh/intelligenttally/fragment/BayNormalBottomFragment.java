@@ -30,19 +30,35 @@ import org.mobile.library.model.operate.EmptyParameterListener;
 public class BayNormalBottomFragment extends Fragment implements BottomBayCommonOperator {
 
     /**
-     * 信息布局填充工具
+     * 控件集
      */
-    private BottomBayInfoFunction function = null;
+    private class ViewHolder {
+
+        /**
+         * 信息布局填充工具
+         */
+        private BottomBayInfoFunction function = null;
+
+        /**
+         * 父activity
+         */
+        private BayActivity activity = null;
+
+        /**
+         * 移贝状态的底部布局
+         */
+        private BayMoveBottomFragment moveBottomFragment = null;
+
+        /**
+         * 移贝按钮控件
+         */
+        private View bayMoveView = null;
+    }
 
     /**
-     * 父activity
+     * 控件集实例
      */
-    private BayActivity activity = null;
-
-    /**
-     * 移贝状态的底部布局
-     */
-    private BayMoveBottomFragment moveBottomFragment = null;
+    private ViewHolder holder = new ViewHolder();
 
     @Nullable
     @Override
@@ -61,8 +77,8 @@ public class BayNormalBottomFragment extends Fragment implements BottomBayCommon
      * @param rootView 根布局
      */
     private void initView(View rootView) {
-        function = new BottomBayInfoFunction(rootView);
-        activity = (BayActivity) getActivity();
+        holder.function = new BottomBayInfoFunction(rootView);
+        holder.activity = (BayActivity) getActivity();
         initMove(rootView);
     }
 
@@ -72,17 +88,18 @@ public class BayNormalBottomFragment extends Fragment implements BottomBayCommon
      * @param rootView 根布局
      */
     private void initMove(View rootView) {
-        View view = rootView.findViewById(R.id.fragment_bottom_sheet_normal_move_bay_layout);
+        holder.bayMoveView = rootView.findViewById(R.id
+                .fragment_bottom_sheet_normal_move_bay_layout);
 
-        view.setOnClickListener(new View.OnClickListener() {
+        holder.bayMoveView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activity.hideBottomLayout(new EmptyParameterListener() {
+                holder.activity.hideBottomLayout(new EmptyParameterListener() {
                     @Override
                     public void onInvoke() {
-                        if (moveBottomFragment == null) {
-                            moveBottomFragment = new BayMoveBottomFragment();
-                            moveBottomFragment.setOnMoveListener(new EmptyParameterListener() {
+                        if (holder.moveBottomFragment == null) {
+                            holder.moveBottomFragment = new BayMoveBottomFragment();
+                            holder.moveBottomFragment.setOnMoveListener(new EmptyParameterListener() {
                                 @Override
                                 public void onInvoke() {
                                     onBackMe();
@@ -90,9 +107,9 @@ public class BayNormalBottomFragment extends Fragment implements BottomBayCommon
                             });
                         }
 
-                        moveBottomFragment.setBayData(function.getData());
-                        activity.onChangeBottomFragment(moveBottomFragment);
-                        activity.showBottomLayout();
+                        holder.moveBottomFragment.setBayData(holder.function.getData());
+                        holder.activity.onChangeBottomFragment(holder.moveBottomFragment);
+                        holder.activity.showBottomLayout();
                     }
                 });
             }
@@ -103,8 +120,8 @@ public class BayNormalBottomFragment extends Fragment implements BottomBayCommon
      * 从子功能片段返回自身
      */
     private void onBackMe() {
-        activity.onChangeBottomFragment(BayNormalBottomFragment.this);
-        activity.hideBottomLayout();
+        holder.activity.onChangeBottomFragment(BayNormalBottomFragment.this);
+        holder.activity.hideBottomLayout();
     }
 
     /**
@@ -113,29 +130,35 @@ public class BayNormalBottomFragment extends Fragment implements BottomBayCommon
      * @param data 贝数据
      */
     private void setBayData(ShipImage data) {
-        function.bindData(data);
+        holder.function.bindData(data);
     }
 
     @Override
     public void onBayClick(BayGridAdapter.ViewHolder holder, ShipImage data) {
 
-        if (holder != activity.beforeHolder) {
+        if (holder != this.holder.activity.beforeHolder) {
             if (!TextUtils.isEmpty(data.getBayno())) {
                 setBayData(data);
-                activity.showBottomLayout();
-            } else {
-                activity.hideBottomLayout();
-            }
 
+                if (data.getBaynum().compareTo(data.getBay_num()) < 0) {
+                    this.holder.bayMoveView.setVisibility(View.INVISIBLE);
+                } else {
+                    this.holder.bayMoveView.setVisibility(View.VISIBLE);
+                }
+
+                this.holder.activity.showBottomLayout();
+            } else {
+                this.holder.activity.hideBottomLayout();
+            }
         } else {
-            activity.hideBottomLayout();
+            this.holder.activity.hideBottomLayout();
         }
     }
 
     @Override
     public void onBaySwitch() {
-        if (activity != null) {
-            activity.hideBottomLayout();
+        if (holder.activity != null) {
+            holder.activity.hideBottomLayout();
         }
     }
 }
