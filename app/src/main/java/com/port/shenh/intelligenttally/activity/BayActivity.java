@@ -293,6 +293,7 @@ public class BayActivity extends AppCompatActivity {
             case R.id.menu_next_bay:
                 //清楚缓存
                 doNextBay();
+                break;
             case R.id.menu_refresh_bay:
                 doRefreshBay();
                 break;
