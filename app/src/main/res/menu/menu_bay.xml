@@ -4,17 +4,17 @@
 
     <item
         android:id="@+id/menu_refresh_bay"
-        android:title="@string/refresh_bay"
         android:icon="@mipmap/refresh"
-        app:showAsAction="never"/>
+        android:title="@string/refresh_bay"
+        app:showAsAction="never|withText"/>
     <item
         android:id="@+id/menu_last_bay"
-        android:title="@string/last_bay"
         android:icon="@mipmap/last"
-        app:showAsAction="never"/>
+        android:title="@string/last_bay"
+        app:showAsAction="never|withText"/>
     <item
         android:id="@+id/menu_next_bay"
-        android:title="@string/next_bay"
         android:icon="@mipmap/next"
-        app:showAsAction="never"/>
+        android:title="@string/next_bay"
+        app:showAsAction="never|withText"/>
 </menu>

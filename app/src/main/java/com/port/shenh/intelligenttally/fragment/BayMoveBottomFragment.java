@@ -17,7 +17,6 @@ import com.port.shenh.intelligenttally.R;
 import com.port.shenh.intelligenttally.activity.BayActivity;
 import com.port.shenh.intelligenttally.adapter.BayGridAdapter;
 import com.port.shenh.intelligenttally.bean.ShipImage;
-import com.port.shenh.intelligenttally.bean.Voyage;
 import com.port.shenh.intelligenttally.function.BottomBayCommonOperator;
 import com.port.shenh.intelligenttally.function.BottomBayInfoFunction;
 import com.port.shenh.intelligenttally.function.ShipImageListFunction;
@@ -102,6 +101,13 @@ public class BayMoveBottomFragment extends Fragment implements BottomBayCommonOp
         initShip(rootView);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        bayNumberEditText.setText(null);
+        bayNumberEditText.setError(null);
+    }
+
     /**
      * 初始化要移动的船图数据
      *
@@ -170,14 +176,7 @@ public class BayMoveBottomFragment extends Fragment implements BottomBayCommonOp
      * 点击取消事件
      */
     private void onMoveCancel() {
-        if (activity.beforeHolder != null) {
-            activity.beforeHolder.itemView.setSelected(false);
-            activity.beforeHolder = null;
-        }
-
         InputMethodController.CloseInputMethod(getActivity());
-        bayNumberEditText.setText(null);
-        bayNumberEditText.setError(null);
         onMoveListener.onInvoke();
     }
 
@@ -190,10 +189,10 @@ public class BayMoveBottomFragment extends Fragment implements BottomBayCommonOp
             return;
         }
 
-        String result = shipFunction.moveBay(data, bayNumberEditText.getText().toString(), codeInOut);
+        String result = shipFunction.moveBay(data, bayNumberEditText.getText().toString(),
+                codeInOut);
 
         if (result == null) {
-            bayNumberEditText.setText(null);
             onMoveListener.onInvoke();
             activity.loadBay();
         } else {
@@ -228,5 +227,10 @@ public class BayMoveBottomFragment extends Fragment implements BottomBayCommonOp
     @Override
     public void onBaySwitch() {
 
+    }
+
+    @Override
+    public void onBack() {
+        onMoveCancel();
     }
 }

@@ -2,6 +2,7 @@ package com.port.shenh.intelligenttally.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -292,9 +293,43 @@ public class BayActivity extends AppCompatActivity {
             case R.id.menu_next_bay:
                 //清楚缓存
                 doNextBay();
+            case R.id.menu_refresh_bay:
+                doRefreshBay();
                 break;
         }
         return true;
+    }
+
+    /**
+     * 刷新贝
+     */
+    private void doRefreshBay() {
+        operator.onBack();
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        // 设置提醒
+        progressDialog.setMessage("数据正在下载中....");
+        progressDialog.setCancelable(false);
+
+        progressDialog.show();
+
+        String bayNumber = bayNumberList.get(bayNumberPosition);
+
+        function.setOnLoadEndListener(new ShipImageListFunction.OnLoadEndListener() {
+            @Override
+            public void OnLoadEnd() {
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loadBay();
+                        progressDialog.dismiss();
+                    }
+                });
+            }
+        });
+
+        function.onUpdate(shipId, bayNumber);
     }
 
     /**
@@ -377,6 +412,16 @@ public class BayActivity extends AppCompatActivity {
                     bottomBackgroundView.setVisibility(View.GONE);
                 }
             }).start();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        if (isBottomShow) {
+            operator.onBack();
+        } else {
+            super.onBackPressed();
         }
     }
 }

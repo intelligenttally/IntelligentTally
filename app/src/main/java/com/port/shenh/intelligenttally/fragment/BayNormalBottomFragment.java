@@ -120,6 +120,10 @@ public class BayNormalBottomFragment extends Fragment implements BottomBayCommon
      * 从子功能片段返回自身
      */
     private void onBackMe() {
+        if (holder.activity.beforeHolder != null) {
+            holder.activity.beforeHolder.itemView.setSelected(false);
+            holder.activity.beforeHolder = null;
+        }
         holder.activity.onChangeBottomFragment(BayNormalBottomFragment.this);
         holder.activity.hideBottomLayout();
     }
@@ -160,5 +164,10 @@ public class BayNormalBottomFragment extends Fragment implements BottomBayCommon
         if (holder.activity != null) {
             holder.activity.hideBottomLayout();
         }
+    }
+
+    @Override
+    public void onBack() {
+        onBackMe();
     }
 }

@@ -5,13 +5,16 @@ package com.port.shenh.intelligenttally.function;
 
 import android.content.Context;
 import android.util.Log;
+
 import com.port.shenh.intelligenttally.bean.Bay;
 import com.port.shenh.intelligenttally.bean.ShipImage;
 import com.port.shenh.intelligenttally.database.ShipImageOperator;
 import com.port.shenh.intelligenttally.work.PullShipImageList;
 import com.port.shenh.intelligenttally.work.PullShipImageListOfBay;
+
 import org.mobile.library.model.database.BaseOperator;
 import org.mobile.library.model.work.WorkBack;
+
 import java.util.List;
 import java.util.Map;
 
@@ -101,6 +104,7 @@ public class ShipImageListFunction {
      * 创建数据库操作对象
      *
      * @param context 上下文
+     *
      * @return 数据库操作对象
      */
     private BaseOperator<ShipImage> onCreateOperator(Context context) {
@@ -151,8 +155,8 @@ public class ShipImageListFunction {
     /**
      * 升级数据（贝船图数据）
      *
-     * @param shipId  航次编码
-     * @param bayNum  贝号
+     * @param shipId 航次编码
+     * @param bayNum 贝号
      */
     public void onUpdate(String shipId, String bayNum) {
         Log.i(LOG_TAG + "onUpdate", "getDataList is invoked");
@@ -168,10 +172,10 @@ public class ShipImageListFunction {
 
     /**
      * 从网络加载数据(加载贝船图数据)，
-     * 完成请求后要调用{@link #netWorkEndSetData(boolean, List)}继续执行后续任务
+     * 完成请求后要调用{@link #netWorkEndSetData(boolean , List)}继续执行后续任务
      *
-     * @param shipId  航次编码
-     * @param bayNum  贝号
+     * @param shipId 航次编码
+     * @param bayNum 贝号
      */
     private void onLoadFromNetWork(String shipId, String bayNum) {
         Log.i(LOG_TAG + "onLoadFromNetWork", "shipId parameter is " + shipId);
@@ -186,6 +190,8 @@ public class ShipImageListFunction {
 
                     Log.i(LOG_TAG + "netWorkEndSetData", "getResult is invoked");
                     netWorkEndSetDataOfBay(state, data);
+                } else {
+                    onLoadEndListener.OnLoadEnd();
                 }
 
             }
@@ -197,7 +203,7 @@ public class ShipImageListFunction {
 
     /**
      * 从网络加载数据，
-     * 完成请求后要调用{@link #netWorkEndSetData(boolean, List)}继续执行后续任务
+     * 完成请求后要调用{@link #netWorkEndSetData(boolean , List)}继续执行后续任务
      *
      * @param parameter 取值条件参数
      */
@@ -213,6 +219,8 @@ public class ShipImageListFunction {
 
                     Log.i(LOG_TAG + "netWorkEndSetData", "getResult is invoked");
                     netWorkEndSetData(state, data);
+                } else {
+                    onLoadEndListener.OnLoadEnd();
                 }
 
             }
@@ -287,6 +295,7 @@ public class ShipImageListFunction {
      *
      * @param state 执行结果
      * @param data  响应数据
+     *
      * @return 整理好的数据集
      */
     private List<ShipImage> onNetworkEnd(boolean state, List<ShipImage> data) {
@@ -314,7 +323,8 @@ public class ShipImageListFunction {
      */
     private void onSaveDataOfBay(BaseOperator<ShipImage> operator, List<ShipImage> dataList) {
         if (!canceled && operator != null && dataList != null) {
-            this.operator.deleteShipImage(dataList.get(0).getShip_id(), dataList.get(0).getBay_num());
+            this.operator.deleteShipImage(dataList.get(0).getShip_id(), dataList.get(0)
+                    .getBay_num());
             operator.insert(dataList);
         }
     }
@@ -331,13 +341,14 @@ public class ShipImageListFunction {
     public void onClear() {
         Log.i(LOG_TAG + "onClear", "clear is invoked");
         operator.clear();
-//        onClearEndListener.OnClearEnd();
+        //        onClearEndListener.OnClearEnd();
     }
 
     /**
      * 是否已下载
      *
      * @param shipId 航次编码
+     *
      * @return true/false
      */
     public boolean isDownloaded(String shipId) {
@@ -351,6 +362,7 @@ public class ShipImageListFunction {
      * 从数据库获取贝号列表
      *
      * @param shipId 航次编码
+     *
      * @return 数据集合
      */
     public List<String> onLoadBayNumListFromDataBase(String shipId) {
@@ -369,6 +381,7 @@ public class ShipImageListFunction {
      * 从数据库获取卸货港简写列表
      *
      * @param shipId 航次编码
+     *
      * @return 数据集合
      */
     public Map<String, String> onLoadCodeUnloadPortSubListFromDataBase(String shipId) {
@@ -388,6 +401,7 @@ public class ShipImageListFunction {
      *
      * @param shipId 航次编码
      * @param bayNum 贝号
+     *
      * @return 数据集合
      */
     public List<ShipImage> onLoadShipImageFromDataBase(String shipId, String bayNum) {
@@ -406,6 +420,7 @@ public class ShipImageListFunction {
      *
      * @param shipId 航次编码
      * @param bayNum 贝号
+     *
      * @return 数据集合
      */
     public Bay onLoadBayFromDataBase(String shipId, String bayNum) {
@@ -422,9 +437,10 @@ public class ShipImageListFunction {
     /**
      * 移贝
      *
-     * @param b1 贝位1
-     * @param sbayno2 贝位号2
+     * @param b1        贝位1
+     * @param sbayno2   贝位号2
      * @param codeInOut 进出口编码
+     *
      * @return 错误消息，正确返回null
      */
     public String moveBay(ShipImage b1, String sbayno2, String codeInOut) {
@@ -439,14 +455,14 @@ public class ShipImageListFunction {
 
         Log.i(LOG_TAG + "MoveBay", "贝位箱子数量：shipImages is " + shipImages.size());
 
-        if (shipImages.size() == 0){
+        if (shipImages.size() == 0) {
 
             return String.format(sbayno2 + "贝位不存在，请重新操作");
 
         }
 
         //判断b2是否是一贝多箱
-        if (shipImages.size()>1){
+        if (shipImages.size() > 1) {
 
             return String.format(sbayno2 + "贝位存在多箱，请重新操作");
 
@@ -487,7 +503,7 @@ public class ShipImageListFunction {
 
                         }
 
-                    }else{
+                    } else {
 
                         Log.i(LOG_TAG + "MoveBay", "贝位1箱子20，贝位2有箱子，箱子40，贝位1不通贝");
                         return String.format(b1.getSbayno() + "贝位放不下大箱子，请重新操作");
@@ -507,7 +523,7 @@ public class ShipImageListFunction {
 
         } else {
 
-            if(operator.isJoint(b2.getShip_id(), b2.getBay_num())){
+            if (operator.isJoint(b2.getShip_id(), b2.getBay_num())) {
 
                 ShipImage b2Next = isContainerOfNextBayNo(b2);
 
@@ -526,7 +542,7 @@ public class ShipImageListFunction {
 
                 }
 
-            }else{
+            } else {
 
                 Log.i(LOG_TAG + "MoveBay", "贝位1箱子40，贝位2不通贝");
 
@@ -539,12 +555,13 @@ public class ShipImageListFunction {
     }
 
     /**
-     *  对调贝位1，贝位2
-     * @param b1 贝位1
-     * @param b2 贝位2
+     * 对调贝位1，贝位2
+     *
+     * @param b1        贝位1
+     * @param b2        贝位2
      * @param codeInOut 进出口编码
      */
-    private void swapBay(ShipImage b1, ShipImage b2, String codeInOut){
+    private void swapBay(ShipImage b1, ShipImage b2, String codeInOut) {
 
         Log.i(LOG_TAG + "swapBay", "swapBay is invoked");
 
@@ -556,6 +573,7 @@ public class ShipImageListFunction {
      * 判断下一贝贝位是否有箱子
      *
      * @param b 当前贝位
+     *
      * @return 有，返回下一贝位；无返回null
      */
     private ShipImage isContainerOfNextBayNo(ShipImage b) {
@@ -598,6 +616,7 @@ public class ShipImageListFunction {
      *
      * @param shipId 航次编码
      * @param sbayno 标准贝位号
+     *
      * @return 数据对象
      */
     private List<ShipImage> getShipImageList(String shipId, String sbayno) {

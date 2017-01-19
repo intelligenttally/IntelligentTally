@@ -27,4 +27,9 @@ public interface BottomBayCommonOperator {
      * 切换贝图
      */
     void onBaySwitch();
+
+    /**
+     * 后退回滚
+     */
+    void onBack();
 }
