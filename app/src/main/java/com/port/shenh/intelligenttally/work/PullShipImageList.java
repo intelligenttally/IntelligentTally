@@ -7,9 +7,13 @@ import android.util.Log;
 
 import com.port.shenh.intelligenttally.bean.ShipImage;
 import com.port.shenh.intelligenttally.util.StaticValue;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.mobile.library.model.work.SimpleWorkModel;
+import org.mobile.library.network.communication.Communication;
+import org.mobile.library.network.factory.CommunicationBuilder;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +31,12 @@ public class PullShipImageList extends SimpleWorkModel<String, List<ShipImage>> 
      * 日志标签前缀
      */
     private static final String LOG_TAG = "PullShipImageList";
+//
+//    @Override
+//    protected Communication onCreateCommunication() {
+//        //0表示无限
+//        return new CommunicationBuilder(onNetworkType()).networkRefreshProgressListener(onCreateProgressListener()).readTimeout(0).build();
+//    }
 
     /**
      * 航次列表

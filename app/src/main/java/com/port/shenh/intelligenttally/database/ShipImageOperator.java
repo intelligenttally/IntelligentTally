@@ -258,6 +258,9 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
         int holidays = cursor.getColumnIndex(TableConst.ShipImage.HOLIDAYS);
         int night = cursor.getColumnIndex(TableConst.ShipImage.NIGHT);
         int name = cursor.getColumnIndex(TableConst.ShipImage.NAME);
+        int mark_modify = cursor.getColumnIndex(TableConst.ShipImage.MARK_MODIFY);
+        int modifier = cursor.getColumnIndex(TableConst.ShipImage.MODIFIER);
+        int modifytime = cursor.getColumnIndex(TableConst.ShipImage.MODIFYTIME);
 
         // 数据填充
         List<ShipImage> list = new ArrayList<>();
@@ -313,6 +316,9 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
             data.setHolidays(cursor.getString(holidays));
             data.setNight(cursor.getString(night));
             data.setNight(cursor.getString(name));
+            data.setMark_modify(cursor.getString(mark_modify));
+            data.setModifier(cursor.getString(modifier));
+            data.setModifytime(cursor.getString(modifytime));
 
             list.add(data);
         }
@@ -645,7 +651,8 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
      */
     public boolean isJoint(String shipId, String bayNum) {
 
-        Log.i(LOG_TAG + "queryBay", "query param is " + shipId + " " + bayNum);
+        Log.i(LOG_TAG + "queryBay", "shipId param is " + shipId);
+        Log.i(LOG_TAG + "queryBay", "bayNum param is " + bayNum);
 
         boolean isJoint = false;
 
@@ -847,16 +854,65 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
         } else if (b1.getSize_con().equals("20") && (b2.getSize_con().equals("40") || b2.getSize_con().equals("45"))) {
 
             String bayno1 = b2.getSbayno();
-            String bayno1Next = "0" + Integer.toString(Integer.parseInt(b2.getBay_num()) + 2) + b2.getBay_col() + b2.getBay_row();
-            String bayno2 = "0" + Integer.toString(Integer.parseInt(b1.getBay_num()) + 1) + b1.getBay_col() + b1.getBay_row();
+            String bayno1Next = null;
+            if ((Integer.parseInt(b2.getBay_num()) + 2) < 10){
+
+                bayno1Next = "0" + Integer.toString(Integer.parseInt(b2.getBay_num()) + 2) + b2.getBay_col() + b2.getBay_row();
+
+            }else {
+
+                bayno1Next = Integer.toString(Integer.parseInt(b2.getBay_num()) + 2) + b2.getBay_col() + b2.getBay_row();
+
+            }
+            String bayno2 = null;
+            if ((Integer.parseInt(b1.getBay_num()) + 1) < 10){
+
+                bayno2 = "0" + Integer.toString(Integer.parseInt(b1.getBay_num()) + 1) + b1.getBay_col() + b1.getBay_row();
+            }else {
+
+                bayno2 = Integer.toString(Integer.parseInt(b1.getBay_num()) + 1) + b1.getBay_col() + b1.getBay_row();
+
+            }
             String bayno2Next = bayno2;
 
-            String sbayno1Next = "0" + Integer.toString(Integer.parseInt(b1.getBay_num()) + 2) + b1.getBay_col() + b1.getBay_row();
-            String sbayno2Next = "0" + Integer.toString(Integer.parseInt(b2.getBay_num()) + 2) + b2.getBay_col() + b2.getBay_row();
+            String sbayno1Next = null;
+            if ((Integer.parseInt(b1.getBay_num()) + 2) < 10){
+
+                sbayno1Next = "0" + Integer.toString(Integer.parseInt(b1.getBay_num()) + 2) + b1.getBay_col() + b1.getBay_row();
+            }else {
+
+                sbayno1Next = Integer.toString(Integer.parseInt(b1.getBay_num()) + 2) + b1.getBay_col() + b1.getBay_row();
+
+            }
+            String sbayno2Next = null;
+            if ((Integer.parseInt(b2.getBay_num()) + 2) < 10){
+
+                sbayno2Next = "0" + Integer.toString(Integer.parseInt(b2.getBay_num()) + 2) + b2.getBay_col() + b2.getBay_row();
+            }else {
+
+                sbayno2Next = Integer.toString(Integer.parseInt(b2.getBay_num()) + 2) + b2.getBay_col() + b2.getBay_row();
+
+            }
 
             String bayNum1 = b2.getBaynum();
-            String bayNum1Next = "0" + Integer.toString(Integer.parseInt(b2.getBay_num()) + 2);
-            String bayNum2 = "0" + Integer.toString(Integer.parseInt(b1.getBay_num()) + 1);
+            String bayNum1Next = null;
+            if ((Integer.parseInt(b2.getBay_num()) + 2) < 10){
+
+                bayNum1Next = "0" + Integer.toString(Integer.parseInt(b2.getBay_num()) + 2);
+            }else {
+
+                bayNum1Next = Integer.toString(Integer.parseInt(b2.getBay_num()) + 2);
+
+            }
+            String bayNum2 = null;
+            if ((Integer.parseInt(b1.getBay_num()) + 1) < 10){
+
+                bayNum2 = "0" + Integer.toString(Integer.parseInt(b1.getBay_num()) + 1);
+            }else {
+
+                bayNum2 = Integer.toString(Integer.parseInt(b1.getBay_num()) + 1);
+
+            }
             String bayNum2Next = bayNum2;
 
             Log.i(LOG_TAG + "swapBay", "bayno1 is " + bayno1);
@@ -1056,15 +1112,52 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
 
         } else if (b1.getSize_con().equals("40")) {
 
-            String bayno1 = "0" + Integer.toString(Integer.parseInt(b2.getBay_num()) + 1) + b2.getBay_col() + b2.getBay_row();
+            String bayno1 = null;
+            if ((Integer.parseInt(b2.getBay_num()) + 1) < 10){
+
+                bayno1 = "0" + Integer.toString(Integer.parseInt(b2.getBay_num()) + 1) + b2.getBay_col() + b2.getBay_row();
+
+            }else {
+
+                bayno1 = Integer.toString(Integer.parseInt(b2.getBay_num()) + 1) + b2.getBay_col() + b2.getBay_row();
+
+            }
             String bayno1Next = bayno1;
             String bayno2 = b2.getBayno().isEmpty() == true ? "" : b1.getSbayno();
             String bayno2Next = "";
 
-            String sbayno1Next = "0" + Integer.toString(Integer.parseInt(b1.getBay_num()) + 2) + b1.getBay_col() + b1.getBay_row();
-            String sbayno2Next = "0" + Integer.toString(Integer.parseInt(b2.getBay_num()) + 2) + b2.getBay_col() + b2.getBay_row();
 
-            String bayNum1 = "0" + Integer.toString(Integer.parseInt(b2.getBay_num()) + 1);
+            String sbayno1Next = null;
+            if ((Integer.parseInt(b1.getBay_num()) + 2) < 10){
+
+                sbayno1Next = "0" + Integer.toString(Integer.parseInt(b1.getBay_num()) + 2) + b1.getBay_col() + b1.getBay_row();
+
+            }else {
+
+                sbayno1Next = Integer.toString(Integer.parseInt(b1.getBay_num()) + 2) + b1.getBay_col() + b1.getBay_row();
+
+            }
+            String sbayno2Next = null;
+            if ((Integer.parseInt(b2.getBay_num()) + 2) < 10){
+
+                sbayno2Next = "0" + Integer.toString(Integer.parseInt(b2.getBay_num()) + 2) + b2.getBay_col() + b2.getBay_row();
+
+            }else {
+
+                sbayno2Next = Integer.toString(Integer.parseInt(b2.getBay_num()) + 2) + b2.getBay_col() + b2.getBay_row();
+
+            }
+
+            String bayNum1 = null;
+            if ((Integer.parseInt(b2.getBay_num()) + 1) < 10){
+
+                bayNum1 = "0" + Integer.toString(Integer.parseInt(b2.getBay_num()) + 1);
+
+            }else {
+
+                bayNum1 = Integer.toString(Integer.parseInt(b2.getBay_num()) + 1);
+
+            }
             String bayNum1Next = bayNum1;
             String bayNum2 = b2.getBayno().isEmpty() == true ? "" : b1.getBaynum();
             String bayNum2Next = "";
@@ -1348,5 +1441,26 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
 
         return moved;
 
+    }
+
+
+    /**
+     * 根据航次编码查询已修改的船图数据
+     *
+     * @param shipId 航次编码
+     * @return 数据对象，没有返回null
+     */
+    public List<ShipImage> queryShipImageOfModify(String shipId) {
+        Log.i(LOG_TAG + "queryShipImageOfModify", "query param is " + shipId);
+
+        // 查询语句
+        String sql = String.format("select * from %s where %s='%s' and %s='%s'", tableName,
+                "ship_id", shipId, "mark_modify", "1");
+
+        Log.i(LOG_TAG + "queryShipImageOfModify", "query sql is " + sql);
+
+        List<ShipImage> list = query(sql);
+
+        return list;
     }
 }

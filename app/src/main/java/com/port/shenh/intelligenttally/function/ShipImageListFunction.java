@@ -435,6 +435,20 @@ public class ShipImageListFunction {
     }
 
     /**
+     * 从数据库获取已修改的船图数据
+     *
+     * @param shipId 航次编码
+     *
+     * @return 数据对象
+     */
+    public List<ShipImage>  onLoadShipImageListOfModifyFromDataBase(String shipId) {
+        Log.i(LOG_TAG + "getShipImageListOfModify", "getShipImageList is invoked");
+
+        return operator.queryShipImageOfModify(shipId);
+
+    }
+
+    /**
      * 移贝
      *
      * @param b1        贝位1
@@ -625,4 +639,10 @@ public class ShipImageListFunction {
         return operator.getShipImageList(shipId, sbayno);
 
     }
+
+
+
+
+
+
 }

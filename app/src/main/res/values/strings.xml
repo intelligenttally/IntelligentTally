@@ -19,6 +19,9 @@
     <string name="not_download">未下载</string>
     <string name="clear_success">清除成功</string>
     <string name="hint_input_bay_number_text">选择或输入一个目标贝号</string>
+    <string name="upload_success">上传成功</string>
+    <string name="upload_failure">上传失败</string>
+    <string name="not_move">无移贝操作</string>
 
 
     <string name="error_bayno">此贝位号不存在</string>

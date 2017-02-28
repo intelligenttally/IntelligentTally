@@ -251,6 +251,21 @@ public class ShipImage {
     private String name = null;
 
     /**
+     * 数据修改标志
+     */
+    private String mark_modify = null;
+
+    /**
+     * 修改人（工号）
+     */
+    private String modifier = null;
+
+    /**
+     * 修改时间
+     */
+    private String modifytime = null;
+
+    /**
      * 获取编码ID
      *
      * @return 编码ID
@@ -1095,6 +1110,60 @@ public class ShipImage {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * 获取数据修改标志
+     *
+     * @return 数据修改标志
+     */
+    public String getMark_modify() {
+        return mark_modify;
+    }
+
+    /**
+     * 设置数据修改标志
+     *
+     * @param mark_modify 数据修改标志
+     */
+    public void setMark_modify(String mark_modify) {
+        this.mark_modify = mark_modify;
+    }
+
+    /**
+     * 获取修改人（工号）
+     *
+     * @return 修改人（工号）
+     */
+    public String getModifier() {
+        return modifier;
+    }
+
+    /**
+     * 设置修改人（工号）
+     *
+     * @param modifier 修改人（工号）
+     */
+    public void setModifier(String modifier) {
+        this.modifier = modifier;
+    }
+
+    /**
+     * 获取修改时间
+     *
+     * @return 修改时间
+     */
+    public String getModifytime() {
+        return modifytime;
+    }
+
+    /**
+     * 设置修改时间
+     *
+     * @param modifytime 修改时间
+     */
+    public void setModifytime(String modifytime) {
+        this.modifytime = modifytime;
     }
 
 

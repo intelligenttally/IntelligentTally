@@ -298,9 +298,6 @@ public class BayActivity extends AppCompatActivity {
                 //清楚缓存
                 doNextBay();
                 break;
-            case R.id.menu_refresh_bay:
-                doRefreshBay();
-                break;
         }
         return true;
     }
@@ -308,7 +305,7 @@ public class BayActivity extends AppCompatActivity {
     /**
      * 刷新贝
      */
-    private void doRefreshBay() {
+    private void doRefresh_bay() {
         operator.onBack();
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -335,13 +332,6 @@ public class BayActivity extends AppCompatActivity {
         });
 
         function.onUpdate(shipId, bayNumber);
-    }
-
-    /**
-     * 刷新贝
-     */
-    private void doRefresh_bay(){
-
     }
 
     /**

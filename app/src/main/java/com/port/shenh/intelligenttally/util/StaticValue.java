@@ -57,25 +57,30 @@ public interface StaticValue {
         String HTTP_LOGIN_URL = HTTP_IP_URL + "M_Znlh/Entrance/Login.aspx";
 
         /**
-         * 航次（在港）
+         * 获取航次（在港）
          */
         String HTTP_VOYAGE_LIST_OF_IN_PORT_URL = HTTP_IP_URL + "M_Znlh/Voyage/GetVoyageOfInPort.aspx";
 
 
         /**
-         * 航次（已下载）
+         * 获取航次（已下载）
          */
         String HTTP_VOYAGE_LIST_OF_DOWNLOADED_URL = HTTP_IP_URL + "M_Znlh/Voyage/GetVoyage.aspx";
 
         /**
-         * 船图数据（航次）
+         * 获取船图数据（航次）
          */
         String HTTP_SHIP_IMAGE_URL = HTTP_IP_URL + "M_Znlh/Ship/GetShipImagesOfVoyage.aspx";
 
         /**
-         * 船图数据（贝）
+         * 获取船图数据（贝）
          */
         String HTTP_SHIP_IMAGE_OF_BAY_URL = HTTP_IP_URL + "M_Znlh/Ship/GetShipImagesOfBay.aspx";
+
+        /**
+         * 上传船图数据（贝）
+         */
+        String HTTP_UPLOAD_SHIP_IMAGE_URL = HTTP_IP_URL + "M_Znlh/Ship/UploadShipImages.aspx";
     }
 
 }

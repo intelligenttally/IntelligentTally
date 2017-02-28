@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
      * 检查新版本
      */
     private void checkUpdate() {
+
         // 新建版本检查工具
         CheckUpdate checkUpdate = new CheckUpdate(this);
         // 执行检查

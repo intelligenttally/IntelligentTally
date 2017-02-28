@@ -88,7 +88,7 @@ public class VoyageOperator extends BaseOperator<Voyage> {
         cv.put(TableConst.Voyage.SHIP_ID, data.getShip_id());
         cv.put(TableConst.Voyage.V_ID, data.getV_id());
         cv.put(TableConst.Voyage.BERTHNO, data.getBerthno());
-        cv.put(TableConst.Voyage.VOYAGE, data.getChi_vessel());
+        cv.put(TableConst.Voyage.VOYAGE, data.getVoyage());
         cv.put(TableConst.Voyage.CHI_VESSEL, data.getChi_vessel());
         cv.put(TableConst.Voyage.CODEINOUT, data.getCodeInOut());
         cv.put(TableConst.Voyage.TRADE, data.getTrade());

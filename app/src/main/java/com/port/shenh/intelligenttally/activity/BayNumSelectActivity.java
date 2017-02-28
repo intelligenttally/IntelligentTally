@@ -3,9 +3,12 @@ package com.port.shenh.intelligenttally.activity;
  * Created by sh on 2016/11/15.
  */
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,18 +17,26 @@ import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.port.shenh.intelligenttally.R;
 import com.port.shenh.intelligenttally.adapter.BayNumRecyclerViewAdapter;
+import com.port.shenh.intelligenttally.bean.ShipImage;
+import com.port.shenh.intelligenttally.bean.Voyage;
 import com.port.shenh.intelligenttally.function.ShipImageListFunction;
+import com.port.shenh.intelligenttally.function.VoyageListFunction;
 import com.port.shenh.intelligenttally.holder.BayNumItemViewHolder;
 import com.port.shenh.intelligenttally.util.StaticValue;
+import com.port.shenh.intelligenttally.work.UploadShipImageList;
 
 import org.mobile.library.common.function.ToolbarInitialize;
 import org.mobile.library.model.operate.OnItemClickListenerForRecyclerViewItem;
+import org.mobile.library.model.work.WorkBack;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 贝位号选择Activity
@@ -66,6 +77,11 @@ public class BayNumSelectActivity extends AppCompatActivity {
          */
         String ship_id = null;
     }
+
+    /**
+     * 进度条
+     */
+    private ProgressDialog progressDialog = null;
 
     /**
      * 控件集对象
@@ -189,7 +205,79 @@ public class BayNumSelectActivity extends AppCompatActivity {
      */
     private void doUpload() {
 
+        Log.i(LOG_TAG + "doUpload", "doUpload is invoked");
+
+        if (viewHolder.shipImageListFunction.onLoadShipImageListOfModifyFromDataBase(viewHolder.ship_id).size() == 0) {
+
+            Toast.makeText(this, R.string.not_move, Toast.LENGTH_SHORT).show();
+
+            return;
+        }
+
+        new AlertDialog.Builder(BayNumSelectActivity.this).setTitle("确认").setIcon(android.R
+                .drawable.ic_dialog_info).setMessage("是否上传？").setPositiveButton("确定", new
+                DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        startProgressDialog();
+
+                        UploadShipImageList uploadShipImageList = new UploadShipImageList();
+
+                        uploadShipImageList.setWorkEndListener(new WorkBack<String>() {
+                            @Override
+                            public void doEndWork(boolean state, String data) {
+
+                                if (state) {
+                                    Toast.makeText(getBaseContext(), R.string.upload_success,
+                                            Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(getBaseContext(), R.string.upload_failure,
+                                            Toast.LENGTH_SHORT).show();
+                                }
+
+                                //停止进度条
+                                stopProgressDialog();
+                            }
+                        });
+
+                        String shipImageList = null;
+                        List<ShipImage> list = viewHolder.shipImageListFunction.onLoadShipImageListOfModifyFromDataBase(viewHolder.ship_id);
+
+                        Gson gson = new Gson();
+                        shipImageList = gson.toJson(list);
+
+                        Log.i(LOG_TAG + " doUpload", "shipImageList is " + shipImageList);
+
+                        // 执行任务
+                        uploadShipImageList.beginExecute(shipImageList);
 
 
+                    }
+                }).setNegativeButton("取消", null).show();
+    }
+
+    /**
+     * 打开进度条
+     */
+    protected void startProgressDialog() {
+
+        if (progressDialog == null) {
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            // 设置提醒
+            progressDialog.setMessage("数据正在上传中....");
+            progressDialog.setCancelable(false);
+        }
+        progressDialog.show();
+    }
+
+    /**
+     * 停止进度条
+     */
+    protected void stopProgressDialog() {
+        if (progressDialog != null) {
+            progressDialog.cancel();
+        }
     }
 }
