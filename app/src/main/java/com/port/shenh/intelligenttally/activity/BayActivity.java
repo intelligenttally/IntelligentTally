@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.port.shenh.intelligenttally.R;
 import com.port.shenh.intelligenttally.adapter.BayGridAdapter;
@@ -31,6 +33,7 @@ import org.mobile.library.common.function.ToolbarInitialize;
 import org.mobile.library.model.operate.EmptyParameterListener;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by shenh on 2016/11/21.
@@ -312,8 +315,9 @@ public class BayActivity extends AppCompatActivity {
         // 设置提醒
         progressDialog.setMessage("数据正在下载中....");
         progressDialog.setCancelable(false);
-
         progressDialog.show();
+
+        final AtomicInteger count = new AtomicInteger(1);
 
         String bayNumber = bayNumberList.get(bayNumberPosition);
 
@@ -321,17 +325,45 @@ public class BayActivity extends AppCompatActivity {
             @Override
             public void OnLoadEnd() {
 
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        loadBay();
-                        progressDialog.dismiss();
-                    }
-                });
+                Log.i(LOG_TAG + "OnLoadEnd", "count is" + count.get());
+
+                if (count.decrementAndGet() == 0) {
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            loadBay();
+                            progressDialog.dismiss();
+                            Toast.makeText(getBaseContext(), R.string.download_success,
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             }
         });
 
+
+        count.incrementAndGet();
         function.onUpdate(shipId, bayNumber);
+
+        String bayNumberNext = Integer.toString(Integer.parseInt(bayNumber) + 2);
+//        int bayNumberNextIndex = function.onLoadBayNumListFromDataBase(shipId).indexOf
+//                (bayNumberNext);
+//
+//        Log.i(LOG_TAG + "doRefresh_bay", "bayNumNext is " + bayNumberNext);
+//        Log.i(LOG_TAG + "doRefresh_bay", "bayNumberNextIndex is " + bayNumberNextIndex);
+
+        if (function.isJoint(shipId, bayNumber)&&(function.onLoadBayNumListFromDataBase(shipId)
+                .indexOf(bayNumberNext) != -1)){
+
+            count.incrementAndGet();
+
+            function.onUpdate(shipId, bayNumberNext);
+
+        }
+
+        count.decrementAndGet();
+
     }
 
     /**

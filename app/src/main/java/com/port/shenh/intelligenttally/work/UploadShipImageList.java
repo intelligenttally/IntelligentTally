@@ -13,6 +13,15 @@ import java.util.Map;
  * Created by shenh on 2017/1/19.
  */
 
+
+/**
+ * 上传船图列表
+ *
+ * @author sh
+ * @version 1.0 2016/10/13
+ * @since 1.0
+ */
+
 public class UploadShipImageList extends SimpleWorkModel<String, String> {
 
     /**

@@ -6,37 +6,35 @@ package com.port.shenh.intelligenttally.activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.util.SparseBooleanArray;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.port.shenh.intelligenttally.R;
 import com.port.shenh.intelligenttally.adapter.BayNumRecyclerViewAdapter;
 import com.port.shenh.intelligenttally.bean.ShipImage;
-import com.port.shenh.intelligenttally.bean.Voyage;
 import com.port.shenh.intelligenttally.function.ShipImageListFunction;
-import com.port.shenh.intelligenttally.function.VoyageListFunction;
 import com.port.shenh.intelligenttally.holder.BayNumItemViewHolder;
 import com.port.shenh.intelligenttally.util.StaticValue;
 import com.port.shenh.intelligenttally.work.UploadShipImageList;
 
-import org.mobile.library.common.function.ToolbarInitialize;
 import org.mobile.library.model.operate.OnItemClickListenerForRecyclerViewItem;
 import org.mobile.library.model.work.WorkBack;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 贝位号选择Activity
@@ -116,8 +114,41 @@ public class BayNumSelectActivity extends AppCompatActivity {
      * 初始化控件
      */
     private void initView() {
-        // 初始化Toolbar
-        ToolbarInitialize.initToolbar(this, R.string.baynum, true, true);
+        //        // 初始化Toolbar
+        //        ToolbarInitialize.initToolbar(this, R.string.baynum, true, true);
+
+
+        Toolbar toolbar = (Toolbar) findViewById(org.mobile.library.R.id.toolbar);
+
+        setSupportActionBar(toolbar);
+        setTitle(R.string.baynum);
+
+        TextView title = (TextView) findViewById(org.mobile.library.R.id.toolbar_title);
+
+        if (title != null) {
+            title.setVisibility(View.VISIBLE);
+            title.setText(R.string.baynum);
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (viewHolder.shipImageListFunction.isExistModifyMark(viewHolder.ship_id)) {
+                    Toast.makeText(BayNumSelectActivity.this, R.string.not_upload_complete, Toast
+                            .LENGTH_SHORT).show();
+
+                    return;
+                } else {
+
+                    finish();
+
+                }
+            }
+        });
+
         // 初始化列表
         initListView();
     }
@@ -151,7 +182,8 @@ public class BayNumSelectActivity extends AppCompatActivity {
                 dataList = new ArrayList<>();
             }
 
-            viewHolder.shipImageListFunction.onLoadCodeUnloadPortSubListFromDataBase(viewHolder.ship_id);
+            viewHolder.shipImageListFunction.onLoadCodeUnloadPortSubListFromDataBase(viewHolder
+                    .ship_id);
 
             Log.i(LOG_TAG + "loadData", "dataList count is " + dataList.size());
 
@@ -207,7 +239,8 @@ public class BayNumSelectActivity extends AppCompatActivity {
 
         Log.i(LOG_TAG + "doUpload", "doUpload is invoked");
 
-        if (viewHolder.shipImageListFunction.onLoadShipImageListOfModifyFromDataBase(viewHolder.ship_id).size() == 0) {
+        if (viewHolder.shipImageListFunction.onLoadShipImageListOfModifyFromDataBase(viewHolder
+                .ship_id).size() == 0) {
 
             Toast.makeText(this, R.string.not_move, Toast.LENGTH_SHORT).show();
 
@@ -217,44 +250,48 @@ public class BayNumSelectActivity extends AppCompatActivity {
         new AlertDialog.Builder(BayNumSelectActivity.this).setTitle("确认").setIcon(android.R
                 .drawable.ic_dialog_info).setMessage("是否上传？").setPositiveButton("确定", new
                 DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                startProgressDialog();
+
+                UploadShipImageList uploadShipImageList = new UploadShipImageList();
+
+                uploadShipImageList.setWorkEndListener(new WorkBack<String>() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void doEndWork(boolean state, String data) {
 
-                        startProgressDialog();
+                        if (state) {
 
-                        UploadShipImageList uploadShipImageList = new UploadShipImageList();
+                            viewHolder.shipImageListFunction.onUpdateModifyMark(viewHolder.ship_id);
 
-                        uploadShipImageList.setWorkEndListener(new WorkBack<String>() {
-                            @Override
-                            public void doEndWork(boolean state, String data) {
+                            Toast.makeText(getBaseContext(), R.string.upload_success, Toast
+                                    .LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getBaseContext(), R.string.upload_failure, Toast
+                                    .LENGTH_SHORT).show();
+                        }
 
-                                if (state) {
-                                    Toast.makeText(getBaseContext(), R.string.upload_success,
-                                            Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(getBaseContext(), R.string.upload_failure,
-                                            Toast.LENGTH_SHORT).show();
-                                }
-
-                                //停止进度条
-                                stopProgressDialog();
-                            }
-                        });
-
-                        String shipImageList = null;
-                        List<ShipImage> list = viewHolder.shipImageListFunction.onLoadShipImageListOfModifyFromDataBase(viewHolder.ship_id);
-
-                        Gson gson = new Gson();
-                        shipImageList = gson.toJson(list);
-
-                        Log.i(LOG_TAG + " doUpload", "shipImageList is " + shipImageList);
-
-                        // 执行任务
-                        uploadShipImageList.beginExecute(shipImageList);
-
-
+                        //停止进度条
+                        stopProgressDialog();
                     }
-                }).setNegativeButton("取消", null).show();
+                });
+
+                String shipImageList = null;
+                List<ShipImage> list = viewHolder.shipImageListFunction
+                        .onLoadShipImageListOfModifyFromDataBase(viewHolder.ship_id);
+
+                Gson gson = new Gson();
+                shipImageList = gson.toJson(list);
+
+                Log.i(LOG_TAG + " doUpload", "shipImageList is " + shipImageList);
+
+                // 执行任务
+                uploadShipImageList.beginExecute(shipImageList);
+
+
+            }
+        }).setNegativeButton("取消", null).show();
     }
 
     /**
@@ -280,4 +317,23 @@ public class BayNumSelectActivity extends AppCompatActivity {
             progressDialog.cancel();
         }
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+
+
+            if (viewHolder.shipImageListFunction.isExistModifyMark(viewHolder.ship_id)) {
+
+                Toast.makeText(this, R.string.not_upload_complete, Toast.LENGTH_SHORT).show();
+
+                return false;
+
+            }
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
+
+
 }

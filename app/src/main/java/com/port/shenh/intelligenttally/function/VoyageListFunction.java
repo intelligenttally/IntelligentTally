@@ -6,22 +6,17 @@ package com.port.shenh.intelligenttally.function;
 import android.content.Context;
 import android.util.Log;
 
-import com.port.shenh.intelligenttally.bean.Bay;
-import com.port.shenh.intelligenttally.bean.ShipImage;
 import com.port.shenh.intelligenttally.bean.Voyage;
-import com.port.shenh.intelligenttally.database.ShipImageOperator;
 import com.port.shenh.intelligenttally.database.VoyageOperator;
-import com.port.shenh.intelligenttally.work.PullShipImageList;
 import com.port.shenh.intelligenttally.work.PullVoyageListOfDownloaded;
 
 import org.mobile.library.model.database.BaseOperator;
 import org.mobile.library.model.work.WorkBack;
 
 import java.util.List;
-import java.util.Map;
 
 /**
- * 船图数据功能类
+ * 航次数据功能类
  *
  * @author sh
  * @version 1.1 2016/11/25

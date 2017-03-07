@@ -59,6 +59,16 @@ public class BottomBayInfoFunction {
     private TextView type = null;
 
     /**
+     * 卸货港
+     */
+    private TextView unload = null;
+
+    /**
+     * 铅封号
+     */
+    private TextView sealno = null;
+
+    /**
      * 构造函数
      *
      * @param rootView 包含信息布局的根布局
@@ -78,10 +88,12 @@ public class BottomBayInfoFunction {
                 .layout_bottom_sheet_info_box_number_textView);
         inverted = (TextView) rootView.findViewById(R.id
                 .layout_bottom_sheet_info_inverted_textView);
-        weight = (TextView) rootView.findViewById(R.id.layout_bottom_sheet_info_weight_textView);
+//        weight = (TextView) rootView.findViewById(R.id.layout_bottom_sheet_info_weight_textView);
         empty = (TextView) rootView.findViewById(R.id.layout_bottom_sheet_info_empty_textView);
         size = (TextView) rootView.findViewById(R.id.layout_bottom_sheet_info_size_textView);
         type = (TextView) rootView.findViewById(R.id.layout_bottom_sheet_info_type_textView);
+        unload = (TextView) rootView.findViewById(R.id.layout_bottom_sheet_info_unload_textView);
+        sealno = (TextView) rootView.findViewById(R.id.layout_bottom_sheet_info_sealno_textView);
     }
 
     /**
@@ -105,10 +117,12 @@ public class BottomBayInfoFunction {
         bayNumber.setText(data.getBayno());
         boxNumber.setText(data.getContainer_no());
         inverted.setText(data.getMoved_name());
-        weight.setText(data.getWeight());
+//        weight.setText(data.getWeight());
         empty.setText(data.getCode_empty());
         size.setText(data.getSize_con());
         type.setText(data.getContainer_type());
+        unload.setText(data.getCode_unload_port());
+        sealno.setText(data.getSealno());
     }
 
     /**

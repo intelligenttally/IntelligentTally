@@ -3,16 +3,20 @@ package com.port.shenh.intelligenttally.fragment;
  * Created by 超悟空 on 2016/12/30.
  */
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.port.shenh.intelligenttally.R;
 import com.port.shenh.intelligenttally.activity.BayActivity;
 import com.port.shenh.intelligenttally.adapter.BayGridAdapter;
@@ -21,9 +25,13 @@ import com.port.shenh.intelligenttally.function.BottomBayCommonOperator;
 import com.port.shenh.intelligenttally.function.BottomBayInfoFunction;
 import com.port.shenh.intelligenttally.function.ShipImageListFunction;
 import com.port.shenh.intelligenttally.function.VoyageListFunction;
+import com.port.shenh.intelligenttally.work.UploadShipImageList;
 
 import org.mobile.library.common.function.InputMethodController;
 import org.mobile.library.model.operate.EmptyParameterListener;
+import org.mobile.library.model.work.WorkBack;
+
+import java.util.List;
 
 /**
  * 移贝状态的贝图底部布局
@@ -33,6 +41,11 @@ import org.mobile.library.model.operate.EmptyParameterListener;
  * @since 1.0
  */
 public class BayMoveBottomFragment extends Fragment implements BottomBayCommonOperator {
+
+    /**
+     * 日志标签前缀
+     */
+    private static final String LOG_TAG = "BayMoveBottomFragment";
 
     /**
      * 数据加载工具
@@ -67,12 +80,18 @@ public class BayMoveBottomFragment extends Fragment implements BottomBayCommonOp
     /**
      * 要移动的船图数据
      */
-    private ShipImage data = null;
+    private ShipImage dataShipImage = null;
 
     /**
      * 进出口编码
      */
     private String codeInOut = null;
+
+
+    /**
+     * 进度条
+     */
+    private ProgressDialog progressDialog = null;
 
 
     @Nullable
@@ -95,7 +114,7 @@ public class BayMoveBottomFragment extends Fragment implements BottomBayCommonOp
         activity = (BayActivity) getActivity();
         shipFunction = new ShipImageListFunction(getActivity());
         voyageFunction = new VoyageListFunction(getActivity());
-        codeInOut = voyageFunction.onLoadCodeInOutOfVoyageFromDataBase(this.data.getShip_id());
+        codeInOut = voyageFunction.onLoadCodeInOutOfVoyageFromDataBase(dataShipImage.getShip_id());
         initEditText(rootView);
         initMove(rootView);
         initShip(rootView);
@@ -115,7 +134,7 @@ public class BayMoveBottomFragment extends Fragment implements BottomBayCommonOp
      */
     private void initShip(View rootView) {
         function = new BottomBayInfoFunction(rootView);
-        function.bindData(data);
+        function.bindData(dataShipImage);
     }
 
     /**
@@ -189,12 +208,13 @@ public class BayMoveBottomFragment extends Fragment implements BottomBayCommonOp
             return;
         }
 
-        String result = shipFunction.moveBay(data, bayNumberEditText.getText().toString(),
+        String result = shipFunction.onMoveBay(dataShipImage, bayNumberEditText.getText().toString(),
                 codeInOut);
 
         if (result == null) {
             onMoveListener.onInvoke();
             activity.loadBay();
+            onUpload();
         } else {
             bayNumberEditText.setError(result);
         }
@@ -215,7 +235,7 @@ public class BayMoveBottomFragment extends Fragment implements BottomBayCommonOp
      * @param data 贝数据
      */
     public void setBayData(ShipImage data) {
-        this.data = data;
+        this.dataShipImage = data;
     }
 
     @Override
@@ -232,5 +252,71 @@ public class BayMoveBottomFragment extends Fragment implements BottomBayCommonOp
     @Override
     public void onBack() {
         onMoveCancel();
+    }
+
+    /**
+     *  数据上传
+     */
+    private void onUpload(){
+
+        startProgressDialog();
+
+        UploadShipImageList uploadShipImageList = new UploadShipImageList();
+
+        uploadShipImageList.setWorkEndListener(new WorkBack<String>() {
+            @Override
+            public void doEndWork(boolean state, String data) {
+
+                if (state) {
+
+                    shipFunction.onUpdateModifyMark(dataShipImage.getShip_id());
+
+                    Toast.makeText(getContext(), R.string.upload_success, Toast
+                            .LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), R.string.upload_failure, Toast
+                            .LENGTH_SHORT).show();
+                }
+
+                //停止进度条
+                stopProgressDialog();
+            }
+        });
+
+        String shipImageList = null;
+        List<ShipImage> list = shipFunction
+                .onLoadShipImageListOfModifyFromDataBase(dataShipImage.getShip_id());
+
+        Gson gson = new Gson();
+        shipImageList = gson.toJson(list);
+
+        Log.i(LOG_TAG + " doUpload", "shipImageList is " + shipImageList);
+
+        // 执行任务
+        uploadShipImageList.beginExecute(shipImageList);
+    }
+
+    /**
+     * 打开进度条
+     */
+    protected void startProgressDialog() {
+
+        if (progressDialog == null) {
+            progressDialog = new ProgressDialog(getContext());
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            // 设置提醒
+            progressDialog.setMessage("数据正在上传中....");
+            progressDialog.setCancelable(false);
+        }
+        progressDialog.show();
+    }
+
+    /**
+     * 停止进度条
+     */
+    protected void stopProgressDialog() {
+        if (progressDialog != null) {
+            progressDialog.cancel();
+        }
     }
 }

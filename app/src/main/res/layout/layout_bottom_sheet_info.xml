@@ -27,10 +27,10 @@
 
     <TableRow android:layout_marginTop="@dimen/layout_default_spacing">
 
-        <TextView android:text="重量："/>
+        <TextView android:text="卸货港："/>
 
         <TextView
-            android:id="@+id/layout_bottom_sheet_info_weight_textView"/>
+            android:id="@+id/layout_bottom_sheet_info_unload_textView"/>
 
         <TextView
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
@@ -52,6 +52,15 @@
 
         <TextView
             android:id="@+id/layout_bottom_sheet_info_empty_textView"/>
+    </TableRow>
+
+    <TableRow android:layout_marginTop="@dimen/layout_default_spacing">
+
+        <TextView android:text="铅封号："/>
+
+        <TextView
+            android:id="@+id/layout_bottom_sheet_info_sealno_textView"/>
+
     </TableRow>
 
 </TableLayout>

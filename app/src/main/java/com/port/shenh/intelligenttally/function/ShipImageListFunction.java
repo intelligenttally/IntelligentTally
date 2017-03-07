@@ -442,6 +442,10 @@ public class ShipImageListFunction {
      * @return 数据对象
      */
     public List<ShipImage>  onLoadShipImageListOfModifyFromDataBase(String shipId) {
+        if (operator == null || operator.isEmpty()) {
+            Log.i(LOG_TAG + "onLoadFromDataBase", "database null");
+            return null;
+        }
         Log.i(LOG_TAG + "getShipImageListOfModify", "getShipImageList is invoked");
 
         return operator.queryShipImageOfModify(shipId);
@@ -457,7 +461,7 @@ public class ShipImageListFunction {
      *
      * @return 错误消息，正确返回null
      */
-    public String moveBay(ShipImage b1, String sbayno2, String codeInOut) {
+    public String onMoveBay(ShipImage b1, String sbayno2, String codeInOut) {
         if (operator == null || operator.isEmpty()) {
             Log.i(LOG_TAG + "onLoadFromDataBase", "database null");
             return "false";
@@ -568,6 +572,60 @@ public class ShipImageListFunction {
         return null;
     }
 
+
+    /**
+     * 根据航次编码更新船图数据修改标志
+     *
+     * @param shipId 航次编码
+     */
+    public void onUpdateModifyMark(String shipId){
+        if (operator == null || operator.isEmpty()) {
+            Log.i(LOG_TAG + "onLoadFromDataBase", "database null");
+            return;
+        }
+        Log.i(LOG_TAG + "onUpdateModifyMark", "onUpdateModifyMark is invoked");
+
+        operator.updateModifyMark(shipId);
+
+    }
+
+    /**
+     * 根据航次编码查询是否有修改标志为1
+     *
+     * @param shipId 航次编码
+     */
+    public boolean isExistModifyMark(String shipId){
+        if (operator == null || operator.isEmpty()) {
+            Log.i(LOG_TAG + "onLoadFromDataBase", "database null");
+            return false;
+        }
+        Log.i(LOG_TAG + "isExistModifyMark", "isExistModifyMark is invoked");
+
+        return operator.isExistModifyMark(shipId);
+    }
+
+    /**
+     * 根据航次编码、贝号判断是否通贝
+     *
+     * @param shipId 航次编码
+     * @param bayNum 贝号
+     * @return false/true
+     */
+    public boolean isJoint(String shipId, String bayNum){
+        if (operator == null || operator.isEmpty()) {
+            Log.i(LOG_TAG + "onLoadFromDataBase", "database null");
+            return false;
+        }
+        Log.i(LOG_TAG + "isJoint", "isJoint is invoked");
+
+        return operator.isJoint(shipId, bayNum);
+    }
+
+
+
+
+
+
     /**
      * 对调贝位1，贝位2
      *
@@ -576,7 +634,10 @@ public class ShipImageListFunction {
      * @param codeInOut 进出口编码
      */
     private void swapBay(ShipImage b1, ShipImage b2, String codeInOut) {
-
+        if (operator == null || operator.isEmpty()) {
+            Log.i(LOG_TAG + "onLoadFromDataBase", "database null");
+            return;
+        }
         Log.i(LOG_TAG + "swapBay", "swapBay is invoked");
 
         operator.swapBay(b1, b2, codeInOut);
@@ -634,11 +695,17 @@ public class ShipImageListFunction {
      * @return 数据对象
      */
     private List<ShipImage> getShipImageList(String shipId, String sbayno) {
+        if (operator == null || operator.isEmpty()) {
+            Log.i(LOG_TAG + "onLoadFromDataBase", "database null");
+            return null;
+        }
         Log.i(LOG_TAG + "getShipImageList", "getShipImageList is invoked");
 
         return operator.getShipImageList(shipId, sbayno);
 
     }
+
+
 
 
 

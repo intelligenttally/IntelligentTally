@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static com.port.shenh.intelligenttally.database.TableConst.ShipImage.MARK_MODIFY;
+
 /**
  * 船图数据库操作工具
  *
@@ -138,7 +140,7 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
                         .WORK_DATE, TableConst.ShipImage.SEALNO, TableConst.ShipImage.MOVED_NAME,
                 TableConst.ShipImage.INOUTMARK, TableConst.ShipImage.TRANSMARK, TableConst
                         .ShipImage.HOLIDAYS, TableConst.ShipImage.NIGHT, TableConst.ShipImage.NAME,
-                TableConst.ShipImage.MARK_MODIFY, TableConst.ShipImage.MODIFIER, TableConst.ShipImage.MODIFYTIME);
+                MARK_MODIFY, TableConst.ShipImage.MODIFIER, TableConst.ShipImage.MODIFYTIME);
 
 
         Log.i(LOG_TAG + "onCreateTable", "sql is " + createTableSql);
@@ -258,7 +260,7 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
         int holidays = cursor.getColumnIndex(TableConst.ShipImage.HOLIDAYS);
         int night = cursor.getColumnIndex(TableConst.ShipImage.NIGHT);
         int name = cursor.getColumnIndex(TableConst.ShipImage.NAME);
-        int mark_modify = cursor.getColumnIndex(TableConst.ShipImage.MARK_MODIFY);
+        int mark_modify = cursor.getColumnIndex(MARK_MODIFY);
         int modifier = cursor.getColumnIndex(TableConst.ShipImage.MODIFIER);
         int modifytime = cursor.getColumnIndex(TableConst.ShipImage.MODIFYTIME);
 
@@ -703,6 +705,52 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
     }
 
     /**
+     * 根据航次编码更新船图数据修改标志
+     *
+     * @param shipId 航次编码
+     */
+    public void updateModifyMark(String shipId){
+
+        Log.i(LOG_TAG + "updateModifyMark", "shipId is " + shipId);
+
+        String sql = String.format("update %s set mark_modify='%s' " +
+                "where ship_id='%s' and mark_modify='%s'",
+                tableName,
+                "0", shipId, "1");
+
+        Log.i(LOG_TAG + "updateModifyMark", "sql1 is " + sql);
+
+        sqLiteHelper.getWritableDatabase().execSQL(sql);
+
+        close(sqLiteHelper);
+    }
+
+    public boolean isExistModifyMark(String shipId){
+        Log.i(LOG_TAG + "isExistModifyMark", "shipId is " + shipId);
+
+        // 查询语句
+        String sql = String.format("select  count(*) from %s where ship_id=%s and mark_modify=%s",
+                tableName, shipId, "1");
+
+        Log.i(LOG_TAG + "isExistModifyMark", "sql is " + sql);
+
+        Cursor cursor = sqLiteHelper.getReadableDatabase().rawQuery(sql, null);
+        if (cursor.moveToNext()) {
+            if (cursor.getInt(0) > 0) {
+                cursor.close();
+                close(sqLiteHelper);
+                Log.i(LOG_TAG + "isExistModifyMark", "isExistModifyMark is " + "true");
+                return true;
+            }
+        }
+        cursor.close();
+        close(sqLiteHelper);
+
+        Log.i(LOG_TAG + "isExistModifyMark", "isExistModifyMark is " + "false");
+        return false;
+    }
+
+    /**
      * 对调贝位
      *
      * @param b1        贝位1
@@ -798,7 +846,7 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
                     b2.getDanger_grade(), b2.getDegree_setting(), b2.getDegree_unit(), b2.getMin_degree(), b2.getMax_degree(), bayno2,
                     oldbayno2, b2.getCode_crane(), bayNum2, bayCol2, bayRow2, b2.getContainer_no(), b2.getSize_con(),
                     b2.getContainer_type(), b2.getCode_empty(), b2.getWeight(), b2.getSealno(), b2.getMoved_name(), b2.getInoutmark(),
-                    b2.getTransmark(), b2.getHolidays(), b2.getNight(), b2.getName(), "1", "admin", date,
+                    b2.getTransmark(), b2.getHolidays(), b2.getNight(), b2.getName(), "1", Global.getApplicationConfig().getUserName(), date,
                     b1.getShip_id(), b1.getSbayno());
 
             Log.i(LOG_TAG + "swapBay", "sql1 is " + sql1);
@@ -841,7 +889,7 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
                     b1.getDanger_grade(), b1.getDegree_setting(), b1.getDegree_unit(), b1.getMin_degree(), b1.getMax_degree(), bayno1,
                     oldbayno1, b1.getCode_crane(), bayNum1, bayCol1, bayRow1, b1.getContainer_no(), b1.getSize_con(),
                     b1.getContainer_type(), b1.getCode_empty(), b1.getWeight(), b1.getSealno(), b1.getMoved_name(), b1.getInoutmark(),
-                    b1.getTransmark(), b1.getHolidays(), b1.getNight(), b1.getName(), "1", "admin", date,
+                    b1.getTransmark(), b1.getHolidays(), b1.getNight(), b1.getName(), "1", Global.getApplicationConfig().getUserName(), date,
                     b2.getShip_id(), b2.getSbayno());
 
             Log.i(LOG_TAG + "swapBay", "sql2 is " + sql2);
@@ -967,7 +1015,7 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
                     b2.getDanger_grade(), b2.getDegree_setting(), b2.getDegree_unit(), b2.getMin_degree(), b2.getMax_degree(), bayno2,
                     oldbayno2, b2.getCode_crane(), bayNum2, b2.getBay_col(), b2.getBay_row(), b2.getContainer_no(), b2.getSize_con(),
                     b2.getContainer_type(), b2.getCode_empty(), b2.getWeight(), b2.getSealno(), b2.getMoved_name(), b2.getInoutmark(),
-                    b2.getTransmark(), b2.getHolidays(), b2.getNight(), b2.getName(), "1", Global.getLoginStatus().getUserID(), date,
+                    b2.getTransmark(), b2.getHolidays(), b2.getNight(), b2.getName(), "1", Global.getApplicationConfig().getUserName(), date,
                     b1.getShip_id(), b1.getSbayno());
 
             Log.i(LOG_TAG + "swapBay", "sql1 is " + sql1);
@@ -1010,7 +1058,7 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
                     b1.getDanger_grade(), b1.getDegree_setting(), b1.getDegree_unit(), b1.getMin_degree(), b1.getMax_degree(), bayno1,
                     oldbayno1, b1.getCode_crane(), bayNum1, b1.getBay_col(), b1.getBay_row(), b1.getContainer_no(), b1.getSize_con(),
                     b1.getContainer_type(), b1.getCode_empty(), b1.getWeight(), b1.getSealno(), b1.getMoved_name(), b1.getInoutmark(),
-                    b1.getTransmark(), b1.getHolidays(), b1.getNight(), b1.getName(), "1", Global.getLoginStatus().getUserID(), date,
+                    b1.getTransmark(), b1.getHolidays(), b1.getNight(), b1.getName(), "1", Global.getApplicationConfig().getUserName(), date,
                     b2.getShip_id(), b2.getSbayno());
 
             Log.i(LOG_TAG + "swapBay", "sql2 is " + sql2);
@@ -1054,7 +1102,7 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
                     b2.getDanger_grade(), b2.getDegree_setting(), b2.getDegree_unit(), b2.getMin_degree(), b2.getMax_degree(), bayno2Next,
                     oldbayno2, b2.getCode_crane(), bayNum2Next, b2.getBay_col(), b2.getBay_row(), b2.getContainer_no(), b2.getSize_con(),
                     b2.getContainer_type(), b2.getCode_empty(), b2.getWeight(), b2.getSealno(), b2.getMoved_name(), b2.getInoutmark(),
-                    b2.getTransmark(), b2.getHolidays(), b2.getNight(), b2.getName(), "1", Global.getLoginStatus().getUserID(), date,
+                    b2.getTransmark(), b2.getHolidays(), b2.getNight(), b2.getName(), "1", Global.getApplicationConfig().getUserName(), date,
                     b1.getShip_id(), sbayno1Next);
 
             Log.i(LOG_TAG + "swapBay", "sql1Next is " + sql1Next);
@@ -1098,7 +1146,7 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
                     b1.getDanger_grade(), b1.getDegree_setting(), b1.getDegree_unit(), b1.getMin_degree(), b1.getMax_degree(), bayno1Next,
                     oldbayno1, b1.getCode_crane(), bayNum1Next, b1.getBay_col(), b1.getBay_row(), b1.getContainer_no(), b1.getSize_con(),
                     b1.getContainer_type(), b1.getCode_empty(), b1.getWeight(), b1.getSealno(), b1.getMoved_name(), b1.getInoutmark(),
-                    b1.getTransmark(), b1.getHolidays(), b1.getNight(), b1.getName(), "1", Global.getLoginStatus().getUserID(), date,
+                    b1.getTransmark(), b1.getHolidays(), b1.getNight(), b1.getName(), "1", Global.getApplicationConfig().getUserName(), date,
                     b2.getShip_id(), sbayno2Next);
 
             Log.i(LOG_TAG + "swapBay", "sql2Next is " + sql2Next);
@@ -1233,7 +1281,7 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
                     b2.getDanger_grade(), b2.getDegree_setting(), b2.getDegree_unit(), b2.getMin_degree(), b2.getMax_degree(), bayno2,
                     oldbayno2, b2.getCode_crane(), bayNum2, bayCol2, b2.getBay_row(), b2.getContainer_no(), b2.getSize_con(),
                     b2.getContainer_type(), b2.getCode_empty(), b2.getWeight(), b2.getSealno(), b2.getMoved_name(), b2.getInoutmark(),
-                    b2.getTransmark(), b2.getHolidays(), b2.getNight(), b2.getName(), "1", Global.getLoginStatus().getUserID(), date,
+                    b2.getTransmark(), b2.getHolidays(), b2.getNight(), b2.getName(), "1", Global.getApplicationConfig().getUserName(), date,
                     b1.getShip_id(), b1.getSbayno());
 
             Log.i(LOG_TAG + "swapBay", "sql1 is " + sql1);
@@ -1276,7 +1324,7 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
                     b1.getDanger_grade(), b1.getDegree_setting(), b1.getDegree_unit(), b1.getMin_degree(), b1.getMax_degree(), bayno1,
                     oldbayno1, b1.getCode_crane(), bayNum1, b1.getBay_col(), b1.getBay_row(), b1.getContainer_no(), b1.getSize_con(),
                     b1.getContainer_type(), b1.getCode_empty(), b1.getWeight(), b1.getSealno(), b1.getMoved_name(), b1.getInoutmark(),
-                    b1.getTransmark(), b1.getHolidays(), b1.getNight(), b1.getName(), "1", Global.getLoginStatus().getUserID(), date,
+                    b1.getTransmark(), b1.getHolidays(), b1.getNight(), b1.getName(), "1", Global.getApplicationConfig().getUserName(), date,
                     b2.getShip_id(), b2.getSbayno());
 
             Log.i(LOG_TAG + "swapBay", "sql2 is " + sql2);
@@ -1320,7 +1368,7 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
                     b2.getDanger_grade(), b2.getDegree_setting(), b2.getDegree_unit(), b2.getMin_degree(), b2.getMax_degree(), bayno2Next,
                     oldbayno2, b2.getCode_crane(), bayNum2Next, b2.getBay_col(), b2.getBay_row(), b2.getContainer_no(), b2.getSize_con(),
                     b2.getContainer_type(), b2.getCode_empty(), b2.getWeight(), b2.getSealno(), b2.getMoved_name(), b2.getInoutmark(),
-                    b2.getTransmark(), b2.getHolidays(), b2.getNight(), b2.getName(), "1", Global.getLoginStatus().getUserID(), date,
+                    b2.getTransmark(), b2.getHolidays(), b2.getNight(), b2.getName(), "1", Global.getApplicationConfig().getUserName(), date,
                     b1.getShip_id(), sbayno1Next);
 
             Log.i(LOG_TAG + "swapBay", "sql1Next is " + sql1Next);
@@ -1364,7 +1412,7 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
                     b1.getDanger_grade(), b1.getDegree_setting(), b1.getDegree_unit(), b1.getMin_degree(), b1.getMax_degree(), bayno1Next,
                     oldbayno1, b1.getCode_crane(), bayNum1Next, b1.getBay_col(), b1.getBay_row(), b1.getContainer_no(), b1.getSize_con(),
                     b1.getContainer_type(), b1.getCode_empty(), b1.getWeight(), b1.getSealno(), b1.getMoved_name(), b1.getInoutmark(),
-                    b1.getTransmark(), b1.getHolidays(), b1.getNight(), b1.getName(), "1", Global.getLoginStatus().getUserID(), date,
+                    b1.getTransmark(), b1.getHolidays(), b1.getNight(), b1.getName(), "1", Global.getApplicationConfig().getUserName(), date,
                     b2.getShip_id(), sbayno2Next);
 
             Log.i(LOG_TAG + "swapBay", "sql2Next is " + sql2Next);
@@ -1410,6 +1458,9 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
             Log.v(LOG_TAG + "execSQL", "parse end");
 
             sqLiteDatabase.endTransaction();
+
+            close(sqLiteHelper);
+
 
         }
     }
