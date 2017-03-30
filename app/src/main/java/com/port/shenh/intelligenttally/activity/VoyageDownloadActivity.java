@@ -166,7 +166,8 @@ public class VoyageDownloadActivity extends AppCompatActivity {
     /**
      * 初始化列表
      */
-    private void initListView() {
+    private void
+    initListView() {
 
         // RecyclerView列表对象
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id

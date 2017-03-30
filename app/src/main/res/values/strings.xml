@@ -2,6 +2,8 @@
     <string name="app_name">智能理货</string>
     <string name="voyage_download">航次下载</string>
     <string name="vayage_downloaded">已下载航次</string>
+    <string name="full_statistics">全统计</string>
+    <string name="single_statistics">个统计</string>
 
 
     <string name="clear_cache">清除缓存</string>
@@ -23,7 +25,6 @@
     <string name="upload_failure">上传失败</string>
     <string name="not_upload_complete">未上传完整</string>
     <string name="not_move">无移贝操作</string>
-
 
 
     <string name="error_bayno">此贝位号不存在</string>

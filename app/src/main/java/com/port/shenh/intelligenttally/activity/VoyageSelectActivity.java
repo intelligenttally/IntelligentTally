@@ -12,7 +12,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.port.shenh.intelligenttally.R;
-import com.port.shenh.intelligenttally.adapter.VoyageOfInPortRecyclerViewAdapter;
 import com.port.shenh.intelligenttally.adapter.VoyageRecyclerViewAdapter;
 import com.port.shenh.intelligenttally.bean.Voyage;
 import com.port.shenh.intelligenttally.function.ShipImageListFunction;
@@ -147,7 +146,7 @@ public class VoyageSelectActivity extends AppCompatActivity {
 
                     // 跳转意图
                     Intent intent = new Intent(VoyageSelectActivity.this, BayNumSelectActivity.class);
-                    intent.putExtra(StaticValue.IntentTag.BAYNUM_SELECT_TAG, voyage.getShip_id());
+                    intent.putExtra(StaticValue.IntentTag.VOYAGE_TAG, voyage.getShip_id());
                     // 跳转到详情页面
                     startActivity(intent);
                 }

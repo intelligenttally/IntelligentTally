@@ -11,7 +11,7 @@ import com.port.shenh.intelligenttally.R;
 /**
  * 仅文本框的Item的View管理器
  *
- * @author 超悟空
+ * @author sh
  * @version 1.0 2016/3/16
  * @since 1.0
  */

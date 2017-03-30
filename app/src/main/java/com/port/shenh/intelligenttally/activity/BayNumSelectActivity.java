@@ -21,7 +21,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.port.shenh.intelligenttally.R;
 import com.port.shenh.intelligenttally.adapter.BayNumRecyclerViewAdapter;
 import com.port.shenh.intelligenttally.bean.ShipImage;
@@ -106,7 +105,7 @@ public class BayNumSelectActivity extends AppCompatActivity {
         viewHolder.shipImageListFunction = new ShipImageListFunction(this);
 
         viewHolder.ship_id = (String) getIntent().getSerializableExtra(StaticValue.IntentTag
-                .BAYNUM_SELECT_TAG);
+                .VOYAGE_TAG);
         Log.i(LOG_TAG + " initViewAdapter", "ship_d is " + viewHolder.ship_id);
     }
 
@@ -239,6 +238,15 @@ public class BayNumSelectActivity extends AppCompatActivity {
 
         Log.i(LOG_TAG + "doUpload", "doUpload is invoked");
 
+        if(!(viewHolder.ship_id.equals("196") || viewHolder.ship_id.equals("195"))){
+
+            Toast.makeText(this, "暂不支持“新海悦”以外的船舶", Toast
+                    .LENGTH_SHORT).show();
+
+            return;
+
+        }
+
         if (viewHolder.shipImageListFunction.onLoadShipImageListOfModifyFromDataBase(viewHolder
                 .ship_id).size() == 0) {
 
@@ -257,9 +265,11 @@ public class BayNumSelectActivity extends AppCompatActivity {
 
                 UploadShipImageList uploadShipImageList = new UploadShipImageList();
 
-                uploadShipImageList.setWorkEndListener(new WorkBack<String>() {
+                uploadShipImageList.setWorkEndListener(new WorkBack<Void>() {
                     @Override
-                    public void doEndWork(boolean state, String data) {
+                    public void doEndWork(boolean state, Void data) {
+
+                        Log.i(LOG_TAG + "doUpload", "state is " + state);
 
                         if (state) {
 
@@ -281,13 +291,10 @@ public class BayNumSelectActivity extends AppCompatActivity {
                 List<ShipImage> list = viewHolder.shipImageListFunction
                         .onLoadShipImageListOfModifyFromDataBase(viewHolder.ship_id);
 
-                Gson gson = new Gson();
-                shipImageList = gson.toJson(list);
-
                 Log.i(LOG_TAG + " doUpload", "shipImageList is " + shipImageList);
 
                 // 执行任务
-                uploadShipImageList.beginExecute(shipImageList);
+                uploadShipImageList.beginExecute(list);
 
 
             }

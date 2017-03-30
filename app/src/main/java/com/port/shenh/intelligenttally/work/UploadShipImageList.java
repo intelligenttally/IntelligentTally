@@ -3,10 +3,15 @@ package com.port.shenh.intelligenttally.work;
 
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.port.shenh.intelligenttally.bean.ShipImage;
 import com.port.shenh.intelligenttally.util.StaticValue;
+
 import org.json.JSONObject;
 import org.mobile.library.model.work.SimpleWorkModel;
+import org.mobile.library.network.factory.NetworkType;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,7 +27,7 @@ import java.util.Map;
  * @since 1.0
  */
 
-public class UploadShipImageList extends SimpleWorkModel<String, String> {
+public class UploadShipImageList extends SimpleWorkModel<Object, Void> {
 
     /**
      * 日志标签前缀
@@ -31,20 +36,31 @@ public class UploadShipImageList extends SimpleWorkModel<String, String> {
 
 
     @Override
-    protected void onFill(Map<String, String> dataMap, String... parameters) {
+    protected void onFill(Map<String, String> dataMap, Object... parameters) {
 
-        dataMap.put("ShipImageList", parameters[0]);
+        List<ShipImage> list = (List<ShipImage>) parameters[0];
+
+        Gson gson = new Gson();
+        dataMap.put("ShipImageList", gson.toJson(list));
+
         Log.i(LOG_TAG + " onFillRequestParameters", " ShipImageList is " + parameters[0]);
 
     }
 
     @Override
-    protected String onSuccessExtract(JSONObject jsonResult) throws Exception {
+    protected Void onSuccessExtract(JSONObject jsonResult) throws Exception {
         return null;
+    }
+
+    @Override
+    protected NetworkType onNetworkType() {
+        return NetworkType.POST;
     }
 
     @Override
     protected String onTaskUri() {
         return StaticValue.Url.HTTP_UPLOAD_SHIP_IMAGE_URL;
     }
+
+
 }

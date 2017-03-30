@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.port.shenh.intelligenttally.R;
 import com.port.shenh.intelligenttally.activity.BayActivity;
 import com.port.shenh.intelligenttally.adapter.BayGridAdapter;
@@ -45,7 +44,7 @@ public class BayMoveBottomFragment extends Fragment implements BottomBayCommonOp
     /**
      * 日志标签前缀
      */
-    private static final String LOG_TAG = "BayMoveBottomFragment";
+    private static final String LOG_TAG = "BayMoveBottomFragment.";
 
     /**
      * 数据加载工具
@@ -259,13 +258,28 @@ public class BayMoveBottomFragment extends Fragment implements BottomBayCommonOp
      */
     private void onUpload(){
 
+        Log.i(LOG_TAG + " onUpload", "Ship_id is " + dataShipImage.getShip_id());
+
+        if(!(dataShipImage.getShip_id().equals("196") || dataShipImage.getShip_id().equals("195"))){
+
+            Toast.makeText(getContext(), "暂不支持“新海悦”以外的船舶", Toast
+                    .LENGTH_SHORT).show();
+
+            return;
+
+        }
+
+
+
         startProgressDialog();
 
         UploadShipImageList uploadShipImageList = new UploadShipImageList();
 
-        uploadShipImageList.setWorkEndListener(new WorkBack<String>() {
+        uploadShipImageList.setWorkEndListener(new WorkBack<Void>() {
             @Override
-            public void doEndWork(boolean state, String data) {
+            public void doEndWork(boolean state, Void data) {
+
+                Log.i(LOG_TAG + "doUpload", "state is " + state);
 
                 if (state) {
 
@@ -287,13 +301,8 @@ public class BayMoveBottomFragment extends Fragment implements BottomBayCommonOp
         List<ShipImage> list = shipFunction
                 .onLoadShipImageListOfModifyFromDataBase(dataShipImage.getShip_id());
 
-        Gson gson = new Gson();
-        shipImageList = gson.toJson(list);
-
-        Log.i(LOG_TAG + " doUpload", "shipImageList is " + shipImageList);
-
         // 执行任务
-        uploadShipImageList.beginExecute(shipImageList);
+        uploadShipImageList.beginExecute(list);
     }
 
     /**

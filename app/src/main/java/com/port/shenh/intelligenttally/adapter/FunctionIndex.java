@@ -5,8 +5,11 @@ package com.port.shenh.intelligenttally.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+
 import com.port.shenh.intelligenttally.activity.VoyageDownloadActivity;
 import com.port.shenh.intelligenttally.activity.VoyageSelectActivity;
+import com.port.shenh.intelligenttally.activity.VoyageSelectActivity2;
+import com.port.shenh.intelligenttally.activity.VoyageSelectActivity3;
 
 /**
  * 主界面功能索引
@@ -39,11 +42,11 @@ public class FunctionIndex {
                 break;
             case 2:
                 // 个统计
-                intent = new Intent(context, VoyageSelectActivity.class);
+                intent = new Intent(context, VoyageSelectActivity2.class);
                 break;
             case 3:
                 // 全统计
-                intent = new Intent(context, VoyageSelectActivity.class);
+                intent = new Intent(context, VoyageSelectActivity3.class);
                 break;
 
         }

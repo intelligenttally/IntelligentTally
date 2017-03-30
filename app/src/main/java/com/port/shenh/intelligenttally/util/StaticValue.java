@@ -40,6 +40,11 @@ public interface StaticValue {
          * 最大贝号
          */
         String MAX_BAY_NUMBER_TAG = "max_bay_number_tag";
+
+        /**
+         * 进出口
+         */
+        String CODE_INOUT_TAG = "inout_tag";
     }
 
     /**
@@ -59,7 +64,8 @@ public interface StaticValue {
         /**
          * 获取航次（在港）
          */
-        String HTTP_VOYAGE_LIST_OF_IN_PORT_URL = HTTP_IP_URL + "M_Znlh/Voyage/GetVoyageOfInPort.aspx";
+        String HTTP_VOYAGE_LIST_OF_IN_PORT_URL = HTTP_IP_URL + "M_Znlh/Voyage/GetVoyageOfInPort" +
+                ".aspx";
 
 
         /**
@@ -81,6 +87,24 @@ public interface StaticValue {
          * 上传船图数据（贝）
          */
         String HTTP_UPLOAD_SHIP_IMAGE_URL = HTTP_IP_URL + "M_Znlh/Ship/UploadShipImages.aspx";
+
+        /**
+         * 获取全统计数据
+         */
+        String HTTP_FULL_STATISTICS_URL = HTTP_IP_URL + "M_Znlh/Statistics/GetFullStatisticsOfVoyage.aspx";
+
+        /**
+         * 获取个统计理货员数据
+         */
+        String HTTP_SINGLE_STATISTICS_TALLY_URL = HTTP_IP_URL +
+                        "M_Znlh/Statistics/GetSingleStatisticsTallyOfVoyage.aspx";
+
+        /**
+         * 获取个统计操作员数据
+         */
+        String HTTP_SINGLE_STATISTICS_OPERATE_URL = HTTP_IP_URL +
+                "M_Znlh/Statistics/GetSingleStatisticsOperateOfVoyage.aspx";
+
     }
 
 }

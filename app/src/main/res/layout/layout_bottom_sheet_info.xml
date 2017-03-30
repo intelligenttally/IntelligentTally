@@ -59,7 +59,8 @@
         <TextView android:text="铅封号："/>
 
         <TextView
-            android:id="@+id/layout_bottom_sheet_info_sealno_textView"/>
+            android:id="@+id/layout_bottom_sheet_info_sealno_textView"
+            android:layout_span="2"/>
 
     </TableRow>
 
