@@ -34,15 +34,6 @@ public class SingleStatisticsOperateFragment extends Fragment {
      */
     private static final String LOG_TAG = "SingleStatisticsOperateFragment.";
 
-    /**
-     * 一次性加载的数据行数
-     */
-    private static final int ROW_COUNT = 30;
-
-    /**
-     * 加载更多数据的触发剩余行数
-     */
-    private static final int LAST_ROW_COUNT = 15;
 
     /**
      * 控件集
@@ -59,26 +50,17 @@ public class SingleStatisticsOperateFragment extends Fragment {
          */
         public volatile DefaultWorkModel beforeLoadWork = null;
 
-        /**
-         * 表示是否还有更多数据
-         */
-        public volatile boolean hasMoreData = false;
-
-        /**
-         * 表示是否正在加载
-         */
-        public volatile boolean loading = false;
-
-        /**
-         * 航次
-         */
-        public String ship_id = null;
-
-        /**
-         * 进出口编码
-         */
-        public String code_inout = null;
     }
+
+    /**
+     * 航次
+     */
+    public String ship_id = null;
+
+    /**
+     * 进出口编码
+     */
+    public String code_inout = null;
 
     /**
      * 控件集对象
@@ -151,25 +133,6 @@ public class SingleStatisticsOperateFragment extends Fragment {
         // 设置列表适配器
         recyclerView.setAdapter(viewHolder.recyclerViewAdapter);
 
-        Log.i(LOG_TAG + "initListView", "initListView2 is invoked");
-
-        // 设置加载更多
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-
-                int lastCount = recyclerView.getAdapter().getItemCount() - recyclerView
-                        .getChildAdapterPosition(recyclerView.getChildAt(0)) - recyclerView
-                        .getChildCount();
-                Log.i(LOG_TAG + "initListView", "onScrolled lastCount is " + lastCount);
-                if (dy > 0 && !viewHolder.loading && viewHolder.hasMoreData && lastCount <=
-                        LAST_ROW_COUNT) {
-                    // 有必要加载更多
-                    Log.i(LOG_TAG + "initListView", "onScrolled now load more");
-                    loadData(false);
-                }
-            }
-        });
     }
 
     /**
@@ -208,30 +171,13 @@ public class SingleStatisticsOperateFragment extends Fragment {
                     // 插入新数据
                     viewHolder.recyclerViewAdapter.addData(viewHolder.recyclerViewAdapter
                             .getItemCount(), data);
-
-                    if (data.size() == ROW_COUNT) {
-                        // 取到了预期条数的数据
-                        viewHolder.hasMoreData = true;
-                    }
                 }
-
-                // 改变请求状态
-                viewHolder.loading = false;
             }
         });
 
-        // 改变请求状态
-        viewHolder.loading = true;
-        // 初始化更多预期
-        viewHolder.hasMoreData = false;
-
         // 执行任务
-        pullSingleStatisticsOpearte.beginExecute(String.valueOf(viewHolder.recyclerViewAdapter
-                .getItemCount()), String.valueOf(ROW_COUNT), viewHolder.ship_id, viewHolder
+        pullSingleStatisticsOpearte.beginExecute(this.ship_id, this
                 .code_inout);
-
-        // 保存新的加载任务对象
-        viewHolder.beforeLoadWork = pullSingleStatisticsOpearte;
     }
 
     /**
@@ -240,7 +186,7 @@ public class SingleStatisticsOperateFragment extends Fragment {
      * @param ship_id 贝数据
      */
     public void setShipId(String ship_id) {
-        viewHolder.ship_id = ship_id;
+        this.ship_id = ship_id;
     }
 
     /**
@@ -249,7 +195,7 @@ public class SingleStatisticsOperateFragment extends Fragment {
      * @param code_inout 贝数据
      */
     public void setCodeInout(String code_inout) {
-        viewHolder.code_inout = code_inout;
+        this.code_inout = code_inout;
     }
 
 

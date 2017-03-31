@@ -13,7 +13,7 @@ public class SingleStatistics {
     /**
      * 姓名
      */
-    private int name = 0;
+    private String name = null;
 
     /**
      * 20空
@@ -45,11 +45,11 @@ public class SingleStatistics {
      */
     private int F_other = 0;
 
-    public int getName() {
+    public String getName() {
         return name;
     }
 
-    public void setName(int name) {
+    public void setName(String name) {
         this.name = name;
     }
 

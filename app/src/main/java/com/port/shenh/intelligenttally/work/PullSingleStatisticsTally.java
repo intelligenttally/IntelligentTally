@@ -31,14 +31,10 @@ public class PullSingleStatisticsTally extends SimpleWorkModel<String, List<Sing
 
     @Override
     protected void onFill(Map<String, String> dataMap, String... parameters) {
-        dataMap.put("StartRow", parameters[0]);
-        Log.i(LOG_TAG + " onFillRequestParameters", " StartRow is " + parameters[0]);
-        dataMap.put("Count", parameters[1]);
-        Log.i(LOG_TAG + " onFillRequestParameters", " Count is " + parameters[1]);
-        dataMap.put("Ship_Id", parameters[2]);
-        Log.i(LOG_TAG + "onFillRequestParameters", " Ship_Id is " + parameters[2]);
-        dataMap.put("CodeInout", parameters[3]);
-        Log.i(LOG_TAG + "onFillRequestParameters", " CodeInout is " + parameters[3]);
+        dataMap.put("Ship_Id", parameters[0]);
+        Log.i(LOG_TAG + "onFillRequestParameters", " Ship_Id is " + parameters[0]);
+        dataMap.put("CodeInout", parameters[1]);
+        Log.i(LOG_TAG + "onFillRequestParameters", " CodeInout is " + parameters[1]);
 
     }
 
@@ -54,20 +50,20 @@ public class PullSingleStatisticsTally extends SimpleWorkModel<String, List<Sing
 
         for (int i = 0; i < jsonArray.length(); i++) {
 
-            JSONArray jsonRow = jsonArray.getJSONArray(i);
-            Log.i(LOG_TAG + "onSuccessExtract", " singleStatisticsList jsonRow length() is " + jsonRow.length());
+            JSONObject jsonObject = jsonArray.getJSONObject(i);
+            Log.i(LOG_TAG + "onSuccessExtract", " singleStatisticsList jsonObject length() is " + jsonObject.length());
 
-            if (jsonRow.length() > 6) {
+            if (jsonObject.length() > 6) {
                 // 一条航次数据
                 SingleStatistics singleStatistics = new SingleStatistics();
 
-                singleStatistics.setName(jsonRow.getInt(0));
-                singleStatistics.setE_20(jsonRow.getInt(1));
-                singleStatistics.setF_20(jsonRow.getInt(2));
-                singleStatistics.setE_40(jsonRow.getInt(3));
-                singleStatistics.setF_40(jsonRow.getInt(4));
-                singleStatistics.setE_other(jsonRow.getInt(5));
-                singleStatistics.setF_other(jsonRow.getInt(6));
+                singleStatistics.setName(jsonObject.getString("Name"));
+                singleStatistics.setE_20(jsonObject.getInt("E_20"));
+                singleStatistics.setF_20(jsonObject.getInt("F_20"));
+                singleStatistics.setE_40(jsonObject.getInt("E_40"));
+                singleStatistics.setF_40(jsonObject.getInt("F_40"));
+                singleStatistics.setE_other(jsonObject.getInt("E_other"));
+                singleStatistics.setF_other(jsonObject.getInt("F_other"));
 
 
 

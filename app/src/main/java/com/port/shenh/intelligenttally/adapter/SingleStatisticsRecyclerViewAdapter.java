@@ -90,7 +90,7 @@ public class SingleStatisticsRecyclerViewAdapter extends RecyclerView.Adapter<Si
     public void onBindViewHolder(SingleStatisticsViewHolder holder, int position) {
 
         SingleStatistics singleStatistics = this.dataList.get(position);
-        holder.nameTextView.setText(Integer.toString(singleStatistics.getName()));
+        holder.nameTextView.setText(singleStatistics.getName());
         holder.E_20_TextView.setText(Integer.toString(singleStatistics.getE_20()));
         holder.F_20_TextView.setText(Integer.toString(singleStatistics.getF_20()));
         holder.E_40_TextView.setText(Integer.toString(singleStatistics.getE_40()));

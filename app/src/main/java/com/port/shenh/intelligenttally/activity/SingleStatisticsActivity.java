@@ -9,6 +9,7 @@ import android.util.Log;
 import com.port.shenh.intelligenttally.R;
 import com.port.shenh.intelligenttally.fragment.SingleStatisticsOperateFragment;
 import com.port.shenh.intelligenttally.fragment.SingleStatisticsTallyFragment;
+import com.port.shenh.intelligenttally.util.StaticValue;
 
 import org.mobile.library.common.function.ToolbarInitialize;
 
@@ -28,6 +29,16 @@ public class SingleStatisticsActivity extends AppCompatActivity {
      * 个统计操作员布局
      */
     private SingleStatisticsOperateFragment singleStatisticsOperateFragment;
+
+    /**
+     * 航次
+     */
+    String ship_id = null;
+
+    /**
+     * 进出口编码
+     */
+    String code_inout = null;
 
     /**
      * 下拉刷新控件
@@ -55,8 +66,19 @@ public class SingleStatisticsActivity extends AppCompatActivity {
      */
     private void initViewHolder() {
 
+        ship_id = (String) getIntent().getSerializableExtra(StaticValue.IntentTag.VOYAGE_TAG);
+
+        code_inout = (String) getIntent().getSerializableExtra(StaticValue.IntentTag.CODE_INOUT_TAG);
+
+        Log.i(LOG_TAG + "initViewHolder", "ship_id is " + ship_id);
+        Log.i(LOG_TAG + "initViewHolder", "code_inout is " + code_inout);
+
         singleStatisticsTallyFragment = new SingleStatisticsTallyFragment();
+        singleStatisticsTallyFragment.setShipId(ship_id);
+        singleStatisticsTallyFragment.setCodeInout(code_inout);
         singleStatisticsOperateFragment = new SingleStatisticsOperateFragment();
+        singleStatisticsOperateFragment.setShipId(ship_id);
+        singleStatisticsOperateFragment.setCodeInout(code_inout);
 
         refreshLayout = (SwipeRefreshLayout) findViewById(R.id
                 .activity_statistics_single_swipeRefreshLayout);
@@ -103,25 +125,28 @@ public class SingleStatisticsActivity extends AppCompatActivity {
     private void RefreshView() {
 
         Log.i(LOG_TAG + "RefreshView", "RefreshView is invoked");
-        //
-        //        getSupportFragmentManager().beginTransaction().remove
-        // (singleStatisticsTallyFragment)
-        //                .commit();
-        //        getSupportFragmentManager().beginTransaction().remove
-        // (singleStatisticsOperateFragment)
-        //                .commit();
-        //
-        //        getSupportFragmentManager().beginTransaction().replace(R.id
-        // .fragment_statistics_single_tally,
-        //                singleStatisticsTallyFragment).commit();
-        //        getSupportFragmentManager().beginTransaction().replace(R.id
-        //                .fragment_statistics_single_operate, singleStatisticsOperateFragment)
-        // .commit();
 
-        getSupportFragmentManager().beginTransaction().hide(singleStatisticsTallyFragment).show
-                (singleStatisticsTallyFragment).commit();
-        getSupportFragmentManager().beginTransaction().hide(singleStatisticsOperateFragment).show
-                (singleStatisticsOperateFragment).commit();
+        getSupportFragmentManager().beginTransaction().remove(singleStatisticsTallyFragment)
+                .commit();
+        getSupportFragmentManager().beginTransaction().remove(singleStatisticsOperateFragment)
+                .commit();
+
+        singleStatisticsTallyFragment = new SingleStatisticsTallyFragment();
+        singleStatisticsTallyFragment.setShipId(ship_id);
+        singleStatisticsTallyFragment.setCodeInout(code_inout);
+        singleStatisticsOperateFragment = new SingleStatisticsOperateFragment();
+        singleStatisticsOperateFragment.setShipId(ship_id);
+        singleStatisticsOperateFragment.setCodeInout(code_inout);
+
+        getSupportFragmentManager().beginTransaction().add(R.id
+                .fragment_statistics_single_tally, singleStatisticsTallyFragment).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id
+                .fragment_statistics_single_operate, singleStatisticsOperateFragment).commit();
+
+//        getSupportFragmentManager().beginTransaction().hide(singleStatisticsTallyFragment).show
+//                (singleStatisticsTallyFragment).commit();
+//        getSupportFragmentManager().beginTransaction().hide(singleStatisticsOperateFragment).show
+//                (singleStatisticsOperateFragment).commit();
 
         // 停止动画
         refreshLayout.setRefreshing(false);

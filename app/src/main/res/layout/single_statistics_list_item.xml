@@ -25,44 +25,51 @@
             <TableRow android:layout_marginTop="@dimen/layout_default_spacing">
 
                 <TextView
-                    android:text="张三"
                     android:id="@+id/single_statistics_list_item_name_textView"
+                    android:width="@dimen/table_col_width"
+                    android:text="张三"
                     android:textAlignment="center"
                     android:textStyle="bold"/>
 
                 <TextView
-                    android:text="60"
                     android:id="@+id/single_statistics_list_item_E_20_textView"
+                    android:width="@dimen/default_table_col_width"
+                    android:text="60"
                     android:textAlignment="center"
                     android:textStyle="bold"/>
 
                 <TextView
-                    android:text="60"
                     android:id="@+id/single_statistics_list_item_F_20_textView"
+                    android:width="@dimen/default_table_col_width"
+                    android:text="60"
                     android:textAlignment="center"
                     android:textStyle="bold"/>
 
                 <TextView
-                    android:text="60"
                     android:id="@+id/single_statistics_list_item_E_40_textView"
+                    android:width="@dimen/default_table_col_width"
+                    android:text="60"
                     android:textAlignment="center"
                     android:textStyle="bold"/>
 
                 <TextView
-                    android:text="60"
                     android:id="@+id/single_statistics_list_item_F_40_textView"
+                    android:width="@dimen/default_table_col_width"
+                    android:text="60"
                     android:textAlignment="center"
                     android:textStyle="bold"/>
 
                 <TextView
-                    android:text="60"
                     android:id="@+id/single_statistics_list_item_E_other_textView"
+                    android:width="@dimen/default_table_col_width"
+                    android:text="60"
                     android:textAlignment="center"
                     android:textStyle="bold"/>
 
                 <TextView
-                    android:text="60"
                     android:id="@+id/single_statistics_list_item_F_other_textView"
+                    android:width="@dimen/default_table_col_width"
+                    android:text="60"
                     android:textAlignment="center"
                     android:textStyle="bold"/>
 
