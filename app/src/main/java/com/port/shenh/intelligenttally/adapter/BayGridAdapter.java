@@ -126,6 +126,11 @@ public class BayGridAdapter {
     private int currentDownGridIndexMaxRow = 0;
 
     /**
+     * 当前有效的船舱最小行
+     */
+    private int currentDownGridIndexMinRow = 0;
+
+    /**
      * 当前有效的船舱最大列
      */
     private int currentDownGridIndexMaxColumn = 0;
@@ -261,6 +266,7 @@ public class BayGridAdapter {
         currentUpGridIndexMinRow = bay.getMinScreenRow_board();
         currentUpGridIndexMaxColumn = bay.getSumScreenCol_board();
         currentDownGridIndexMaxRow = bay.getSumScreenRow_cabin();
+        currentDownGridIndexMinRow = bay.getMinScreenRow_cabin();
         currentDownGridIndexMaxColumn = bay.getSumScreenCol_cabin();
 
         dataViewHolderIndexOffset = currentUpGridIndexMaxRow - currentUpGridIndexMinRow +

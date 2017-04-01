@@ -145,6 +145,11 @@ public class BayMoveBottomFragment extends Fragment implements BottomBayCommonOp
         bayNumberEditText = (TextInputEditText) rootView.findViewById(R.id
                 .fragment_bottom_sheet_move_editText);
 
+        bayNumberEditText.setFocusable(true);
+        bayNumberEditText.setFocusableInTouchMode(true);
+        bayNumberEditText.requestFocus();
+        bayNumberEditText.requestFocusFromTouch();
+
         bayNumberEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -194,6 +199,7 @@ public class BayMoveBottomFragment extends Fragment implements BottomBayCommonOp
      * 点击取消事件
      */
     private void onMoveCancel() {
+        bayNumberEditText.getText().clear();
         InputMethodController.CloseInputMethod(getActivity());
         onMoveListener.onInvoke();
     }
@@ -214,9 +220,11 @@ public class BayMoveBottomFragment extends Fragment implements BottomBayCommonOp
             onMoveListener.onInvoke();
             activity.loadBay();
             onUpload();
+            bayNumberEditText.getText().clear();
         } else {
             bayNumberEditText.setError(result);
         }
+
     }
 
     /**
