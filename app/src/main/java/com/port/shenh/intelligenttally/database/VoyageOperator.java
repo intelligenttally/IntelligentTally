@@ -66,12 +66,13 @@ public class VoyageOperator extends BaseOperator<Voyage> {
                         "%s TEXT," +
                         "%s TEXT," +
                         "%s TEXT," +
+                        "%s TEXT," +
                         "%s TEXT)", tableName, CommonConst._ID,
 
                 TableConst.Voyage.SHIP_ID, TableConst.Voyage.V_ID, TableConst.Voyage
                         .BERTHNO, TableConst.Voyage.VOYAGE, TableConst.Voyage
                         .CHI_VESSEL, TableConst.Voyage.CODEINOUT, TableConst.Voyage.TRADE,
-                TableConst.Voyage.WHEEL);
+                TableConst.Voyage.WHEEL, TableConst.Voyage.DOWNLOADTIME);
 
 
         Log.i(LOG_TAG + "onCreateTable", "sql is " + createTableSql);
@@ -93,6 +94,7 @@ public class VoyageOperator extends BaseOperator<Voyage> {
         cv.put(TableConst.Voyage.CODEINOUT, data.getCodeInOut());
         cv.put(TableConst.Voyage.TRADE, data.getTrade());
         cv.put(TableConst.Voyage.WHEEL, data.getWheel());
+        cv.put(TableConst.Voyage.DOWNLOADTIME, data.getDownloadTime());
 
         return cv;
     }
@@ -114,6 +116,7 @@ public class VoyageOperator extends BaseOperator<Voyage> {
         int codeinout = cursor.getColumnIndex(TableConst.Voyage.CODEINOUT);
         int trade = cursor.getColumnIndex(TableConst.Voyage.TRADE);
         int wheel = cursor.getColumnIndex(TableConst.Voyage.WHEEL);
+        int downloadtime = cursor.getColumnIndex(TableConst.Voyage.DOWNLOADTIME);
 
         // 数据填充
         List<Voyage> list = new ArrayList<>();
@@ -132,6 +135,7 @@ public class VoyageOperator extends BaseOperator<Voyage> {
             data.setCodeInOut(cursor.getString(codeinout));
             data.setTrade(cursor.getString(trade));
             data.setWheel(cursor.getString(wheel));
+            data.setDownloadTime(cursor.getString(downloadtime));
 
             list.add(data);
         }

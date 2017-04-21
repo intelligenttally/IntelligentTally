@@ -13,6 +13,8 @@
     <string name="baynum">贝号</string>
     <string name="last_bay">上一贝</string>
     <string name="next_bay">下一贝</string>
+    <string name="up_bay">放大贝</string>
+    <string name="down_bay">缩小贝</string>
     <string name="refresh_bay">刷新</string>
 
     <string name="data_loading">数据下载中...</string>
@@ -31,4 +33,5 @@
     <string name="exist_container">已存在箱子</string>
     <string name="not_match_container">箱子尺寸不匹配</string>
     <string name="name_wait_move_bay_text">待移动贝位信息</string>
+    <string name="bay_num_select">贝号选择</string>
 </resources>

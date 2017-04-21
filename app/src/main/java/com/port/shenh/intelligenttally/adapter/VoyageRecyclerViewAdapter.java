@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 
 import com.port.shenh.intelligenttally.R;
 import com.port.shenh.intelligenttally.bean.Voyage;
-import com.port.shenh.intelligenttally.holder.BayNumItemViewHolder;
 import com.port.shenh.intelligenttally.holder.VoyageItemViewHolder;
 
 import org.mobile.library.model.operate.OnItemClickListenerForRecyclerViewItem;
@@ -156,6 +155,9 @@ public class VoyageRecyclerViewAdapter extends RecyclerView.Adapter<VoyageItemVi
         holder.inOutTextView.setText(voyage.getCodeInOut().equals("1") == true ? "出" : "进");
         holder.voyageTextView.setText(voyage.getVoyage());
         holder.chi_VesselTextView.setText(voyage.getChi_vessel());
+
+        String dstr=voyage.getDownloadTime();
+        holder.downloadedTextView.setText(dstr.substring(5, 10));
 
         int color = 0;
         if (selectedItems.get(position, false)) {

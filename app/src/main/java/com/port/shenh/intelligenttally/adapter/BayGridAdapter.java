@@ -3,13 +3,17 @@ package com.port.shenh.intelligenttally.adapter;
  * Created by 超悟空 on 2016/12/10.
  */
 
+import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayout;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.port.shenh.intelligenttally.R;
@@ -29,6 +33,11 @@ import java.util.Map;
  * @since 1.0
  */
 public class BayGridAdapter {
+
+    /**
+     * 日志标签前缀
+     */
+    private static final String LOG_TAG = "BayGridAdapter.";
 
     /**
      * 甲板船图前缀
@@ -151,6 +160,15 @@ public class BayGridAdapter {
     private int currentColorIndex = 0;
 
     /**
+     * 屏幕宽度
+     */
+    private int screenWidth = 0;
+    /**
+     * 屏幕高度
+     */
+    private int screenheight = 0;
+
+    /**
      * 构造函数
      *
      * @param activity 引用的界面，用于获取表格控件
@@ -181,6 +199,18 @@ public class BayGridAdapter {
 
         defaultTextColor = typedArray.getColor(0, Color.DKGRAY);
         typedArray.recycle();
+
+
+        WindowManager wm = (WindowManager) activity.getApplication().getSystemService(Context
+                .WINDOW_SERVICE);
+
+        DisplayMetrics metric = new DisplayMetrics();
+        wm.getDefaultDisplay().getMetrics(metric);
+        screenWidth = metric.widthPixels;     // 屏幕宽度（像素）
+        screenheight = metric.heightPixels;   // 屏幕高度（像素）
+
+        Log.i(LOG_TAG + "BayGridAdapter", "width is" + screenWidth + "  " + "height is" +
+                screenheight);
     }
 
     /**
@@ -284,7 +314,9 @@ public class BayGridAdapter {
         }
 
         // 设置表格大小
-        downGridLayout.setRowCount(currentDownGridIndexMaxRow + 1);
+        //        downGridLayout.setRowCount(currentDownGridIndexMaxRow -
+        // currentDownGridIndexMinRow + 2);
+        downGridLayout.setRowCount(currentDownGridIndexMaxRow - 1);
         downGridLayout.setColumnCount(currentDownGridIndexMaxColumn);
         upGridLayout.setRowCount(currentUpGridIndexMaxRow - currentUpGridIndexMinRow + 2);
         upGridLayout.setColumnCount(currentUpGridIndexMaxColumn);
@@ -457,6 +489,15 @@ public class BayGridAdapter {
             GridLayout.LayoutParams layoutParams = (GridLayout.LayoutParams) view.getLayoutParams();
             layoutParams.rowSpec = UNDEFINED_SPEC;
             layoutParams.columnSpec = UNDEFINED_SPEC;
+            layoutParams.width = (screenWidth - 76 - (currentUpGridIndexMaxColumn + 1) * 2) /
+                    (currentUpGridIndexMaxColumn + 1);
+            layoutParams.height = layoutParams.width;
+            layoutParams.setMargins(2, 2, 2, 2);
+
+            Log.i(LOG_TAG + "onResetViewLayoutParams", "layoutParams.width is" + layoutParams
+                    .width + "  " + "layoutParams.height is" + layoutParams.height);
+
+
         }
     }
 

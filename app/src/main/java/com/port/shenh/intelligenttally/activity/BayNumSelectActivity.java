@@ -181,9 +181,6 @@ public class BayNumSelectActivity extends AppCompatActivity {
                 dataList = new ArrayList<>();
             }
 
-            viewHolder.shipImageListFunction.onLoadCodeUnloadPortSubListFromDataBase(viewHolder
-                    .ship_id);
-
             Log.i(LOG_TAG + "loadData", "dataList count is " + dataList.size());
 
             viewHolder.recyclerViewAdapter = new BayNumRecyclerViewAdapter(dataList);
@@ -238,14 +235,14 @@ public class BayNumSelectActivity extends AppCompatActivity {
 
         Log.i(LOG_TAG + "doUpload", "doUpload is invoked");
 
-        if(!(viewHolder.ship_id.equals("196") || viewHolder.ship_id.equals("195"))){
-
-            Toast.makeText(this, "暂不支持“新海悦”以外的船舶", Toast
-                    .LENGTH_SHORT).show();
-
-            return;
-
-        }
+//        if(!(viewHolder.ship_id.equals("196") || viewHolder.ship_id.equals("195"))){
+//
+//            Toast.makeText(this, "暂不支持“新海悦”以外的船舶", Toast
+//                    .LENGTH_SHORT).show();
+//
+//            return;
+//
+//        }
 
         if (viewHolder.shipImageListFunction.onLoadShipImageListOfModifyFromDataBase(viewHolder
                 .ship_id).size() == 0) {

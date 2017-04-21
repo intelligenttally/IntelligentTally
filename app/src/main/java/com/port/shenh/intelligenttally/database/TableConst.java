@@ -61,6 +61,11 @@ public interface TableConst {
          * 国外轮
          */
         String WHEEL = "wheel";
+
+        /**
+         * 下载时间
+         */
+        String DOWNLOADTIME = "downloadTime";
     }
 
     /**

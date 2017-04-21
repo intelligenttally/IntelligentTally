@@ -63,6 +63,12 @@ public class Voyage {
     private boolean downloaded = false;
 
     /**
+     * 下载时间
+     */
+    private String downloadTime = null;
+
+
+    /**
      * 获取编码ID
      *
      * @return 编码ID
@@ -241,5 +247,23 @@ public class Voyage {
      */
     public void setDownloaded(boolean downloaded) {
         this.downloaded = downloaded;
+    }
+
+    /**
+     * 获取下载时间
+     *
+     * @return 下载时间
+     */
+    public String getDownloadTime() {
+        return downloadTime;
+    }
+
+    /**
+     * 设置下载时间
+     *
+     * @param downloadTime 下载时间
+     */
+    public void setDownloadTime(String downloadTime) {
+        this.downloadTime = downloadTime;
     }
 }

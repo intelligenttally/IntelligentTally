@@ -4,11 +4,15 @@ package com.port.shenh.intelligenttally.work;
  */
 
 import android.util.Log;
+
 import com.port.shenh.intelligenttally.bean.Voyage;
 import com.port.shenh.intelligenttally.util.StaticValue;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.mobile.library.model.work.SimpleWorkModel;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +51,9 @@ public class PullVoyageListOfDownloaded extends SimpleWorkModel<String, List<Voy
         // 新建航次列表
         voyageList = new ArrayList<>();
 
+        SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
+        String date = sDateFormat.format(new java.util.Date());
+
         for (int i = 0; i < jsonArray.length(); i++) {
 
             JSONArray jsonRow = jsonArray.getJSONArray(i);
@@ -64,6 +71,7 @@ public class PullVoyageListOfDownloaded extends SimpleWorkModel<String, List<Voy
                 voyage.setCodeInOut(jsonRow.getString(5));
                 voyage.setTrade(jsonRow.getString(6));
                 voyage.setWheel(jsonRow.getString(7));
+                voyage.setDownloadTime(date);
 
                 // 添加到列表
                 voyageList.add(voyage);

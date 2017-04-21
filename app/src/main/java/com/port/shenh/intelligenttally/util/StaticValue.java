@@ -54,7 +54,7 @@ public interface StaticValue {
         /**
          * IP
          */
-        String HTTP_IP_URL = "http://218.92.115.55/";
+        String HTTP_IP_URL = "http://www.boea.cn/";
 
         /**
          * 登录
