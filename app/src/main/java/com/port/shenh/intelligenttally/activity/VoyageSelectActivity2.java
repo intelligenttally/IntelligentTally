@@ -145,7 +145,7 @@ public class VoyageSelectActivity2 extends AppCompatActivity {
                     viewHolder.recyclerViewAdapter.switchSelectedState(voyageItemViewHolder);
 
                     // 跳转意图
-                    Intent intent = new Intent(VoyageSelectActivity2.this, SingleStatisticsActivity.class);
+                    Intent intent = new Intent(VoyageSelectActivity2.this, GeneralSingleStatisticsActivity.class);
                     intent.putExtra(StaticValue.IntentTag.VOYAGE_TAG, voyage.getShip_id());
                     intent.putExtra(StaticValue.IntentTag.CODE_INOUT_TAG, voyage.getCodeInOut());
                     // 跳转到详情页面

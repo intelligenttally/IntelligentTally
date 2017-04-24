@@ -13,7 +13,7 @@ import com.port.shenh.intelligenttally.util.StaticValue;
 
 import org.mobile.library.common.function.ToolbarInitialize;
 
-public class SingleStatisticsActivity extends AppCompatActivity {
+public class GeneralSingleStatisticsActivity extends AppCompatActivity {
 
     /**
      * 日志标签前缀
@@ -53,7 +53,7 @@ public class SingleStatisticsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_statistics_single);
+        setContentView(R.layout.activity_general_single_statistics);
 
         // 初始化控件引用
         initViewHolder();

@@ -15,6 +15,17 @@
         <item>@mipmap/all</item>
     </array>
 
+
+    <string-array name="full_statistics_title">
+        <item>@string/title_general</item>
+        <item>@string/title_moved</item>
+    </string-array>
+
+    <array name="full_statistics_image">
+        <item>@mipmap/general</item>
+        <item>@mipmap/moved</item>
+    </array>
+
     <array name="box_text_colors">
         <item>@color/orange</item>
         <item>@color/mediumseagreen</item>

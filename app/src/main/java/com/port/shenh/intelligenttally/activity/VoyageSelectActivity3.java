@@ -46,7 +46,7 @@ public class VoyageSelectActivity3 extends AppCompatActivity {
     private class LocalViewHolder {
 
         /**
-         * 堆存列表数据适配器
+         * 航次列表数据适配器
          */
         public VoyageRecyclerViewAdapter recyclerViewAdapter = null;
 
@@ -145,7 +145,7 @@ public class VoyageSelectActivity3 extends AppCompatActivity {
                     viewHolder.recyclerViewAdapter.switchSelectedState(voyageItemViewHolder);
 
                     // 跳转意图
-                    Intent intent = new Intent(VoyageSelectActivity3.this, FullStatisticsActivity.class);
+                    Intent intent = new Intent(VoyageSelectActivity3.this, GeneralFullStatisticsActivity.class);
                     intent.putExtra(StaticValue.IntentTag.VOYAGE_TAG, voyage.getShip_id());
                     intent.putExtra(StaticValue.IntentTag.CODE_INOUT_TAG, voyage.getCodeInOut());
                     // 跳转到详情页面

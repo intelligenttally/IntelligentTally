@@ -1,23 +1,37 @@
 package com.port.shenh.intelligenttally.activity;
 
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 
 import com.port.shenh.intelligenttally.R;
-import com.port.shenh.intelligenttally.bean.FullStatistics;
-import com.port.shenh.intelligenttally.holder.FullStatisticsViewHolder;
-import com.port.shenh.intelligenttally.util.StaticValue;
-import com.port.shenh.intelligenttally.work.PullFullStatistics;
 
 import org.mobile.library.common.function.ToolbarInitialize;
-import org.mobile.library.model.work.DefaultWorkModel;
-import org.mobile.library.model.work.WorkBack;
 
-public class FullStatisticsActivity extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by shenh on 2017/04/24.
+ */
+
+
+/**
+ * 全统计列表
+ *
+ * @author shenh
+ * @version 1.0 2017/04/24
+ * @since 1.0
+ */
+public class FullStatisticsActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     /**
      * 日志标签前缀
@@ -25,180 +39,135 @@ public class FullStatisticsActivity extends AppCompatActivity {
     private static final String LOG_TAG = "FullStatisticsActivity.";
 
     /**
-     * 航次
+     * 功能标题的取值标签，用于数据适配器中
      */
-    String ship_id = null;
+    private static final String FUNCTION_TITLE = "function_title";
 
     /**
-     * 进出口编码
+     * 功能图标取值图标
      */
-    String code_inout = null;
+    private static final String FUNCTION_IMAGE = "function_image";
 
     /**
-     * 下拉刷新控件
+     * 列表使用的数据适配器
      */
-    public SwipeRefreshLayout refreshLayout = null;
+    private SimpleAdapter adapter = null;
 
     /**
-     * 上一个执行的加载任务
+     * 数据适配器的元数据
      */
-    public volatile DefaultWorkModel beforeLoadWork = null;
-
-    /**
-     * 全统计ViewHolder
-     */
-    FullStatisticsViewHolder viewHolder = null;
-
+    private List<Map<String, Object>> adapterDataList = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_statistics_full);
 
-        // 初始化控件引用
-        initViewHolder();
-        // 加载界面
+        setContentView(R.layout.activity_full_statistics);
+
+        // 初始化控件
         initView();
-    }
 
-    /**
-     * 初始化空间引用
-     */
-    private void initViewHolder() {
-
-        // 创建Item根布局
-        View view = getWindow().getDecorView();
-
-        viewHolder = new FullStatisticsViewHolder(view);
-
-        ship_id = (String) getIntent().getSerializableExtra(StaticValue.IntentTag.VOYAGE_TAG);
-
-        code_inout = (String) getIntent().getSerializableExtra(StaticValue.IntentTag.CODE_INOUT_TAG);
-
-        refreshLayout = (SwipeRefreshLayout) findViewById(R.id
-                .activity_statistics_full_swipeRefreshLayout);
+        // 初始化功能列表
+        initListView();
 
     }
 
     /**
      * 初始化控件
      */
-    private void initView() {
+    private void initView(){
+
         // 初始化Toolbar
         ToolbarInitialize.initToolbar(this, R.string.full_statistics, true, true);
 
-        // 初始化数据
-        loadData(false);
-        //初始化刷新控件
-        initSwipeRefresh();
+        // 初始化功能列表
+        initListView();
     }
 
 
     /**
-     * 初始化刷新控件
-     */
-    private void initSwipeRefresh() {
-
-        TypedArray typedArray = obtainStyledAttributes(new int[]{R.attr.colorPrimary});
-        refreshLayout.setColorSchemeResources(typedArray.getResourceId(0, 0));
-        typedArray.recycle();
-
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                initData();
-            }
-        });
-    }
-
-    /**
-     * 初始化数据
-     */
-    private void initData() {
-        loadData(true);
-    }
-
-    /**
-     * 加载数据
+     * 初始化功能表格布局
      *
-     * @param reload 表示是否为全新加载，true表示为全新加载
      */
-    private void loadData(boolean reload) {
-        Log.i(LOG_TAG + "loadData", "reload tag is " + reload);
+    private void initListView() {
 
-        if (reload) {
-            // 中断上次请求
-            if (beforeLoadWork != null) {
-                beforeLoadWork.cancel();
-            }
+        // 片段中的列表布局
+        ListView listView = (ListView) findViewById(R.id.activity_full_statistics_list_view);
+
+        // 列表使用的数据适配器
+        adapter = new SimpleAdapter(this, getFunctionTitle(), R.layout
+                .full_statistics_item, new String[]{FUNCTION_TITLE , FUNCTION_IMAGE}, new
+                int[]{R.id.full_statistics_item_textView , R.id.full_statistics_item_imageView});
+
+        // 设置适配器
+        listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(this);
+
+    }
+
+    /**
+     * 生成功能项标签资源的数据源
+     *
+     * @return 返回SimpleAdapter适配器使用的数据源
+     */
+    private List<Map<String, Object>> getFunctionTitle() {
+        // 加载功能项
+        List<Map<String, Object>> dataList = new ArrayList<>();
+
+        String[] functionTitle = getResources().getStringArray(R.array
+                .full_statistics_title);
+        // 资源类型数组
+        TypedArray images = getResources().obtainTypedArray(R.array.full_statistics_image);
+
+        for (int i = 0; i < functionTitle.length; i++) {
+            // 新建一个功能项标签
+            Map<String, Object> function = new HashMap<>();
+
+            // 添加标签资源
+            // 添加标题
+            function.put(FUNCTION_TITLE, functionTitle[i]);
+            // 添加功能标签图标资源
+            function.put(FUNCTION_IMAGE, images.getResourceId(i, R.mipmap.ic_launcher));
+
+            // 将标签加入数据源
+            dataList.add(function);
+        }
+        return dataList;
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        Log.i(LOG_TAG + "onItemClick", "onItemClick is invoked");
+        switch (position) {
+            case 0:
+                // 普通
+                doGeneralFullStatistics();
+                break;
+            case 1:
+                // 捣箱
+                doMovedFullStatistics();
+                break;
+            default:
+                break;
         }
 
-        PullFullStatistics pullFullStatistics = new PullFullStatistics();
-        pullFullStatistics.setWorkEndListener(new WorkBack<FullStatistics>() {
-            @Override
-            public void doEndWork(boolean state, FullStatistics data) {
-
-
-                Log.i(LOG_TAG + "loadData", "PullFullStatistics state is " + state);
-
-                if (state && data != null) {
-
-                    fillData(data);
-                }
-
-                // 停止动画
-                refreshLayout.setRefreshing(false);
-
-            }
-        });
-
-        // 执行任务
-        pullFullStatistics.beginExecute(ship_id, code_inout);
-
-        // 保存新的加载任务对象
-        beforeLoadWork = pullFullStatistics;
-
-
     }
 
+    /**
+     * 普通全统计
+     */
+    private void doGeneralFullStatistics() {
+        Intent intent = new Intent(this, GeneralFullStatisticsActivity.class);
+        startActivity(intent);
+    }
 
     /**
-     * 填充数据
-     *
-     * @param data 数据源
+     * 捣箱全统计
      */
-    private void fillData(FullStatistics data) {
-
-        viewHolder.forecast_totalTextView.setText(Integer.toString(data.getForecast_total()));
-        viewHolder.forecast_E_20TextView.setText(Integer.toString(data.getForecast_E_20()));
-        viewHolder.forecast_E_40TextView.setText(Integer.toString(data.getForecast_E_40()));
-        viewHolder.forecast_E_otherTextView.setText(Integer.toString(data.getForecast_E_other()));
-        viewHolder.forecast_E_totalTextView.setText(Integer.toString(data.getForecast_E_total()));
-        viewHolder.forecast_F_20TextView.setText(Integer.toString(data.getForecast_F_20()));
-        viewHolder.forecast_F_40TextView.setText(Integer.toString(data.getForecast_F_40()));
-        viewHolder.forecast_F_otherTextView.setText(Integer.toString(data.getForecast_F_other()));
-        viewHolder.forecast_F_totalTextView.setText(Integer.toString(data.getForecast_F_total()));
-
-        viewHolder.tally_totalTextView.setText(Integer.toString(data.getTally_total()));
-        viewHolder.tally_E_20TextView.setText(Integer.toString(data.getTally_E_20()));
-        viewHolder.tally_E_40TextView.setText(Integer.toString(data.getTally_E_40()));
-        viewHolder.tally_E_otherTextView.setText(Integer.toString(data.getTally_E_other()));
-        viewHolder.tally_E_totalTextView.setText(Integer.toString(data.getTally_E_total()));
-        viewHolder.tally_F_20TextView.setText(Integer.toString(data.getTally_F_20()));
-        viewHolder.tally_F_40TextView.setText(Integer.toString(data.getTally_F_40()));
-        viewHolder.tally_F_otherTextView.setText(Integer.toString(data.getTally_F_other()));
-        viewHolder.tally_F_totalTextView.setText(Integer.toString(data.getTally_F_total()));
-
-        viewHolder.abnormal_totalTextView.setText(Integer.toString(data.getAbnormal_total()));
-        viewHolder.abnormal_E_20TextView.setText(Integer.toString(data.getAbnormal_E_20()));
-        viewHolder.abnormal_E_40TextView.setText(Integer.toString(data.getAbnormal_E_40()));
-        viewHolder.abnormal_E_otherTextView.setText(Integer.toString(data.getAbnormal_E_other()));
-        viewHolder.abnormal_E_totalTextView.setText(Integer.toString(data.getAbnormal_E_total()));
-        viewHolder.abnormal_F_20TextView.setText(Integer.toString(data.getAbnormal_F_20()));
-        viewHolder.abnormal_F_40TextView.setText(Integer.toString(data.getAbnormal_F_40()));
-        viewHolder.abnormal_F_otherTextView.setText(Integer.toString(data.getAbnormal_F_other()));
-        viewHolder.abnormal_F_totalTextView.setText(Integer.toString(data.getAbnormal_F_total()));
-
-
+    private void doMovedFullStatistics() {
+        Intent intent = new Intent(this, GeneralFullStatisticsActivity.class);
+        startActivity(intent);
     }
 }

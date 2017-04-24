@@ -34,4 +34,9 @@
     <string name="not_match_container">箱子尺寸不匹配</string>
     <string name="name_wait_move_bay_text">待移动贝位信息</string>
     <string name="bay_num_select">贝号选择</string>
+
+    <string name="title_general">普通</string>
+    <string name="title_moved">捣箱</string>
+    <string name="voyage_select">航次选择</string>
+
 </resources>
