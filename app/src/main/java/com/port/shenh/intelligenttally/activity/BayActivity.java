@@ -149,25 +149,14 @@ public class BayActivity extends AppCompatActivity {
     /**
      * 缩放比例因子
      */
-    final private float scaleArray[] = new float[]{0.5f , 0.6f , 0.7f , 0.8f , 0.9f , 1.0f , 1.1f
-            , 1.2f , 1.3f , 1.4f , 1.5f};
+    final private float scaleArray[] = new float[]{0.5f, 0.6f, 0.7f, 0.8f, 0.9f, 1.0f,
+                                                   1.1f, 1.2f, 1.3f, 1.4f, 1.5f, 1.6f,
+                                                   1.7f, 1.8f, 2.0f, 2.2f};
 
     /**
      * 缩放比例因子索引
      */
     private int scaleIndex = 5;
-
-
-    //    private final Matrix mScaleMatrix = new Matrix();
-    //
-    //    private final float[] matrixValues = new float[9];
-    //
-    //    /**
-    //     * 初始化时的缩放比例，如果图片宽或高大于屏幕，此值将小于0
-    //     */
-    //    private float initScale = 0.0f;
-    //
-    //    public static final float SCALE_MAX = 4.0f;
 
 
     @Override
@@ -433,140 +422,8 @@ public class BayActivity extends AppCompatActivity {
         scrollView = (FreedomScrollView) findViewById(R.id.activity_bay_scrollView);
 
         scrollView.setScrollableOutsideChile(true);
-        //
-        //        final ScaleGestureDetector scaleGestureDetector = new ScaleGestureDetector
-        // (BayActivity
-        //                .this, new ScaleGestureDetector.SimpleOnScaleGestureListener() {
-        //            @Override
-        //            public boolean onScale(ScaleGestureDetector detector) {
-        //
-        //                float scale = getScale();
-        //                float scaleFactor = detector.getScaleFactor();
-        //
-        //                /**
-        //                 * 缩放的范围控制
-        //                 */
-        //                if ((scale < SCALE_MAX && scaleFactor > 1.0f) || (scale > initScale &&
-        //                        scaleFactor < 1.0f)) {
-        //
-        //                    /**
-        //                     * 最大值最小值判断
-        //                     */
-        //                    if (scaleFactor * scale < initScale) {
-        //                        scaleFactor = initScale / scale;
-        //                    }
-        //                    if (scaleFactor * scale > SCALE_MAX) {
-        //                        scaleFactor = SCALE_MAX / scale;
-        //                    }
-        //
-        //                    layout.setScaleX(scaleFactor);
-        //                    layout.setScaleY(scaleFactor);
-        //
-        //                    layout.setTranslationX(layout.getWidth() * (scaleFactor - 1) / 2);
-        //                    layout.setTranslationY(layout.getWidth() * (scaleFactor - 1) / 2);
-        //
-        //                }
-        //
-        //                return false;
-        //            }
-        //        });
-        //
-        //        scrollView.setOnTouchListener(new View.OnTouchListener() {
-        //            @Override
-        //            public boolean onTouch(View v, MotionEvent event) {
-        //                return event.getPointerCount() > 1 && scaleGestureDetector.onTouchEvent
-        // (event);
-        //            }
-        //        });
+
     }
-
-
-    //
-    //        final ScaleGestureDetector scaleGestureDetector = new ScaleGestureDetector(BayActivity
-    //                .this, new ScaleGestureDetector.SimpleOnScaleGestureListener() {
-    //
-    //            private float scale;
-    //            private float preScale = 1;// 默认前一次缩放比例为1
-    //
-    //            @Override
-    //            public boolean onScale(ScaleGestureDetector detector) {
-    //
-    //                float previousSpan = detector.getPreviousSpan();
-    //                float currentSpan = detector.getCurrentSpan();
-    //                if (currentSpan < previousSpan) {
-    //                    // 缩小
-    //                    // scale = preScale-detector.getScaleFactor()/3;
-    //                    scale = preScale - (previousSpan - currentSpan) / 1000;
-    //                } else {
-    //                    // 放大
-    //                    // scale = preScale+detector.getScaleFactor()/3;
-    //                    scale = preScale + (currentSpan - previousSpan) / 1000;
-    //                }
-    //
-    //                // 缩放view
-    //                ViewHelper.setScaleX(layout, scale );// x方向上缩小
-    //                ViewHelper.setScaleY(layout, scale );// y方向上缩小
-    //
-    //                return false;
-    //            }
-    //
-    //            @Override
-    //            public boolean onScaleBegin(ScaleGestureDetector detector) {
-    //                // 一定要返回true才会进入onScale()这个函数
-    //                return true;
-    //            }
-    //
-    //            @Override
-    //            public void onScaleEnd(ScaleGestureDetector detector) {
-    //                preScale = scale;//记录本次缩放比例
-    //            }
-    //        });
-    //
-    //        scrollView.setOnTouchListener(new View.OnTouchListener() {
-    //            @Override
-    //            public boolean onTouch(View v, MotionEvent event) {
-    //                return event.getPointerCount() > 1 && scaleGestureDetector.onTouchEvent
-    // (event);
-    //            }
-    //        });
-    //
-    //    }
-
-
-    //
-    //        final ScaleGestureDetector scaleGestureDetector = new ScaleGestureDetector
-    // (BayActivity
-    //                .this, new ScaleGestureDetector.SimpleOnScaleGestureListener() {
-    //            @Override
-    //            public boolean onScale(ScaleGestureDetector detector) {
-    //
-    //                float factor = detector.getScaleFactor();
-    //
-    //                if (factor > 1.5 || factor < 0.5) {
-    //                    return false;
-    //                }
-    //
-    //                layout.setScaleX(factor);
-    //                layout.setScaleY(factor);
-    //
-    //                layout.setTranslationX(layout.getWidth() * (factor - 1) / 2);
-    //                layout.setTranslationY(layout.getHeight() * (factor - 1) / 2);
-    //
-    //
-    //                return false;
-    //            }
-    //        });
-
-
-    //    /**
-    //     * 获得当前的缩放比例
-    //     *
-    //     * @return
-    //     */
-    //    public final float getScale() {
-    //        mScaleMatrix.getValues(matrixValues);
-    //        return matrixValues[Matrix.MSCALE_X];
-    //    }
 
 
     /**

@@ -314,11 +314,13 @@ public class BayGridAdapter {
         }
 
         // 设置表格大小
-        //        downGridLayout.setRowCount(currentDownGridIndexMaxRow -
+        //        downGridLayout.setRowCount(currentDownridIndexMaxRow -
         // currentDownGridIndexMinRow + 2);
-        downGridLayout.setRowCount(currentDownGridIndexMaxRow - 1);
+        Log.i(LOG_TAG + "initResource", "currentDownGridIndexMaxRow is " +
+                currentDownGridIndexMaxRow);
+        downGridLayout.setRowCount(currentDownGridIndexMaxRow);
         downGridLayout.setColumnCount(currentDownGridIndexMaxColumn);
-        upGridLayout.setRowCount(currentUpGridIndexMaxRow - currentUpGridIndexMinRow + 2);
+        upGridLayout.setRowCount(currentUpGridIndexMaxRow - currentUpGridIndexMinRow + 1);
         upGridLayout.setColumnCount(currentUpGridIndexMaxColumn);
     }
 
