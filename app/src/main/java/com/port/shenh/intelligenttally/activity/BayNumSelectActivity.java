@@ -284,11 +284,10 @@ public class BayNumSelectActivity extends AppCompatActivity {
                     }
                 });
 
-                String shipImageList = null;
                 List<ShipImage> list = viewHolder.shipImageListFunction
                         .onLoadShipImageListOfModifyFromDataBase(viewHolder.ship_id);
 
-                Log.i(LOG_TAG + " doUpload", "shipImageList is " + shipImageList);
+                Log.i(LOG_TAG + " doUpload", "shipImageList is " + list.toString());
 
                 // 执行任务
                 uploadShipImageList.beginExecute(list);

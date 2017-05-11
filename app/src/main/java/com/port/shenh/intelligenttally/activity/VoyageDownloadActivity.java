@@ -327,6 +327,7 @@ public class VoyageDownloadActivity extends AppCompatActivity {
      */
     private void doDownload() {
 
+
         if (viewHolder.recyclerViewAdapter.getSelectedItemCount() == 0) {
 
             Toast.makeText(this, R.string.not_selected, Toast.LENGTH_SHORT).show();

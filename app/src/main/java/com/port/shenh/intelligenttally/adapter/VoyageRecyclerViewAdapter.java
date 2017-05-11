@@ -125,6 +125,43 @@ public class VoyageRecyclerViewAdapter extends RecyclerView.Adapter<VoyageItemVi
         notifyDataSetChanged();
     }
 
+    /**
+     * 获取选中item数目
+     */
+    public int getSelectedItemCount() {
+        return selectedItems.size();
+    }
+
+    /**
+     * 获取选中的Items
+     *
+     * @return Items
+     */
+    public Integer getSelectedItem() {
+
+        if (selectedItems.size() == 0) {
+            return null;
+        }
+
+        return selectedItems.keyAt(0);
+    }
+
+    /**
+     * 获取选中的数据
+     *
+     * @return 获取选中的数据
+     */
+    public Voyage getSelectedData() {
+
+        if (selectedItems.size() == 0) {
+            return null;
+        }
+
+        Voyage selectedData = dataList.get(getSelectedItem());
+
+        return selectedData;
+    }
+
 
     /**
      * 设置Item点击事件监听器

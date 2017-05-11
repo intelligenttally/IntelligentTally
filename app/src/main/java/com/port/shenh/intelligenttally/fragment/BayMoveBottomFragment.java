@@ -277,8 +277,6 @@ public class BayMoveBottomFragment extends Fragment implements BottomBayCommonOp
 //
 //        }
 
-
-
         startProgressDialog();
 
         UploadShipImageList uploadShipImageList = new UploadShipImageList();

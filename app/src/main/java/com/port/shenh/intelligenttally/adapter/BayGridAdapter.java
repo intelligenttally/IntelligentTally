@@ -169,6 +169,11 @@ public class BayGridAdapter {
     private int screenheight = 0;
 
     /**
+     * 当前有效最大列
+     */
+    private int currentMaxColumn = 0;
+
+    /**
      * 构造函数
      *
      * @param activity 引用的界面，用于获取表格控件
@@ -298,14 +303,33 @@ public class BayGridAdapter {
         currentDownGridIndexMaxRow = bay.getSumScreenRow_cabin();
         currentDownGridIndexMinRow = bay.getMinScreenRow_cabin();
         currentDownGridIndexMaxColumn = bay.getSumScreenCol_cabin();
+        Log.i(LOG_TAG + "initResource", "currentUpGridIndexMaxRow is " + currentUpGridIndexMaxRow);
+        Log.i(LOG_TAG + "initResource", "currentUpGridIndexMinRow is " + currentUpGridIndexMinRow);
+        Log.i(LOG_TAG + "initResource", "currentUpGridIndexMaxColumn is " +
+                currentUpGridIndexMaxColumn);
+        Log.i(LOG_TAG + "initResource", "currentDownGridIndexMaxRow is " +
+                currentDownGridIndexMaxRow);
+        Log.i(LOG_TAG + "initResource", "currentDownGridIndexMinRow is " +
+                currentDownGridIndexMinRow);
+        Log.i(LOG_TAG + "initResource", "currentDownGridIndexMaxColumn is " +
+                currentDownGridIndexMaxColumn);
+
+        currentMaxColumn = currentUpGridIndexMaxColumn > currentDownGridIndexMaxColumn ?
+                currentUpGridIndexMaxColumn : currentDownGridIndexMaxColumn;
 
         dataViewHolderIndexOffset = currentUpGridIndexMaxRow - currentUpGridIndexMinRow +
-                currentDownGridIndexMaxRow + currentUpGridIndexMaxColumn + 1;
+                currentDownGridIndexMaxRow - currentDownGridIndexMinRow +
+                currentUpGridIndexMaxColumn + 2;
+
+        //对偏移量进行修正
+        if (currentUpGridIndexMaxRow == 0 || currentDownGridIndexMaxRow == 0) {
+            dataViewHolderIndexOffset--;
+        }
 
         // item控件集缓存扩容
         int size = (currentUpGridIndexMaxRow - currentUpGridIndexMinRow + 2) *
-                (currentUpGridIndexMaxColumn + 1) + (currentDownGridIndexMaxRow + 1) *
-                (currentDownGridIndexMaxColumn + 1) - 2;
+                (currentUpGridIndexMaxColumn + 1) + (currentDownGridIndexMaxRow -
+                currentDownGridIndexMinRow + 2) * (currentDownGridIndexMaxColumn + 1) - 2;
 
         if (size > viewHolderList.size()) {
             for (int i = viewHolderList.size(); i < size; i++) {
@@ -318,7 +342,7 @@ public class BayGridAdapter {
         // currentDownGridIndexMinRow + 2);
         Log.i(LOG_TAG + "initResource", "currentDownGridIndexMaxRow is " +
                 currentDownGridIndexMaxRow);
-        downGridLayout.setRowCount(currentDownGridIndexMaxRow);
+        downGridLayout.setRowCount(currentDownGridIndexMaxRow - currentDownGridIndexMinRow + 1);
         downGridLayout.setColumnCount(currentDownGridIndexMaxColumn);
         upGridLayout.setRowCount(currentUpGridIndexMaxRow - currentUpGridIndexMinRow + 1);
         upGridLayout.setColumnCount(currentUpGridIndexMaxColumn);
@@ -337,7 +361,7 @@ public class BayGridAdapter {
      * 初始化船舱部分的表格
      */
     private void onInitDownGridLayout() {
-        for (int i = currentDownGridIndexMaxRow; i >= 1; i--) {
+        for (int i = currentDownGridIndexMaxRow; i >= currentDownGridIndexMinRow; i--) {
             for (int j = 1; j <= currentDownGridIndexMaxColumn; j++) {
                 ViewHolder holder = viewHolderList.get(viewHolderCursor++);
                 holder.rowIndex = i;
@@ -433,33 +457,39 @@ public class BayGridAdapter {
      * 初始化左侧编号
      */
     private void onInitLeftGridLayout() {
-        // 甲板编号
-        for (int i = currentUpGridIndexMaxRow; i >= currentUpGridIndexMinRow; i--) {
-            ViewHolder holder = viewHolderList.get(viewHolderCursor++);
-            holder.rowIndex = i;
-            holder.columnIndex = 0;
-            holder.itemGrid = 3;
 
-            // 设置编号和样式
-            onSetNumberView(holder, String.valueOf((i - currentUpGridIndexMinRow + 1) * 2 + 80));
+        if (currentUpGridIndexMaxRow > 0) {
+            // 甲板编号
+            for (int i = currentUpGridIndexMaxRow; i >= currentUpGridIndexMinRow; i--) {
+                ViewHolder holder = viewHolderList.get(viewHolderCursor++);
+                holder.rowIndex = i;
+                holder.columnIndex = 0;
+                holder.itemGrid = 3;
 
-            onResetViewLayoutParams(holder.itemView);
-            upLeftGridLayout.addView(holder.itemView);
+                // 设置编号和样式
+                onSetNumberView(holder, String.valueOf((i - currentUpGridIndexMinRow + 1) * 2 +
+                        80));
+
+                onResetViewLayoutParams(holder.itemView);
+                upLeftGridLayout.addView(holder.itemView);
+            }
         }
 
-        // 船舱编号
-        for (int i = currentDownGridIndexMaxRow; i > 0; i--) {
-            ViewHolder holder = viewHolderList.get(viewHolderCursor++);
-            holder.rowIndex = i;
-            holder.columnIndex = 0;
-            holder.itemGrid = 5;
+        if (currentDownGridIndexMaxRow > 0) {
+            // 船舱编号
+            for (int i = currentDownGridIndexMaxRow; i >= currentDownGridIndexMinRow; i--) {
+                ViewHolder holder = viewHolderList.get(viewHolderCursor++);
+                holder.rowIndex = i;
+                holder.columnIndex = 0;
+                holder.itemGrid = 5;
 
-            // 设置编号和样式
-            String value = i < 5 ? "0" + String.valueOf(i * 2) : String.valueOf(i * 2);
-            onSetNumberView(holder, value);
+                // 设置编号和样式
+                String value = i < 5 ? "0" + String.valueOf(i * 2) : String.valueOf(i * 2);
+                onSetNumberView(holder, value);
 
-            onResetViewLayoutParams(holder.itemView);
-            downLeftGridLayout.addView(holder.itemView);
+                onResetViewLayoutParams(holder.itemView);
+                downLeftGridLayout.addView(holder.itemView);
+            }
         }
     }
 
@@ -491,8 +521,8 @@ public class BayGridAdapter {
             GridLayout.LayoutParams layoutParams = (GridLayout.LayoutParams) view.getLayoutParams();
             layoutParams.rowSpec = UNDEFINED_SPEC;
             layoutParams.columnSpec = UNDEFINED_SPEC;
-            layoutParams.width = (screenWidth - 76 - (currentUpGridIndexMaxColumn + 1) * 2) /
-                    (currentUpGridIndexMaxColumn + 1);
+            layoutParams.width = (screenWidth - 76 - (currentMaxColumn + 1) * 2) /
+                    (currentMaxColumn + 1);
             layoutParams.height = layoutParams.width;
             layoutParams.setMargins(2, 2, 2, 2);
 

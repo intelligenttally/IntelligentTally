@@ -167,7 +167,7 @@ public class FullStatisticsActivity extends AppCompatActivity implements Adapter
      * 捣箱全统计
      */
     private void doMovedFullStatistics() {
-        Intent intent = new Intent(this, GeneralFullStatisticsActivity.class);
+        Intent intent = new Intent(this, MovedFullStatisticsActivity.class);
         startActivity(intent);
     }
 }

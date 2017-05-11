@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import com.port.shenh.intelligenttally.R;
 import com.port.shenh.intelligenttally.bean.FullStatistics;
@@ -35,14 +36,19 @@ public class GeneralFullStatisticsActivity extends AppCompatActivity {
     private static final String LOG_TAG = "FullStatisticsActivity.";
 
     /**
-     * 航次
+     * 当前航次
+     */
+    Voyage cunVoyage = null;
+
+    /**
+     * 航次编码
      */
     String ship_id = null;
 
     /**
      * 进出口编码
      */
-    String code_inout = null;
+    String code_inOut = null;
 
     /**
      * 下拉刷新控件
@@ -63,6 +69,11 @@ public class GeneralFullStatisticsActivity extends AppCompatActivity {
      * 已下载航次选择列表
      */
     private VoyageDownloadedSelectList voyageDownloadedSelectList = null;
+
+    /**
+     * 标题文本框
+     */
+    private TextView titleTextView = null;
 
 
     /**
@@ -103,9 +114,11 @@ public class GeneralFullStatisticsActivity extends AppCompatActivity {
 
         viewHolder = new FullStatisticsViewHolder(rootView);
 
-//        ship_id = (String) getIntent().getSerializableExtra(StaticValue.IntentTag.VOYAGE_TAG);
-//
-//        code_inout = (String) getIntent().getSerializableExtra(StaticValue.IntentTag.CODE_INOUT_TAG);
+        //        ship_id = (String) getIntent().getSerializableExtra(StaticValue.IntentTag
+        // .VOYAGE_TAG);
+        //
+        //        code_inout = (String) getIntent().getSerializableExtra(StaticValue.IntentTag
+        // .CODE_INOUT_TAG);
 
         refreshLayout = (SwipeRefreshLayout) findViewById(R.id
                 .activity_statistics_full_swipeRefreshLayout);
@@ -122,6 +135,7 @@ public class GeneralFullStatisticsActivity extends AppCompatActivity {
     private void initView() {
         // 初始化Toolbar
         ToolbarInitialize.initToolbar(this, R.string.full_statistics, true, true);
+        titleTextView = (TextView) findViewById(R.id.toolbar_title);
 
         // 初始化弹出框
         initPopupWindow();
@@ -136,18 +150,18 @@ public class GeneralFullStatisticsActivity extends AppCompatActivity {
     /**
      * 初始化已下载航次选择列表
      */
-    private void InitVoyageDownloadedSelectList(){
+    private void InitVoyageDownloadedSelectList() {
 
         voyageDownloadedSelectList = new VoyageDownloadedSelectList(this);
 
-        voyageDownloadedSelectList.setOnSelectedListener(new ISelectList.OnSelectedListener<View, Voyage>() {
+        voyageDownloadedSelectList.setOnSelectedListener(new ISelectList.OnSelectedListener<View,
+                Voyage>() {
 
 
             @Override
             public void onFinish(Voyage voyage) {
 
-                ship_id = voyage.getShip_id();
-                code_inout = voyage.getCodeInOut();
+                cunVoyage = voyage;
 
                 loadData(true);
 
@@ -194,10 +208,20 @@ public class GeneralFullStatisticsActivity extends AppCompatActivity {
     private void loadData(boolean reload) {
         Log.i(LOG_TAG + "loadData", "reload tag is " + reload);
 
+        String title = "";
+
         if (reload) {
             // 中断上次请求
             if (beforeLoadWork != null) {
                 beforeLoadWork.cancel();
+            }
+
+            if (cunVoyage != null) {
+                ship_id = cunVoyage.getShip_id();
+                code_inOut = cunVoyage.getCodeInOut();
+                String inOut = code_inOut.equals("1") == true ? "出" : "进";
+                title = cunVoyage.getBerthno() + " " + inOut + " " + cunVoyage.getVoyage() + " "
+                        + cunVoyage.getChi_vessel();
             }
         }
 
@@ -221,10 +245,12 @@ public class GeneralFullStatisticsActivity extends AppCompatActivity {
         });
 
         // 执行任务
-        pullFullStatistics.beginExecute(ship_id, code_inout);
+        pullFullStatistics.beginExecute(ship_id, code_inOut);
 
         // 保存新的加载任务对象
         beforeLoadWork = pullFullStatistics;
+
+        titleTextView.setText(title);
 
 
     }
@@ -320,7 +346,7 @@ public class GeneralFullStatisticsActivity extends AppCompatActivity {
     /**
      * 已下载航次选择
      */
-    private void doVoyageSelect(){
+    private void doVoyageSelect() {
 
         showPopupWindow(rootView, voyageDownloadedSelectList.loadSelect());
 

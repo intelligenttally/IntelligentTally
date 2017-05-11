@@ -139,8 +139,9 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
                         .ShipImage.CODE_EMPTY, TableConst.ShipImage.WEIGHT, TableConst.ShipImage
                         .WORK_DATE, TableConst.ShipImage.SEALNO, TableConst.ShipImage.MOVED_NAME,
                 TableConst.ShipImage.INOUTMARK, TableConst.ShipImage.TRANSMARK, TableConst
-                        .ShipImage.HOLIDAYS, TableConst.ShipImage.NIGHT, TableConst.ShipImage.NAME,
-                MARK_MODIFY, TableConst.ShipImage.MODIFIER, TableConst.ShipImage.MODIFYTIME);
+                        .ShipImage.HOLIDAYS, TableConst.ShipImage.NIGHT, TableConst.ShipImage
+                        .NAME, MARK_MODIFY, TableConst.ShipImage.MODIFIER, TableConst.ShipImage
+                        .MODIFYTIME);
 
 
         Log.i(LOG_TAG + "onCreateTable", "sql is " + createTableSql);
@@ -356,6 +357,7 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
      * 根据行航次编码查询结果
      *
      * @param shipId 航次编码
+     *
      * @return 数据对象，没有返回null
      */
     public ShipImage queryByShipId(String shipId) {
@@ -379,6 +381,7 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
      * 根据航次编码判断数据是否存在
      *
      * @param shipId 航次编码
+     *
      * @return true/flase
      */
     public boolean isExistByShipId(String shipId) {
@@ -386,8 +389,8 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
         Log.i(LOG_TAG + "isExistByShipId", "isExist shipId is " + shipId);
 
         // 查询语句
-        String sql = String.format("select  count(*) from %s a, %s b where a.%s=b.%s and a.%s=%s", "tb_voyage", tableName, "ship_id", "ship_id", "ship_id",
-                shipId);
+        String sql = String.format("select  count(*) from %s a, %s b where a.%s=b.%s and a" +
+                ".%s=%s", "tb_voyage", tableName, "ship_id", "ship_id", "ship_id", shipId);
 
         Log.i(LOG_TAG + "queryByShipId", "query sql is " + sql);
 
@@ -417,6 +420,7 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
      * 删除数据（航次船图数据）
      *
      * @param shipId 航次编码
+     *
      * @return 删除的记录数
      */
     public int deleteShipImage(String shipId) {
@@ -450,6 +454,7 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
      *
      * @param shipId 航次编码
      * @param bayNum 贝号
+     *
      * @return 删除的记录数
      */
     public int deleteShipImage(String shipId, String bayNum) {
@@ -464,7 +469,8 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
         SQLiteDatabase dbWriter = writeSqLiteHelper.getWritableDatabase();
 
         // where子句
-        String whereSql = String.format("%s='%s' and %s='%s' ", TableConst.ShipImage.SHIP_ID, shipId, TableConst.ShipImage.BAY_NUM, bayNum);
+        String whereSql = String.format("%s='%s' and %s='%s' ", TableConst.ShipImage.SHIP_ID,
+                shipId, TableConst.ShipImage.BAY_NUM, bayNum);
 
         Log.v(LOG_TAG + "delete", "where sql is " + whereSql);
 
@@ -482,6 +488,7 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
      * 根据航次编码查询单号列表
      *
      * @param shipId 航次编码
+     *
      * @return 数据对象，没有返回null
      */
     public List<String> queryBayNumList(String shipId) {
@@ -490,8 +497,8 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
         List<String> bayList = new ArrayList<>();
 
         // 查询语句
-        String sql = String.format("select distinct bay_num from %s where %s='%s' order by bay_num " +
-                "asc", tableName, "ship_id", shipId);
+        String sql = String.format("select distinct bay_num from %s where %s='%s' order by " +
+                "bay_num " + "asc", tableName, "ship_id", shipId);
         Log.i(LOG_TAG + "queryBayNumList", "sql is " + sql);
         // 查询数据
         Cursor cursor = sqLiteHelper.getReadableDatabase().rawQuery(sql, null);
@@ -514,6 +521,7 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
      * 根据航次编码查询卸货港简写列表
      *
      * @param shipId 航次编码
+     *
      * @return 数据对象，没有返回null
      */
     public Map<String, String> queryCodeUnloadPortSubList(String shipId) {
@@ -522,7 +530,9 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
         List<String> codeUnloadPortList = new ArrayList<>();
 
         // 查询语句
-        String sql = String.format("select distinct code_unload_port from %s where %s='%s'  and code_unload_port is not null and ltrim(code_unload_port) <> ''", tableName, "ship_id", shipId);
+        String sql = String.format("select distinct code_unload_port from %s where %s='%s'  and " +
+                "code_unload_port is not null and ltrim(code_unload_port) <> ''", tableName,
+                "ship_id", shipId);
         Log.i(LOG_TAG + "queryCodeUnloadPortSubList", "sql is " + sql);
         // 查询数据
         Cursor cursor = sqLiteHelper.getReadableDatabase().rawQuery(sql, null);
@@ -552,6 +562,7 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
      *
      * @param shipId 航次编码
      * @param bayNum 贝号
+     *
      * @return 数据对象，没有返回null
      */
     public List<ShipImage> queryShipImage(String shipId, String bayNum) {
@@ -559,8 +570,7 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
 
         // 查询语句
         String sql = String.format("select * from %s where %s='%s' and %s='%s' order by %s asc",
-                tableName,
-                "ship_id", shipId, "bay_num", bayNum, "unload_mark");
+                tableName, "ship_id", shipId, "bay_num", bayNum, "unload_mark");
 
         Log.i(LOG_TAG + "queryShipImage", "query sql is " + sql);
 
@@ -574,6 +584,7 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
      *
      * @param bayNum 贝号
      * @param shipId 航次编码
+     *
      * @return 数据对象，没有返回null
      */
     public Bay queryBay(String shipId, String bayNum) {
@@ -583,7 +594,8 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
         String bay_num = bayNum;
 
         // 查询语句
-        String sql = String.format("select Max(SCREEN_ROW) as sum_screen_row_board,Min(SCREEN_ROW) as min_screen_row_board,Max" +
+        String sql = String.format("select Max(SCREEN_ROW) as sum_screen_row_board,Min" +
+                "(SCREEN_ROW) as min_screen_row_board,Max" +
                 "(SCREEN_COL) as sum_screen_col_board from %s where %s='%s' and %s='%s' and " +
                 "%s='%s'", tableName, "ship_id", shipId, "bay_num", bayNum, "location", "board");
         Log.i(LOG_TAG + "queryBay", "sql is " + sql);
@@ -604,9 +616,10 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
         }
 
         // 查询语句
-        sql = String.format("select Max(SCREEN_ROW) as sum_screen_row_cabin,Min(SCREEN_ROW) as min_screen_row_cabin,Max(SCREEN_COL) as " +
-                        "sum_screen_col_cabin from %s where %s='%s' and %s='%s' and %s='%s'", tableName,
-                "ship_id", shipId, "bay_num", bayNum, "location", "cabin");
+        sql = String.format("select Max(SCREEN_ROW) as sum_screen_row_cabin,Min(SCREEN_ROW) as " +
+                "min_screen_row_cabin,Max(SCREEN_COL) as " + "sum_screen_col_cabin from %s where " +
+                "%s='%s' and %s='%s' and %s='%s'", tableName, "ship_id", shipId, "bay_num",
+                bayNum, "location", "cabin");
         Log.i(LOG_TAG + "queryBay", "sql is " + sql);
         // 查询数据
         cursor = sqLiteDatabase.rawQuery(sql, null);
@@ -622,7 +635,8 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
             bay.setMinScreenRow_cabin(cursor.getInt(minScreenCol_cabin));
         }
 
-//        Log.i(LOG_TAG + "queryBay", "cabin is " + bayNum + " " + bay.getSumScreenRow_cabin() + " " + bay.getSumScreenCol_cabin());
+        //        Log.i(LOG_TAG + "queryBay", "cabin is " + bayNum + " " + bay
+        // .getSumScreenRow_cabin() + " " + bay.getSumScreenCol_cabin());
 
         if (isJoint(shipId, bayNum)) {
             int tempBayNum = Integer.parseInt(bayNum) + 1;
@@ -650,6 +664,7 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
      *
      * @param shipId 航次编码
      * @param bayNum 贝号
+     *
      * @return false/true
      */
     public boolean isJoint(String shipId, String bayNum) {
@@ -660,8 +675,8 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
         boolean isJoint = false;
 
         // 查询语句
-        String sql = String.format("select joint from %s where %s='%s' and %s='%s' and %s='%s'", tableName,
-                "ship_id", shipId, "bay_num", bayNum, "location", "cabin");
+        String sql = String.format("select joint from %s where %s='%s' and %s='%s' and %s='%s'",
+                tableName, "ship_id", shipId, "bay_num", bayNum, "location", "cabin");
         Log.i(LOG_TAG + "queryBay", "sql is " + sql);
         // 查询数据
         Cursor cursor = sqLiteHelper.getReadableDatabase().rawQuery(sql, null);
@@ -689,6 +704,7 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
      *
      * @param shipId 航次编码
      * @param sbayno 标准贝位号
+     *
      * @return 数据对象
      */
     public List<ShipImage> getShipImageList(String shipId, String sbayno) {
@@ -710,14 +726,12 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
      *
      * @param shipId 航次编码
      */
-    public void updateModifyMark(String shipId){
+    public void updateModifyMark(String shipId) {
 
         Log.i(LOG_TAG + "updateModifyMark", "shipId is " + shipId);
 
-        String sql = String.format("update %s set mark_modify='%s' " +
-                "where ship_id='%s' and mark_modify='%s'",
-                tableName,
-                "0", shipId, "1");
+        String sql = String.format("update %s set mark_modify='%s' " + "where ship_id='%s' and " +
+                "mark_modify='%s'", tableName, "0", shipId, "1");
 
         Log.i(LOG_TAG + "updateModifyMark", "sql1 is " + sql);
 
@@ -726,12 +740,17 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
         close(sqLiteHelper);
     }
 
-    public boolean isExistModifyMark(String shipId){
+    /**
+     * 判断修改标志是否为1
+     * @param shipId 航次编码
+     * @return true/false
+     */
+    public boolean isExistModifyMark(String shipId) {
         Log.i(LOG_TAG + "isExistModifyMark", "shipId is " + shipId);
 
         // 查询语句
-        String sql = String.format("select  count(*) from %s where ship_id=%s and mark_modify=%s",
-                tableName, shipId, "1");
+        String sql = String.format("select  count(*) from %s where ship_id=%s and " +
+                "mark_modify=%s", tableName, shipId, "1");
 
         Log.i(LOG_TAG + "isExistModifyMark", "sql is " + sql);
 
@@ -783,12 +802,13 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
         SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
         String date = sDateFormat.format(new java.util.Date());
 
-        Log.i(LOG_TAG + "swapBay", "date is " +date);
+        Log.i(LOG_TAG + "swapBay", "date is " + date);
 
 
         Log.i(LOG_TAG + "swapBay", "Size_con is " + b1.getSize_con() + " " + b2.getSize_con());
 
-        if (b1.getSize_con().equals("20") && (b2.getSize_con().equals("20") || b2.getSize_con().isEmpty())) {
+        if (b1.getSize_con().equals("20") && (b2.getSize_con().equals("20") || b2.getSize_con()
+                .isEmpty())) {
 
             String bayno1 = b2.getSbayno();
             String bayno2 = b2.getBayno().isEmpty() == true ? "" : b1.getSbayno();
@@ -812,88 +832,91 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
             Log.i(LOG_TAG + "swapBay", "bayRow2 is " + bayRow2);
 
             String sql1 = String.format("update %s set CODE_LOAD_PORT='%s'," +
-                            "CODE_UNLOAD_PORT='%s'," +
-                            "DELIVERY='%s'," +
-                            "MOVED='%s'," +
-                            "UNLOAD_MARK='%s'," +
-                            "WORK_NO='%s'," +
-                            "DANGER_GRADE='%s'," +
-                            "DEGREE_SETTING='%s'," +
-                            "DEGREE_UNIT='%s'," +
-                            "MIN_DEGREE='%s'," +
-                            "MAX_DEGREE='%s'," +
-                            "BAYNO='%s'," +
-                            "OLDBAYNO='%s'," +
-                            "CODE_CRANE='%s'," +
-                            "BAYNUM='%s'," +
-                            "BAYCOL='%s'," +
-                            "BAYROW='%s'," +
-                            "CONTAINER_NO='%s'," +
-                            "SIZE_CON='%s'," +
-                            "CONTAINER_TYPE='%s'," +
-                            "CODE_EMPTY='%s'," +
-                            "WEIGHT='%s'," +
-                            "SEALNO='%s'," +
-                            "MOVED_NAME='%s'," +
-                            "INOUTMARK='%s'," +
-                            "TransMark='%s'," +
-                            "HOLIDAYS='%s'," +
-                            "NIGHT='%s'," +
-                            "NAME='%s'," +
-                            "MARK_MODIFY='%s'," +
-                            "MODIFIER='%s'," +
-                            "MODIFYTIME='%s'" +
-                            "where SHIP_ID='%s' and SBAYNO='%s'",
-                    tableName,
-                    b2.getCode_load_port(), b2.getCode_unload_port(), b2.getDelivery(), moved2, b2.getUnload_mark(), b2.getWork_no(),
-                    b2.getDanger_grade(), b2.getDegree_setting(), b2.getDegree_unit(), b2.getMin_degree(), b2.getMax_degree(), bayno2,
-                    oldbayno2, b2.getCode_crane(), bayNum2, bayCol2, bayRow2, b2.getContainer_no(), b2.getSize_con(),
-                    b2.getContainer_type(), b2.getCode_empty(), b2.getWeight(), b2.getSealno(), moveName2, b2.getInoutmark(),
-                    b2.getTransmark(), b2.getHolidays(), b2.getNight(), b2.getName(), "1", Global.getApplicationConfig().getUserName(), date,
-                    b1.getShip_id(), b1.getSbayno());
+                    "CODE_UNLOAD_PORT='%s'," +
+                    "DELIVERY='%s'," +
+                    "MOVED='%s'," +
+                    "UNLOAD_MARK='%s'," +
+                    "WORK_NO='%s'," +
+                    "DANGER_GRADE='%s'," +
+                    "DEGREE_SETTING='%s'," +
+                    "DEGREE_UNIT='%s'," +
+                    "MIN_DEGREE='%s'," +
+                    "MAX_DEGREE='%s'," +
+                    "BAYNO='%s'," +
+                    "OLDBAYNO='%s'," +
+                    "CODE_CRANE='%s'," +
+                    "BAYNUM='%s'," +
+                    "BAYCOL='%s'," +
+                    "BAYROW='%s'," +
+                    "CONTAINER_NO='%s'," +
+                    "SIZE_CON='%s'," +
+                    "CONTAINER_TYPE='%s'," +
+                    "CODE_EMPTY='%s'," +
+                    "WEIGHT='%s'," +
+                    "SEALNO='%s'," +
+                    "MOVED_NAME='%s'," +
+                    "INOUTMARK='%s'," +
+                    "TransMark='%s'," +
+                    "HOLIDAYS='%s'," +
+                    "NIGHT='%s'," +
+                    "NAME='%s'," +
+                    "MARK_MODIFY='%s'," +
+                    "MODIFIER='%s'," +
+                    "MODIFYTIME='%s'" +
+                    "where SHIP_ID='%s' and SBAYNO='%s'", tableName, b2.getCode_load_port(), b2
+                    .getCode_unload_port(), b2.getDelivery(), moved2, b2.getUnload_mark(), b2
+                    .getWork_no(), b2.getDanger_grade(), b2.getDegree_setting(), b2
+                    .getDegree_unit(), b2.getMin_degree(), b2.getMax_degree(), bayno2, oldbayno2,
+                    b2.getCode_crane(), bayNum2, bayCol2, bayRow2, b2.getContainer_no(), b2
+                            .getSize_con(), b2.getContainer_type(), b2.getCode_empty(), b2
+                            .getWeight(), b2.getSealno(), moveName2, b2.getInoutmark(), b2
+                            .getTransmark(), b2.getHolidays(), b2.getNight(), b2.getName(), "1",
+                    Global.getApplicationConfig().getUserName(), date, b1.getShip_id(), b1
+                            .getSbayno());
 
             Log.i(LOG_TAG + "swapBay", "sql1 is " + sql1);
 
             String sql2 = String.format("update %s set CODE_LOAD_PORT='%s'," +
-                            "CODE_UNLOAD_PORT='%s'," +
-                            "DELIVERY='%s'," +
-                            "MOVED='%s'," +
-                            "UNLOAD_MARK='%s'," +
-                            "WORK_NO='%s'," +
-                            "DANGER_GRADE='%s'," +
-                            "DEGREE_SETTING='%s'," +
-                            "DEGREE_UNIT='%s'," +
-                            "MIN_DEGREE='%s'," +
-                            "MAX_DEGREE='%s'," +
-                            "BAYNO='%s'," +
-                            "OLDBAYNO='%s'," +
-                            "CODE_CRANE='%s'," +
-                            "BAYNUM='%s'," +
-                            "BAYCOL='%s'," +
-                            "BAYROW='%s'," +
-                            "CONTAINER_NO='%s'," +
-                            "SIZE_CON='%s'," +
-                            "CONTAINER_TYPE='%s'," +
-                            "CODE_EMPTY='%s'," +
-                            "WEIGHT='%s'," +
-                            "SEALNO='%s'," +
-                            "MOVED_NAME='%s'," +
-                            "INOUTMARK='%s'," +
-                            "TransMark='%s'," +
-                            "HOLIDAYS='%s'," +
-                            "NIGHT='%s'," +
-                            "NAME='%s'," +
-                            "MARK_MODIFY='%s'," +
-                            "MODIFIER='%s'," +
-                            "MODIFYTIME='%s'" +
-                            "where SHIP_ID='%s' and SBAYNO='%s'",
-                    tableName,
-                    b1.getCode_load_port(), b1.getCode_unload_port(), b1.getDelivery(), moved1, b1.getUnload_mark(), b1.getWork_no(),
-                    b1.getDanger_grade(), b1.getDegree_setting(), b1.getDegree_unit(), b1.getMin_degree(), b1.getMax_degree(), bayno1,
-                    oldbayno1, b1.getCode_crane(), bayNum1, bayCol1, bayRow1, b1.getContainer_no(), b1.getSize_con(),
-                    b1.getContainer_type(), b1.getCode_empty(), b1.getWeight(), b1.getSealno(), moveName1, b1.getInoutmark(),
-                    b1.getTransmark(), b1.getHolidays(), b1.getNight(), b1.getName(), "1", Global.getApplicationConfig().getUserName(), date,
-                    b2.getShip_id(), b2.getSbayno());
+                    "CODE_UNLOAD_PORT='%s'," +
+                    "DELIVERY='%s'," +
+                    "MOVED='%s'," +
+                    "UNLOAD_MARK='%s'," +
+                    "WORK_NO='%s'," +
+                    "DANGER_GRADE='%s'," +
+                    "DEGREE_SETTING='%s'," +
+                    "DEGREE_UNIT='%s'," +
+                    "MIN_DEGREE='%s'," +
+                    "MAX_DEGREE='%s'," +
+                    "BAYNO='%s'," +
+                    "OLDBAYNO='%s'," +
+                    "CODE_CRANE='%s'," +
+                    "BAYNUM='%s'," +
+                    "BAYCOL='%s'," +
+                    "BAYROW='%s'," +
+                    "CONTAINER_NO='%s'," +
+                    "SIZE_CON='%s'," +
+                    "CONTAINER_TYPE='%s'," +
+                    "CODE_EMPTY='%s'," +
+                    "WEIGHT='%s'," +
+                    "SEALNO='%s'," +
+                    "MOVED_NAME='%s'," +
+                    "INOUTMARK='%s'," +
+                    "TransMark='%s'," +
+                    "HOLIDAYS='%s'," +
+                    "NIGHT='%s'," +
+                    "NAME='%s'," +
+                    "MARK_MODIFY='%s'," +
+                    "MODIFIER='%s'," +
+                    "MODIFYTIME='%s'" +
+                    "where SHIP_ID='%s' and SBAYNO='%s'", tableName, b1.getCode_load_port(), b1
+                    .getCode_unload_port(), b1.getDelivery(), moved1, b1.getUnload_mark(), b1
+                    .getWork_no(), b1.getDanger_grade(), b1.getDegree_setting(), b1
+                    .getDegree_unit(), b1.getMin_degree(), b1.getMax_degree(), bayno1, oldbayno1,
+                    b1.getCode_crane(), bayNum1, bayCol1, bayRow1, b1.getContainer_no(), b1
+                            .getSize_con(), b1.getContainer_type(), b1.getCode_empty(), b1
+                            .getWeight(), b1.getSealno(), moveName1, b1.getInoutmark(), b1
+                            .getTransmark(), b1.getHolidays(), b1.getNight(), b1.getName(), "1",
+                    Global.getLoginStatus().getUserID(), date, b2.getShip_id(), b2.getSbayno());
 
             Log.i(LOG_TAG + "swapBay", "sql2 is " + sql2);
 
@@ -902,64 +925,73 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
             sqlList.add(sql2);
             execSQL(sqlList);
 
-        } else if (b1.getSize_con().equals("20") && (b2.getSize_con().equals("40") || b2.getSize_con().equals("45"))) {
+        } else if (b1.getSize_con().equals("20") && (b2.getSize_con().equals("40") || b2
+                .getSize_con().equals("45"))) {
 
             String bayno1 = b2.getSbayno();
             String bayno1Next = null;
-            if ((Integer.parseInt(b2.getBay_num()) + 2) < 10){
+            if ((Integer.parseInt(b2.getBay_num()) + 2) < 10) {
 
-                bayno1Next = "0" + Integer.toString(Integer.parseInt(b2.getBay_num()) + 2) + b2.getBay_col() + b2.getBay_row();
+                bayno1Next = "0" + Integer.toString(Integer.parseInt(b2.getBay_num()) + 2) + b2
+                        .getBay_col() + b2.getBay_row();
 
-            }else {
+            } else {
 
-                bayno1Next = Integer.toString(Integer.parseInt(b2.getBay_num()) + 2) + b2.getBay_col() + b2.getBay_row();
+                bayno1Next = Integer.toString(Integer.parseInt(b2.getBay_num()) + 2) + b2
+                        .getBay_col() + b2.getBay_row();
 
             }
             String bayno2 = null;
-            if ((Integer.parseInt(b1.getBay_num()) + 1) < 10){
+            if ((Integer.parseInt(b1.getBay_num()) + 1) < 10) {
 
-                bayno2 = "0" + Integer.toString(Integer.parseInt(b1.getBay_num()) + 1) + b1.getBay_col() + b1.getBay_row();
-            }else {
+                bayno2 = "0" + Integer.toString(Integer.parseInt(b1.getBay_num()) + 1) + b1
+                        .getBay_col() + b1.getBay_row();
+            } else {
 
-                bayno2 = Integer.toString(Integer.parseInt(b1.getBay_num()) + 1) + b1.getBay_col() + b1.getBay_row();
+                bayno2 = Integer.toString(Integer.parseInt(b1.getBay_num()) + 1) + b1.getBay_col
+                        () + b1.getBay_row();
 
             }
             String bayno2Next = bayno2;
 
             String sbayno1Next = null;
-            if ((Integer.parseInt(b1.getBay_num()) + 2) < 10){
+            if ((Integer.parseInt(b1.getBay_num()) + 2) < 10) {
 
-                sbayno1Next = "0" + Integer.toString(Integer.parseInt(b1.getBay_num()) + 2) + b1.getBay_col() + b1.getBay_row();
-            }else {
+                sbayno1Next = "0" + Integer.toString(Integer.parseInt(b1.getBay_num()) + 2) + b1
+                        .getBay_col() + b1.getBay_row();
+            } else {
 
-                sbayno1Next = Integer.toString(Integer.parseInt(b1.getBay_num()) + 2) + b1.getBay_col() + b1.getBay_row();
+                sbayno1Next = Integer.toString(Integer.parseInt(b1.getBay_num()) + 2) + b1
+                        .getBay_col() + b1.getBay_row();
 
             }
             String sbayno2Next = null;
-            if ((Integer.parseInt(b2.getBay_num()) + 2) < 10){
+            if ((Integer.parseInt(b2.getBay_num()) + 2) < 10) {
 
-                sbayno2Next = "0" + Integer.toString(Integer.parseInt(b2.getBay_num()) + 2) + b2.getBay_col() + b2.getBay_row();
-            }else {
+                sbayno2Next = "0" + Integer.toString(Integer.parseInt(b2.getBay_num()) + 2) + b2
+                        .getBay_col() + b2.getBay_row();
+            } else {
 
-                sbayno2Next = Integer.toString(Integer.parseInt(b2.getBay_num()) + 2) + b2.getBay_col() + b2.getBay_row();
+                sbayno2Next = Integer.toString(Integer.parseInt(b2.getBay_num()) + 2) + b2
+                        .getBay_col() + b2.getBay_row();
 
             }
 
             String bayNum1 = b2.getBaynum();
             String bayNum1Next = null;
-            if ((Integer.parseInt(b2.getBay_num()) + 2) < 10){
+            if ((Integer.parseInt(b2.getBay_num()) + 2) < 10) {
 
                 bayNum1Next = "0" + Integer.toString(Integer.parseInt(b2.getBay_num()) + 2);
-            }else {
+            } else {
 
                 bayNum1Next = Integer.toString(Integer.parseInt(b2.getBay_num()) + 2);
 
             }
             String bayNum2 = null;
-            if ((Integer.parseInt(b1.getBay_num()) + 1) < 10){
+            if ((Integer.parseInt(b1.getBay_num()) + 1) < 10) {
 
                 bayNum2 = "0" + Integer.toString(Integer.parseInt(b1.getBay_num()) + 1);
-            }else {
+            } else {
 
                 bayNum2 = Integer.toString(Integer.parseInt(b1.getBay_num()) + 1);
 
@@ -981,176 +1013,184 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
 
 
             String sql1 = String.format("update %s set CODE_LOAD_PORT='%s'," +
-                            "CODE_UNLOAD_PORT='%s'," +
-                            "DELIVERY='%s'," +
-                            "MOVED='%s'," +
-                            "UNLOAD_MARK='%s'," +
-                            "WORK_NO='%s'," +
-                            "DANGER_GRADE='%s'," +
-                            "DEGREE_SETTING='%s'," +
-                            "DEGREE_UNIT='%s'," +
-                            "MIN_DEGREE='%s'," +
-                            "MAX_DEGREE='%s'," +
-                            "BAYNO='%s'," +
-                            "OLDBAYNO='%s'," +
-                            "CODE_CRANE='%s'," +
-                            "BAYNUM='%s'," +
-                            "BAYCOL='%s'," +
-                            "BAYROW='%s'," +
-                            "CONTAINER_NO='%s'," +
-                            "SIZE_CON='%s'," +
-                            "CONTAINER_TYPE='%s'," +
-                            "CODE_EMPTY='%s'," +
-                            "WEIGHT='%s'," +
-                            "SEALNO='%s'," +
-                            "MOVED_NAME='%s'," +
-                            "INOUTMARK='%s'," +
-                            "TransMark='%s'," +
-                            "HOLIDAYS='%s'," +
-                            "NIGHT='%s'," +
-                            "NAME='%s'," +
-                            "MARK_MODIFY='%s'," +
-                            "MODIFIER='%s'," +
-                            "MODIFYTIME='%s'" +
-                            "where SHIP_ID='%s' and SBAYNO='%s'",
-                    tableName,
-                    b2.getCode_load_port(), b2.getCode_unload_port(), b2.getDelivery(), moved2, b2.getUnload_mark(), b2.getWork_no(),
-                    b2.getDanger_grade(), b2.getDegree_setting(), b2.getDegree_unit(), b2.getMin_degree(), b2.getMax_degree(), bayno2,
-                    oldbayno2, b2.getCode_crane(), bayNum2, b2.getBay_col(), b2.getBay_row(), b2.getContainer_no(), b2.getSize_con(),
-                    b2.getContainer_type(), b2.getCode_empty(), b2.getWeight(), b2.getSealno(), moveName2, b2.getInoutmark(),
-                    b2.getTransmark(), b2.getHolidays(), b2.getNight(), b2.getName(), "1", Global.getApplicationConfig().getUserName(), date,
-                    b1.getShip_id(), b1.getSbayno());
+                    "CODE_UNLOAD_PORT='%s'," +
+                    "DELIVERY='%s'," +
+                    "MOVED='%s'," +
+                    "UNLOAD_MARK='%s'," +
+                    "WORK_NO='%s'," +
+                    "DANGER_GRADE='%s'," +
+                    "DEGREE_SETTING='%s'," +
+                    "DEGREE_UNIT='%s'," +
+                    "MIN_DEGREE='%s'," +
+                    "MAX_DEGREE='%s'," +
+                    "BAYNO='%s'," +
+                    "OLDBAYNO='%s'," +
+                    "CODE_CRANE='%s'," +
+                    "BAYNUM='%s'," +
+                    "BAYCOL='%s'," +
+                    "BAYROW='%s'," +
+                    "CONTAINER_NO='%s'," +
+                    "SIZE_CON='%s'," +
+                    "CONTAINER_TYPE='%s'," +
+                    "CODE_EMPTY='%s'," +
+                    "WEIGHT='%s'," +
+                    "SEALNO='%s'," +
+                    "MOVED_NAME='%s'," +
+                    "INOUTMARK='%s'," +
+                    "TransMark='%s'," +
+                    "HOLIDAYS='%s'," +
+                    "NIGHT='%s'," +
+                    "NAME='%s'," +
+                    "MARK_MODIFY='%s'," +
+                    "MODIFIER='%s'," +
+                    "MODIFYTIME='%s'" +
+                    "where SHIP_ID='%s' and SBAYNO='%s'", tableName, b2.getCode_load_port(), b2
+                    .getCode_unload_port(), b2.getDelivery(), moved2, b2.getUnload_mark(), b2
+                    .getWork_no(), b2.getDanger_grade(), b2.getDegree_setting(), b2
+                    .getDegree_unit(), b2.getMin_degree(), b2.getMax_degree(), bayno2, oldbayno2,
+                    b2.getCode_crane(), bayNum2, b2.getBay_col(), b2.getBay_row(), b2
+                            .getContainer_no(), b2.getSize_con(), b2.getContainer_type(), b2
+                            .getCode_empty(), b2.getWeight(), b2.getSealno(), moveName2, b2
+                            .getInoutmark(), b2.getTransmark(), b2.getHolidays(), b2.getNight(),
+                    b2.getName(), "1", Global.getLoginStatus().getUserID(), date, b1
+                            .getShip_id(), b1.getSbayno());
 
             Log.i(LOG_TAG + "swapBay", "sql1 is " + sql1);
 
             String sql2 = String.format("update %s set CODE_LOAD_PORT='%s'," +
-                            "CODE_UNLOAD_PORT='%s'," +
-                            "DELIVERY='%s'," +
-                            "MOVED='%s'," +
-                            "UNLOAD_MARK='%s'," +
-                            "WORK_NO='%s'," +
-                            "DANGER_GRADE='%s'," +
-                            "DEGREE_SETTING='%s'," +
-                            "DEGREE_UNIT='%s'," +
-                            "MIN_DEGREE='%s'," +
-                            "MAX_DEGREE='%s'," +
-                            "BAYNO='%s'," +
-                            "OLDBAYNO='%s'," +
-                            "CODE_CRANE='%s'," +
-                            "BAYNUM='%s'," +
-                            "BAYCOL='%s'," +
-                            "BAYROW='%s'," +
-                            "CONTAINER_NO='%s'," +
-                            "SIZE_CON='%s'," +
-                            "CONTAINER_TYPE='%s'," +
-                            "CODE_EMPTY='%s'," +
-                            "WEIGHT='%s'," +
-                            "SEALNO='%s'," +
-                            "MOVED_NAME='%s'," +
-                            "INOUTMARK='%s'," +
-                            "TransMark='%s'," +
-                            "HOLIDAYS='%s'," +
-                            "NIGHT='%s'," +
-                            "NAME='%s'," +
-                            "MARK_MODIFY='%s'," +
-                            "MODIFIER='%s'," +
-                            "MODIFYTIME='%s'" +
-                            "where SHIP_ID='%s' and SBAYNO='%s'",
-                    tableName,
-                    b1.getCode_load_port(), b1.getCode_unload_port(), b1.getDelivery(), moved1, b1.getUnload_mark(), b1.getWork_no(),
-                    b1.getDanger_grade(), b1.getDegree_setting(), b1.getDegree_unit(), b1.getMin_degree(), b1.getMax_degree(), bayno1,
-                    oldbayno1, b1.getCode_crane(), bayNum1, b1.getBay_col(), b1.getBay_row(), b1.getContainer_no(), b1.getSize_con(),
-                    b1.getContainer_type(), b1.getCode_empty(), b1.getWeight(), b1.getSealno(), moveName1, b1.getInoutmark(),
-                    b1.getTransmark(), b1.getHolidays(), b1.getNight(), b1.getName(), "1", Global.getApplicationConfig().getUserName(), date,
-                    b2.getShip_id(), b2.getSbayno());
+                    "CODE_UNLOAD_PORT='%s'," +
+                    "DELIVERY='%s'," +
+                    "MOVED='%s'," +
+                    "UNLOAD_MARK='%s'," +
+                    "WORK_NO='%s'," +
+                    "DANGER_GRADE='%s'," +
+                    "DEGREE_SETTING='%s'," +
+                    "DEGREE_UNIT='%s'," +
+                    "MIN_DEGREE='%s'," +
+                    "MAX_DEGREE='%s'," +
+                    "BAYNO='%s'," +
+                    "OLDBAYNO='%s'," +
+                    "CODE_CRANE='%s'," +
+                    "BAYNUM='%s'," +
+                    "BAYCOL='%s'," +
+                    "BAYROW='%s'," +
+                    "CONTAINER_NO='%s'," +
+                    "SIZE_CON='%s'," +
+                    "CONTAINER_TYPE='%s'," +
+                    "CODE_EMPTY='%s'," +
+                    "WEIGHT='%s'," +
+                    "SEALNO='%s'," +
+                    "MOVED_NAME='%s'," +
+                    "INOUTMARK='%s'," +
+                    "TransMark='%s'," +
+                    "HOLIDAYS='%s'," +
+                    "NIGHT='%s'," +
+                    "NAME='%s'," +
+                    "MARK_MODIFY='%s'," +
+                    "MODIFIER='%s'," +
+                    "MODIFYTIME='%s'" +
+                    "where SHIP_ID='%s' and SBAYNO='%s'", tableName, b1.getCode_load_port(), b1
+                    .getCode_unload_port(), b1.getDelivery(), moved1, b1.getUnload_mark(), b1
+                    .getWork_no(), b1.getDanger_grade(), b1.getDegree_setting(), b1
+                    .getDegree_unit(), b1.getMin_degree(), b1.getMax_degree(), bayno1, oldbayno1,
+                    b1.getCode_crane(), bayNum1, b1.getBay_col(), b1.getBay_row(), b1
+                            .getContainer_no(), b1.getSize_con(), b1.getContainer_type(), b1
+                            .getCode_empty(), b1.getWeight(), b1.getSealno(), moveName1, b1
+                            .getInoutmark(), b1.getTransmark(), b1.getHolidays(), b1.getNight(),
+                    b1.getName(), "1", Global.getLoginStatus().getUserID(), date, b2
+                            .getShip_id(), b2.getSbayno());
 
             Log.i(LOG_TAG + "swapBay", "sql2 is " + sql2);
 
 
             String sql1Next = String.format("update %s set CODE_LOAD_PORT='%s'," +
-                            "CODE_UNLOAD_PORT='%s'," +
-                            "DELIVERY='%s'," +
-                            "MOVED='%s'," +
-                            "UNLOAD_MARK='%s'," +
-                            "WORK_NO='%s'," +
-                            "DANGER_GRADE='%s'," +
-                            "DEGREE_SETTING='%s'," +
-                            "DEGREE_UNIT='%s'," +
-                            "MIN_DEGREE='%s'," +
-                            "MAX_DEGREE='%s'," +
-                            "BAYNO='%s'," +
-                            "OLDBAYNO='%s'," +
-                            "CODE_CRANE='%s'," +
-                            "BAYNUM='%s'," +
-                            "BAYCOL='%s'," +
-                            "BAYROW='%s'," +
-                            "CONTAINER_NO='%s'," +
-                            "SIZE_CON='%s'," +
-                            "CONTAINER_TYPE='%s'," +
-                            "CODE_EMPTY='%s'," +
-                            "WEIGHT='%s'," +
-                            "SEALNO='%s'," +
-                            "MOVED_NAME='%s'," +
-                            "INOUTMARK='%s'," +
-                            "TransMark='%s'," +
-                            "HOLIDAYS='%s'," +
-                            "NIGHT='%s'," +
-                            "NAME='%s'," +
-                            "MARK_MODIFY='%s'," +
-                            "MODIFIER='%s'," +
-                            "MODIFYTIME='%s'" +
-                            "where SHIP_ID='%s' and SBAYNO='%s'",
-                    tableName,
-                    b2.getCode_load_port(), b2.getCode_unload_port(), b2.getDelivery(), moved2, b2.getUnload_mark(), b2.getWork_no(),
-                    b2.getDanger_grade(), b2.getDegree_setting(), b2.getDegree_unit(), b2.getMin_degree(), b2.getMax_degree(), bayno2Next,
-                    oldbayno2, b2.getCode_crane(), bayNum2Next, b2.getBay_col(), b2.getBay_row(), b2.getContainer_no(), b2.getSize_con(),
-                    b2.getContainer_type(), b2.getCode_empty(), b2.getWeight(), b2.getSealno(), moveName2, b2.getInoutmark(),
-                    b2.getTransmark(), b2.getHolidays(), b2.getNight(), b2.getName(), "1", Global.getApplicationConfig().getUserName(), date,
-                    b1.getShip_id(), sbayno1Next);
+                    "CODE_UNLOAD_PORT='%s'," +
+                    "DELIVERY='%s'," +
+                    "MOVED='%s'," +
+                    "UNLOAD_MARK='%s'," +
+                    "WORK_NO='%s'," +
+                    "DANGER_GRADE='%s'," +
+                    "DEGREE_SETTING='%s'," +
+                    "DEGREE_UNIT='%s'," +
+                    "MIN_DEGREE='%s'," +
+                    "MAX_DEGREE='%s'," +
+                    "BAYNO='%s'," +
+                    "OLDBAYNO='%s'," +
+                    "CODE_CRANE='%s'," +
+                    "BAYNUM='%s'," +
+                    "BAYCOL='%s'," +
+                    "BAYROW='%s'," +
+                    "CONTAINER_NO='%s'," +
+                    "SIZE_CON='%s'," +
+                    "CONTAINER_TYPE='%s'," +
+                    "CODE_EMPTY='%s'," +
+                    "WEIGHT='%s'," +
+                    "SEALNO='%s'," +
+                    "MOVED_NAME='%s'," +
+                    "INOUTMARK='%s'," +
+                    "TransMark='%s'," +
+                    "HOLIDAYS='%s'," +
+                    "NIGHT='%s'," +
+                    "NAME='%s'," +
+                    "MARK_MODIFY='%s'," +
+                    "MODIFIER='%s'," +
+                    "MODIFYTIME='%s'" +
+                    "where SHIP_ID='%s' and SBAYNO='%s'", tableName, b2.getCode_load_port(), b2
+                    .getCode_unload_port(), b2.getDelivery(), moved2, b2.getUnload_mark(), b2
+                    .getWork_no(), b2.getDanger_grade(), b2.getDegree_setting(), b2
+                    .getDegree_unit(), b2.getMin_degree(), b2.getMax_degree(), bayno2Next,
+                    oldbayno2, b2.getCode_crane(), bayNum2Next, b2.getBay_col(), b2.getBay_row(),
+                    b2.getContainer_no(), b2.getSize_con(), b2.getContainer_type(), b2
+                            .getCode_empty(), b2.getWeight(), b2.getSealno(), moveName2, b2
+                            .getInoutmark(), b2.getTransmark(), b2.getHolidays(), b2.getNight(),
+                    b2.getName(), "1", Global.getLoginStatus().getUserID(), date, b1
+                            .getShip_id(), sbayno1Next);
 
             Log.i(LOG_TAG + "swapBay", "sql1Next is " + sql1Next);
 
 
             String sql2Next = String.format("update %s set CODE_LOAD_PORT='%s'," +
-                            "CODE_UNLOAD_PORT='%s'," +
-                            "DELIVERY='%s'," +
-                            "MOVED='%s'," +
-                            "UNLOAD_MARK='%s'," +
-                            "WORK_NO='%s'," +
-                            "DANGER_GRADE='%s'," +
-                            "DEGREE_SETTING='%s'," +
-                            "DEGREE_UNIT='%s'," +
-                            "MIN_DEGREE='%s'," +
-                            "MAX_DEGREE='%s'," +
-                            "BAYNO='%s'," +
-                            "OLDBAYNO='%s'," +
-                            "CODE_CRANE='%s'," +
-                            "BAYNUM='%s'," +
-                            "BAYCOL='%s'," +
-                            "BAYROW='%s'," +
-                            "CONTAINER_NO='%s'," +
-                            "SIZE_CON='%s'," +
-                            "CONTAINER_TYPE='%s'," +
-                            "CODE_EMPTY='%s'," +
-                            "WEIGHT='%s'," +
-                            "SEALNO='%s'," +
-                            "MOVED_NAME='%s'," +
-                            "INOUTMARK='%s'," +
-                            "TransMark='%s'," +
-                            "HOLIDAYS='%s'," +
-                            "NIGHT='%s'," +
-                            "NAME='%s'," +
-                            "MARK_MODIFY='%s'," +
-                            "MODIFIER='%s'," +
-                            "MODIFYTIME='%s'" +
-                            "where SHIP_ID='%s' and SBAYNO='%s'",
-                    tableName,
-                    b1.getCode_load_port(), b1.getCode_unload_port(), b1.getDelivery(), moved1, b1.getUnload_mark(), b1.getWork_no(),
-                    b1.getDanger_grade(), b1.getDegree_setting(), b1.getDegree_unit(), b1.getMin_degree(), b1.getMax_degree(), bayno1Next,
-                    oldbayno1, b1.getCode_crane(), bayNum1Next, b1.getBay_col(), b1.getBay_row(), b1.getContainer_no(), b1.getSize_con(),
-                    b1.getContainer_type(), b1.getCode_empty(), b1.getWeight(), b1.getSealno(), moveName1, b1.getInoutmark(),
-                    b1.getTransmark(), b1.getHolidays(), b1.getNight(), b1.getName(), "1", Global.getApplicationConfig().getUserName(), date,
-                    b2.getShip_id(), sbayno2Next);
+                    "CODE_UNLOAD_PORT='%s'," +
+                    "DELIVERY='%s'," +
+                    "MOVED='%s'," +
+                    "UNLOAD_MARK='%s'," +
+                    "WORK_NO='%s'," +
+                    "DANGER_GRADE='%s'," +
+                    "DEGREE_SETTING='%s'," +
+                    "DEGREE_UNIT='%s'," +
+                    "MIN_DEGREE='%s'," +
+                    "MAX_DEGREE='%s'," +
+                    "BAYNO='%s'," +
+                    "OLDBAYNO='%s'," +
+                    "CODE_CRANE='%s'," +
+                    "BAYNUM='%s'," +
+                    "BAYCOL='%s'," +
+                    "BAYROW='%s'," +
+                    "CONTAINER_NO='%s'," +
+                    "SIZE_CON='%s'," +
+                    "CONTAINER_TYPE='%s'," +
+                    "CODE_EMPTY='%s'," +
+                    "WEIGHT='%s'," +
+                    "SEALNO='%s'," +
+                    "MOVED_NAME='%s'," +
+                    "INOUTMARK='%s'," +
+                    "TransMark='%s'," +
+                    "HOLIDAYS='%s'," +
+                    "NIGHT='%s'," +
+                    "NAME='%s'," +
+                    "MARK_MODIFY='%s'," +
+                    "MODIFIER='%s'," +
+                    "MODIFYTIME='%s'" +
+                    "where SHIP_ID='%s' and SBAYNO='%s'", tableName, b1.getCode_load_port(), b1
+                    .getCode_unload_port(), b1.getDelivery(), moved1, b1.getUnload_mark(), b1
+                    .getWork_no(), b1.getDanger_grade(), b1.getDegree_setting(), b1
+                    .getDegree_unit(), b1.getMin_degree(), b1.getMax_degree(), bayno1Next,
+                    oldbayno1, b1.getCode_crane(), bayNum1Next, b1.getBay_col(), b1.getBay_row(),
+                    b1.getContainer_no(), b1.getSize_con(), b1.getContainer_type(), b1
+                            .getCode_empty(), b1.getWeight(), b1.getSealno(), moveName1, b1
+                            .getInoutmark(), b1.getTransmark(), b1.getHolidays(), b1.getNight(),
+                    b1.getName(), "1", Global.getLoginStatus().getUserID(), date, b2
+                            .getShip_id(), sbayno2Next);
 
             Log.i(LOG_TAG + "swapBay", "sql2Next is " + sql2Next);
 
@@ -1164,13 +1204,15 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
         } else if (b1.getSize_con().equals("40")) {
 
             String bayno1 = null;
-            if ((Integer.parseInt(b2.getBay_num()) + 1) < 10){
+            if ((Integer.parseInt(b2.getBay_num()) + 1) < 10) {
 
-                bayno1 = "0" + Integer.toString(Integer.parseInt(b2.getBay_num()) + 1) + b2.getBay_col() + b2.getBay_row();
+                bayno1 = "0" + Integer.toString(Integer.parseInt(b2.getBay_num()) + 1) + b2
+                        .getBay_col() + b2.getBay_row();
 
-            }else {
+            } else {
 
-                bayno1 = Integer.toString(Integer.parseInt(b2.getBay_num()) + 1) + b2.getBay_col() + b2.getBay_row();
+                bayno1 = Integer.toString(Integer.parseInt(b2.getBay_num()) + 1) + b2.getBay_col
+                        () + b2.getBay_row();
 
             }
             String bayno1Next = bayno1;
@@ -1179,32 +1221,36 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
 
 
             String sbayno1Next = null;
-            if ((Integer.parseInt(b1.getBay_num()) + 2) < 10){
+            if ((Integer.parseInt(b1.getBay_num()) + 2) < 10) {
 
-                sbayno1Next = "0" + Integer.toString(Integer.parseInt(b1.getBay_num()) + 2) + b1.getBay_col() + b1.getBay_row();
+                sbayno1Next = "0" + Integer.toString(Integer.parseInt(b1.getBay_num()) + 2) + b1
+                        .getBay_col() + b1.getBay_row();
 
-            }else {
+            } else {
 
-                sbayno1Next = Integer.toString(Integer.parseInt(b1.getBay_num()) + 2) + b1.getBay_col() + b1.getBay_row();
+                sbayno1Next = Integer.toString(Integer.parseInt(b1.getBay_num()) + 2) + b1
+                        .getBay_col() + b1.getBay_row();
 
             }
             String sbayno2Next = null;
-            if ((Integer.parseInt(b2.getBay_num()) + 2) < 10){
+            if ((Integer.parseInt(b2.getBay_num()) + 2) < 10) {
 
-                sbayno2Next = "0" + Integer.toString(Integer.parseInt(b2.getBay_num()) + 2) + b2.getBay_col() + b2.getBay_row();
+                sbayno2Next = "0" + Integer.toString(Integer.parseInt(b2.getBay_num()) + 2) + b2
+                        .getBay_col() + b2.getBay_row();
 
-            }else {
+            } else {
 
-                sbayno2Next = Integer.toString(Integer.parseInt(b2.getBay_num()) + 2) + b2.getBay_col() + b2.getBay_row();
+                sbayno2Next = Integer.toString(Integer.parseInt(b2.getBay_num()) + 2) + b2
+                        .getBay_col() + b2.getBay_row();
 
             }
 
             String bayNum1 = null;
-            if ((Integer.parseInt(b2.getBay_num()) + 1) < 10){
+            if ((Integer.parseInt(b2.getBay_num()) + 1) < 10) {
 
                 bayNum1 = "0" + Integer.toString(Integer.parseInt(b2.getBay_num()) + 1);
 
-            }else {
+            } else {
 
                 bayNum1 = Integer.toString(Integer.parseInt(b2.getBay_num()) + 1);
 
@@ -1247,176 +1293,183 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
             Log.i(LOG_TAG + "swapBay", "bayRow2Next is " + bayRow2Next);
 
             String sql1 = String.format("update %s set CODE_LOAD_PORT='%s'," +
-                            "CODE_UNLOAD_PORT='%s'," +
-                            "DELIVERY='%s'," +
-                            "MOVED='%s'," +
-                            "UNLOAD_MARK='%s'," +
-                            "WORK_NO='%s'," +
-                            "DANGER_GRADE='%s'," +
-                            "DEGREE_SETTING='%s'," +
-                            "DEGREE_UNIT='%s'," +
-                            "MIN_DEGREE='%s'," +
-                            "MAX_DEGREE='%s'," +
-                            "BAYNO='%s'," +
-                            "OLDBAYNO='%s'," +
-                            "CODE_CRANE='%s'," +
-                            "BAYNUM='%s'," +
-                            "BAYCOL='%s'," +
-                            "BAYROW='%s'," +
-                            "CONTAINER_NO='%s'," +
-                            "SIZE_CON='%s'," +
-                            "CONTAINER_TYPE='%s'," +
-                            "CODE_EMPTY='%s'," +
-                            "WEIGHT='%s'," +
-                            "SEALNO='%s'," +
-                            "MOVED_NAME='%s'," +
-                            "INOUTMARK='%s'," +
-                            "TransMark='%s'," +
-                            "HOLIDAYS='%s'," +
-                            "NIGHT='%s'," +
-                            "NAME='%s'," +
-                            "MARK_MODIFY='%s'," +
-                            "MODIFIER='%s'," +
-                            "MODIFYTIME='%s'" +
-                            "where SHIP_ID='%s' and SBAYNO='%s'",
-                    tableName,
-                    b2.getCode_load_port(), b2.getCode_unload_port(), b2.getDelivery(), moved2, b2.getUnload_mark(), b2.getWork_no(),
-                    b2.getDanger_grade(), b2.getDegree_setting(), b2.getDegree_unit(), b2.getMin_degree(), b2.getMax_degree(), bayno2,
-                    oldbayno2, b2.getCode_crane(), bayNum2, bayCol2, b2.getBay_row(), b2.getContainer_no(), b2.getSize_con(),
-                    b2.getContainer_type(), b2.getCode_empty(), b2.getWeight(), b2.getSealno(), moveName2, b2.getInoutmark(),
-                    b2.getTransmark(), b2.getHolidays(), b2.getNight(), b2.getName(), "1", Global.getApplicationConfig().getUserName(), date,
-                    b1.getShip_id(), b1.getSbayno());
+                    "CODE_UNLOAD_PORT='%s'," +
+                    "DELIVERY='%s'," +
+                    "MOVED='%s'," +
+                    "UNLOAD_MARK='%s'," +
+                    "WORK_NO='%s'," +
+                    "DANGER_GRADE='%s'," +
+                    "DEGREE_SETTING='%s'," +
+                    "DEGREE_UNIT='%s'," +
+                    "MIN_DEGREE='%s'," +
+                    "MAX_DEGREE='%s'," +
+                    "BAYNO='%s'," +
+                    "OLDBAYNO='%s'," +
+                    "CODE_CRANE='%s'," +
+                    "BAYNUM='%s'," +
+                    "BAYCOL='%s'," +
+                    "BAYROW='%s'," +
+                    "CONTAINER_NO='%s'," +
+                    "SIZE_CON='%s'," +
+                    "CONTAINER_TYPE='%s'," +
+                    "CODE_EMPTY='%s'," +
+                    "WEIGHT='%s'," +
+                    "SEALNO='%s'," +
+                    "MOVED_NAME='%s'," +
+                    "INOUTMARK='%s'," +
+                    "TransMark='%s'," +
+                    "HOLIDAYS='%s'," +
+                    "NIGHT='%s'," +
+                    "NAME='%s'," +
+                    "MARK_MODIFY='%s'," +
+                    "MODIFIER='%s'," +
+                    "MODIFYTIME='%s'" +
+                    "where SHIP_ID='%s' and SBAYNO='%s'", tableName, b2.getCode_load_port(), b2
+                    .getCode_unload_port(), b2.getDelivery(), moved2, b2.getUnload_mark(), b2
+                    .getWork_no(), b2.getDanger_grade(), b2.getDegree_setting(), b2
+                    .getDegree_unit(), b2.getMin_degree(), b2.getMax_degree(), bayno2, oldbayno2,
+                    b2.getCode_crane(), bayNum2, bayCol2, b2.getBay_row(), b2.getContainer_no(),
+                    b2.getSize_con(), b2.getContainer_type(), b2.getCode_empty(), b2.getWeight(),
+                    b2.getSealno(), moveName2, b2.getInoutmark(), b2.getTransmark(), b2
+                            .getHolidays(), b2.getNight(), b2.getName(), "1", Global.getLoginStatus().getUserID(), date, b1.getShip_id(), b1
+                            .getSbayno());
 
             Log.i(LOG_TAG + "swapBay", "sql1 is " + sql1);
 
             String sql2 = String.format("update %s set CODE_LOAD_PORT='%s'," +
-                            "CODE_UNLOAD_PORT='%s'," +
-                            "DELIVERY='%s'," +
-                            "MOVED='%s'," +
-                            "UNLOAD_MARK='%s'," +
-                            "WORK_NO='%s'," +
-                            "DANGER_GRADE='%s'," +
-                            "DEGREE_SETTING='%s'," +
-                            "DEGREE_UNIT='%s'," +
-                            "MIN_DEGREE='%s'," +
-                            "MAX_DEGREE='%s'," +
-                            "BAYNO='%s'," +
-                            "OLDBAYNO='%s'," +
-                            "CODE_CRANE='%s'," +
-                            "BAYNUM='%s'," +
-                            "BAYCOL='%s'," +
-                            "BAYROW='%s'," +
-                            "CONTAINER_NO='%s'," +
-                            "SIZE_CON='%s'," +
-                            "CONTAINER_TYPE='%s'," +
-                            "CODE_EMPTY='%s'," +
-                            "WEIGHT='%s'," +
-                            "SEALNO='%s'," +
-                            "MOVED_NAME='%s'," +
-                            "INOUTMARK='%s'," +
-                            "TransMark='%s'," +
-                            "HOLIDAYS='%s'," +
-                            "NIGHT='%s'," +
-                            "NAME='%s'," +
-                            "MARK_MODIFY='%s'," +
-                            "MODIFIER='%s'," +
-                            "MODIFYTIME='%s'" +
-                            "where SHIP_ID='%s' and SBAYNO='%s'",
-                    tableName,
-                    b1.getCode_load_port(), b1.getCode_unload_port(), b1.getDelivery(), moved1, b1.getUnload_mark(), b1.getWork_no(),
-                    b1.getDanger_grade(), b1.getDegree_setting(), b1.getDegree_unit(), b1.getMin_degree(), b1.getMax_degree(), bayno1,
-                    oldbayno1, b1.getCode_crane(), bayNum1, b1.getBay_col(), b1.getBay_row(), b1.getContainer_no(), b1.getSize_con(),
-                    b1.getContainer_type(), b1.getCode_empty(), b1.getWeight(), b1.getSealno(), moveName1, b1.getInoutmark(),
-                    b1.getTransmark(), b1.getHolidays(), b1.getNight(), b1.getName(), "1", Global.getApplicationConfig().getUserName(), date,
-                    b2.getShip_id(), b2.getSbayno());
+                    "CODE_UNLOAD_PORT='%s'," +
+                    "DELIVERY='%s'," +
+                    "MOVED='%s'," +
+                    "UNLOAD_MARK='%s'," +
+                    "WORK_NO='%s'," +
+                    "DANGER_GRADE='%s'," +
+                    "DEGREE_SETTING='%s'," +
+                    "DEGREE_UNIT='%s'," +
+                    "MIN_DEGREE='%s'," +
+                    "MAX_DEGREE='%s'," +
+                    "BAYNO='%s'," +
+                    "OLDBAYNO='%s'," +
+                    "CODE_CRANE='%s'," +
+                    "BAYNUM='%s'," +
+                    "BAYCOL='%s'," +
+                    "BAYROW='%s'," +
+                    "CONTAINER_NO='%s'," +
+                    "SIZE_CON='%s'," +
+                    "CONTAINER_TYPE='%s'," +
+                    "CODE_EMPTY='%s'," +
+                    "WEIGHT='%s'," +
+                    "SEALNO='%s'," +
+                    "MOVED_NAME='%s'," +
+                    "INOUTMARK='%s'," +
+                    "TransMark='%s'," +
+                    "HOLIDAYS='%s'," +
+                    "NIGHT='%s'," +
+                    "NAME='%s'," +
+                    "MARK_MODIFY='%s'," +
+                    "MODIFIER='%s'," +
+                    "MODIFYTIME='%s'" +
+                    "where SHIP_ID='%s' and SBAYNO='%s'", tableName, b1.getCode_load_port(), b1
+                    .getCode_unload_port(), b1.getDelivery(), moved1, b1.getUnload_mark(), b1
+                    .getWork_no(), b1.getDanger_grade(), b1.getDegree_setting(), b1
+                    .getDegree_unit(), b1.getMin_degree(), b1.getMax_degree(), bayno1, oldbayno1,
+                    b1.getCode_crane(), bayNum1, b1.getBay_col(), b1.getBay_row(), b1
+                            .getContainer_no(), b1.getSize_con(), b1.getContainer_type(), b1
+                            .getCode_empty(), b1.getWeight(), b1.getSealno(), moveName1, b1
+                            .getInoutmark(), b1.getTransmark(), b1.getHolidays(), b1.getNight(),
+                    b1.getName(), "1", Global.getLoginStatus().getUserID(), date, b2
+                            .getShip_id(), b2.getSbayno());
 
             Log.i(LOG_TAG + "swapBay", "sql2 is " + sql2);
 
 
             String sql1Next = String.format("update %s set CODE_LOAD_PORT='%s'," +
-                            "CODE_UNLOAD_PORT='%s'," +
-                            "DELIVERY='%s'," +
-                            "MOVED='%s'," +
-                            "UNLOAD_MARK='%s'," +
-                            "WORK_NO='%s'," +
-                            "DANGER_GRADE='%s'," +
-                            "DEGREE_SETTING='%s'," +
-                            "DEGREE_UNIT='%s'," +
-                            "MIN_DEGREE='%s'," +
-                            "MAX_DEGREE='%s'," +
-                            "BAYNO='%s'," +
-                            "OLDBAYNO='%s'," +
-                            "CODE_CRANE='%s'," +
-                            "BAYNUM='%s'," +
-                            "BAYCOL='%s'," +
-                            "BAYROW='%s'," +
-                            "CONTAINER_NO='%s'," +
-                            "SIZE_CON='%s'," +
-                            "CONTAINER_TYPE='%s'," +
-                            "CODE_EMPTY='%s'," +
-                            "WEIGHT='%s'," +
-                            "SEALNO='%s'," +
-                            "MOVED_NAME='%s'," +
-                            "INOUTMARK='%s'," +
-                            "TransMark='%s'," +
-                            "HOLIDAYS='%s'," +
-                            "NIGHT='%s'," +
-                            "NAME='%s'," +
-                            "MARK_MODIFY='%s'," +
-                            "MODIFIER='%s'," +
-                            "MODIFYTIME='%s'" +
-                            "where SHIP_ID='%s' and SBAYNO='%s'",
-                    tableName,
-                    b2.getCode_load_port(), b2.getCode_unload_port(), b2.getDelivery(), moved2, b2.getUnload_mark(), b2.getWork_no(),
-                    b2.getDanger_grade(), b2.getDegree_setting(), b2.getDegree_unit(), b2.getMin_degree(), b2.getMax_degree(), bayno2Next,
-                    oldbayno2, b2.getCode_crane(), bayNum2Next, b2.getBay_col(), b2.getBay_row(), b2.getContainer_no(), b2.getSize_con(),
-                    b2.getContainer_type(), b2.getCode_empty(), b2.getWeight(), b2.getSealno(), moveName2, b2.getInoutmark(),
-                    b2.getTransmark(), b2.getHolidays(), b2.getNight(), b2.getName(), "1", Global.getApplicationConfig().getUserName(), date,
-                    b1.getShip_id(), sbayno1Next);
+                    "CODE_UNLOAD_PORT='%s'," +
+                    "DELIVERY='%s'," +
+                    "MOVED='%s'," +
+                    "UNLOAD_MARK='%s'," +
+                    "WORK_NO='%s'," +
+                    "DANGER_GRADE='%s'," +
+                    "DEGREE_SETTING='%s'," +
+                    "DEGREE_UNIT='%s'," +
+                    "MIN_DEGREE='%s'," +
+                    "MAX_DEGREE='%s'," +
+                    "BAYNO='%s'," +
+                    "OLDBAYNO='%s'," +
+                    "CODE_CRANE='%s'," +
+                    "BAYNUM='%s'," +
+                    "BAYCOL='%s'," +
+                    "BAYROW='%s'," +
+                    "CONTAINER_NO='%s'," +
+                    "SIZE_CON='%s'," +
+                    "CONTAINER_TYPE='%s'," +
+                    "CODE_EMPTY='%s'," +
+                    "WEIGHT='%s'," +
+                    "SEALNO='%s'," +
+                    "MOVED_NAME='%s'," +
+                    "INOUTMARK='%s'," +
+                    "TransMark='%s'," +
+                    "HOLIDAYS='%s'," +
+                    "NIGHT='%s'," +
+                    "NAME='%s'," +
+                    "MARK_MODIFY='%s'," +
+                    "MODIFIER='%s'," +
+                    "MODIFYTIME='%s'" +
+                    "where SHIP_ID='%s' and SBAYNO='%s'", tableName, b2.getCode_load_port(), b2
+                    .getCode_unload_port(), b2.getDelivery(), moved2, b2.getUnload_mark(), b2
+                    .getWork_no(), b2.getDanger_grade(), b2.getDegree_setting(), b2
+                    .getDegree_unit(), b2.getMin_degree(), b2.getMax_degree(), bayno2Next,
+                    oldbayno2, b2.getCode_crane(), bayNum2Next, b2.getBay_col(), b2.getBay_row(),
+                    b2.getContainer_no(), b2.getSize_con(), b2.getContainer_type(), b2
+                            .getCode_empty(), b2.getWeight(), b2.getSealno(), moveName2, b2
+                            .getInoutmark(), b2.getTransmark(), b2.getHolidays(), b2.getNight(),
+                    b2.getName(), "1", Global.getLoginStatus().getUserID(), date, b1
+                            .getShip_id(), sbayno1Next);
 
             Log.i(LOG_TAG + "swapBay", "sql1Next is " + sql1Next);
 
 
             String sql2Next = String.format("update %s set CODE_LOAD_PORT='%s'," +
-                            "CODE_UNLOAD_PORT='%s'," +
-                            "DELIVERY='%s'," +
-                            "MOVED='%s'," +
-                            "UNLOAD_MARK='%s'," +
-                            "WORK_NO='%s'," +
-                            "DANGER_GRADE='%s'," +
-                            "DEGREE_SETTING='%s'," +
-                            "DEGREE_UNIT='%s'," +
-                            "MIN_DEGREE='%s'," +
-                            "MAX_DEGREE='%s'," +
-                            "BAYNO='%s'," +
-                            "OLDBAYNO='%s'," +
-                            "CODE_CRANE='%s'," +
-                            "BAYNUM='%s'," +
-                            "BAYCOL='%s'," +
-                            "BAYROW='%s'," +
-                            "CONTAINER_NO='%s'," +
-                            "SIZE_CON='%s'," +
-                            "CONTAINER_TYPE='%s'," +
-                            "CODE_EMPTY='%s'," +
-                            "WEIGHT='%s'," +
-                            "SEALNO='%s'," +
-                            "MOVED_NAME='%s'," +
-                            "INOUTMARK='%s'," +
-                            "TransMark='%s'," +
-                            "HOLIDAYS='%s'," +
-                            "NIGHT='%s'," +
-                            "NAME='%s'," +
-                            "MARK_MODIFY='%s'," +
-                            "MODIFIER='%s'," +
-                            "MODIFYTIME='%s'" +
-                            "where SHIP_ID='%s' and SBAYNO='%s'",
-                    tableName,
-                    b1.getCode_load_port(), b1.getCode_unload_port(), b1.getDelivery(), moved1, b1.getUnload_mark(), b1.getWork_no(),
-                    b1.getDanger_grade(), b1.getDegree_setting(), b1.getDegree_unit(), b1.getMin_degree(), b1.getMax_degree(), bayno1Next,
-                    oldbayno1, b1.getCode_crane(), bayNum1Next, b1.getBay_col(), b1.getBay_row(), b1.getContainer_no(), b1.getSize_con(),
-                    b1.getContainer_type(), b1.getCode_empty(), b1.getWeight(), b1.getSealno(), moveName1, b1.getInoutmark(),
-                    b1.getTransmark(), b1.getHolidays(), b1.getNight(), b1.getName(), "1", Global.getApplicationConfig().getUserName(), date,
-                    b2.getShip_id(), sbayno2Next);
+                    "CODE_UNLOAD_PORT='%s'," +
+                    "DELIVERY='%s'," +
+                    "MOVED='%s'," +
+                    "UNLOAD_MARK='%s'," +
+                    "WORK_NO='%s'," +
+                    "DANGER_GRADE='%s'," +
+                    "DEGREE_SETTING='%s'," +
+                    "DEGREE_UNIT='%s'," +
+                    "MIN_DEGREE='%s'," +
+                    "MAX_DEGREE='%s'," +
+                    "BAYNO='%s'," +
+                    "OLDBAYNO='%s'," +
+                    "CODE_CRANE='%s'," +
+                    "BAYNUM='%s'," +
+                    "BAYCOL='%s'," +
+                    "BAYROW='%s'," +
+                    "CONTAINER_NO='%s'," +
+                    "SIZE_CON='%s'," +
+                    "CONTAINER_TYPE='%s'," +
+                    "CODE_EMPTY='%s'," +
+                    "WEIGHT='%s'," +
+                    "SEALNO='%s'," +
+                    "MOVED_NAME='%s'," +
+                    "INOUTMARK='%s'," +
+                    "TransMark='%s'," +
+                    "HOLIDAYS='%s'," +
+                    "NIGHT='%s'," +
+                    "NAME='%s'," +
+                    "MARK_MODIFY='%s'," +
+                    "MODIFIER='%s'," +
+                    "MODIFYTIME='%s'" +
+                    "where SHIP_ID='%s' and SBAYNO='%s'", tableName, b1.getCode_load_port(), b1
+                    .getCode_unload_port(), b1.getDelivery(), moved1, b1.getUnload_mark(), b1
+                    .getWork_no(), b1.getDanger_grade(), b1.getDegree_setting(), b1
+                    .getDegree_unit(), b1.getMin_degree(), b1.getMax_degree(), bayno1Next,
+                    oldbayno1, b1.getCode_crane(), bayNum1Next, b1.getBay_col(), b1.getBay_row(),
+                    b1.getContainer_no(), b1.getSize_con(), b1.getContainer_type(), b1
+                            .getCode_empty(), b1.getWeight(), b1.getSealno(), moveName1, b1
+                            .getInoutmark(), b1.getTransmark(), b1.getHolidays(), b1.getNight(),
+                    b1.getName(), "1", Global.getLoginStatus().getUserID(), date, b2
+                            .getShip_id(), sbayno2Next);
 
             Log.i(LOG_TAG + "swapBay", "sql2Next is " + sql2Next);
 
@@ -1429,683 +1482,750 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
         }
     }
 
-//    /**
-//     * 对调贝位
-//     *
-//     * @param b1        贝位1
-//     * @param b2        贝位2
-//     * @param codeInOut 进出口编码
-//     */
-//    public void swapBay(ShipImage b1, ShipImage b2, String codeInOut) {
-//
-//        Log.i(LOG_TAG + "swapBay", "query param is " + b1.getSbayno() + " " + b2.getSbayno());
-//
-//        Log.i(LOG_TAG + "swapBay", "b1 getSbayno is " + b1.getSbayno());
-//        Log.i(LOG_TAG + "swapBay", "b1 getBaynum is " + b1.getBaynum());
-//        Log.i(LOG_TAG + "swapBay", "b1 getBaycol is " + b1.getBaycol());
-//        Log.i(LOG_TAG + "swapBay", "b1 getBayrow is " + b1.getBayrow());
-//
-//        Log.i(LOG_TAG + "swapBay", "b2 getSbayno is " + b2.getSbayno());
-//        Log.i(LOG_TAG + "swapBay", "b2 getBaynum is " + b2.getBaynum());
-//        Log.i(LOG_TAG + "swapBay", "b2 getBaycol is " + b2.getBaycol());
-//        Log.i(LOG_TAG + "swapBay", "b2 getBayrow is " + b2.getBayrow());
-//
-//
-//        String moved1 = getMoved(b1, codeInOut);
-//        String moved2 = getMoved(b2, codeInOut);
-//        String moveName1 = moved1.equals("1") == true ? "捣箱" : "";
-//        String moveName2 = moved2.equals("1") == true ? "捣箱" : "";
-//        String oldbayno1 = b2.getOldbayno().isEmpty() == true ? b2.getBayno() : "";
-//        String oldbayno2 = b1.getOldbayno().isEmpty() == true ? b1.getBayno() : "";
-//
-//        SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
-//        String date = sDateFormat.format(new java.util.Date());
-//
-//        Log.i(LOG_TAG + "swapBay", "date is " +date);
-//
-//
-//        Log.i(LOG_TAG + "swapBay", "Size_con is " + b1.getSize_con() + " " + b2.getSize_con());
-//
-//        if (b1.getSize_con().equals("20") && (b2.getSize_con().equals("20") || b2.getSize_con().isEmpty())) {
-//
-//            String bayno1 = b2.getSbayno();
-//            String bayno2 = b2.getBayno().isEmpty() == true ? "" : b1.getSbayno();
-//
-//            String bayNum1 = b2.getBay_num();
-//            String bayNum2 = b2.getBayno().isEmpty() == true ? "" : b1.getBay_num();
-//
-//            String bayCol1 = b2.getBay_col();
-//            String bayCol2 = b2.getBayno().isEmpty() == true ? "" : b1.getBay_col();
-//
-//            String bayRow1 = b2.getBay_row();
-//            String bayRow2 = b2.getBayno().isEmpty() == true ? "" : b1.getBay_row();
-//
-//            Log.i(LOG_TAG + "swapBay", "bayno1 is " + bayno1);
-//            Log.i(LOG_TAG + "swapBay", "bayno2 is " + bayno2);
-//            Log.i(LOG_TAG + "swapBay", "bayNum1 is " + bayNum1);
-//            Log.i(LOG_TAG + "swapBay", "bayNum2 is " + bayNum2);
-//            Log.i(LOG_TAG + "swapBay", "bayCol1 is " + bayCol1);
-//            Log.i(LOG_TAG + "swapBay", "bayCol2 is " + bayCol2);
-//            Log.i(LOG_TAG + "swapBay", "bayRow1 is " + bayRow1);
-//            Log.i(LOG_TAG + "swapBay", "bayRow2 is " + bayRow2);
-//
-//            String sql1 = String.format("update %s set CODE_LOAD_PORT='%s'," +
-//                            "CODE_UNLOAD_PORT='%s'," +
-//                            "DELIVERY='%s'," +
-//                            "MOVED='%s'," +
-//                            "UNLOAD_MARK='%s'," +
-//                            "WORK_NO='%s'," +
-//                            "DANGER_GRADE='%s'," +
-//                            "DEGREE_SETTING='%s'," +
-//                            "DEGREE_UNIT='%s'," +
-//                            "MIN_DEGREE='%s'," +
-//                            "MAX_DEGREE='%s'," +
-//                            "BAYNO='%s'," +
-//                            "OLDBAYNO='%s'," +
-//                            "CODE_CRANE='%s'," +
-//                            "BAYNUM='%s'," +
-//                            "BAYCOL='%s'," +
-//                            "BAYROW='%s'," +
-//                            "CONTAINER_NO='%s'," +
-//                            "SIZE_CON='%s'," +
-//                            "CONTAINER_TYPE='%s'," +
-//                            "CODE_EMPTY='%s'," +
-//                            "WEIGHT='%s'," +
-//                            "SEALNO='%s'," +
-//                            "MOVED_NAME='%s'," +
-//                            "INOUTMARK='%s'," +
-//                            "TransMark='%s'," +
-//                            "HOLIDAYS='%s'," +
-//                            "NIGHT='%s'," +
-//                            "NAME='%s'," +
-//                            "MARK_MODIFY='%s'," +
-//                            "MODIFIER='%s'," +
-//                            "MODIFYTIME='%s'" +
-//                            "where SHIP_ID='%s' and SBAYNO='%s' and CONTAINER_NO='%s'",
-//                    tableName,
-//                    b2.getCode_load_port(), b2.getCode_unload_port(), b2.getDelivery(), moved2, b2.getUnload_mark(), b2.getWork_no(),
-//                    b2.getDanger_grade(), b2.getDegree_setting(), b2.getDegree_unit(), b2.getMin_degree(), b2.getMax_degree(), bayno2,
-//                    oldbayno2, b2.getCode_crane(), bayNum2, bayCol2, bayRow2, b2.getContainer_no(), b2.getSize_con(),
-//                    b2.getContainer_type(), b2.getCode_empty(), b2.getWeight(), b2.getSealno(), moveName2, b2.getInoutmark(),
-//                    b2.getTransmark(), b2.getHolidays(), b2.getNight(), b2.getName(), "1", Global.getApplicationConfig().getUserName(), date,
-//                    b1.getShip_id(), b1.getSbayno(), b1.getContainer_no());
-//
-//            Log.i(LOG_TAG + "swapBay", "sql1 is " + sql1);
-//
-//            String sql2 = String.format("update %s set CODE_LOAD_PORT='%s'," +
-//                            "CODE_UNLOAD_PORT='%s'," +
-//                            "DELIVERY='%s'," +
-//                            "MOVED='%s'," +
-//                            "UNLOAD_MARK='%s'," +
-//                            "WORK_NO='%s'," +
-//                            "DANGER_GRADE='%s'," +
-//                            "DEGREE_SETTING='%s'," +
-//                            "DEGREE_UNIT='%s'," +
-//                            "MIN_DEGREE='%s'," +
-//                            "MAX_DEGREE='%s'," +
-//                            "BAYNO='%s'," +
-//                            "OLDBAYNO='%s'," +
-//                            "CODE_CRANE='%s'," +
-//                            "BAYNUM='%s'," +
-//                            "BAYCOL='%s'," +
-//                            "BAYROW='%s'," +
-//                            "CONTAINER_NO='%s'," +
-//                            "SIZE_CON='%s'," +
-//                            "CONTAINER_TYPE='%s'," +
-//                            "CODE_EMPTY='%s'," +
-//                            "WEIGHT='%s'," +
-//                            "SEALNO='%s'," +
-//                            "MOVED_NAME='%s'," +
-//                            "INOUTMARK='%s'," +
-//                            "TransMark='%s'," +
-//                            "HOLIDAYS='%s'," +
-//                            "NIGHT='%s'," +
-//                            "NAME='%s'," +
-//                            "MARK_MODIFY='%s'," +
-//                            "MODIFIER='%s'," +
-//                            "MODIFYTIME='%s'" +
-//                            "where SHIP_ID='%s' and SBAYNO='%s' and CONTAINER_NO='%s'",
-//                    tableName,
-//                    b1.getCode_load_port(), b1.getCode_unload_port(), b1.getDelivery(), moved1, b1.getUnload_mark(), b1.getWork_no(),
-//                    b1.getDanger_grade(), b1.getDegree_setting(), b1.getDegree_unit(), b1.getMin_degree(), b1.getMax_degree(), bayno1,
-//                    oldbayno1, b1.getCode_crane(), bayNum1, bayCol1, bayRow1, b1.getContainer_no(), b1.getSize_con(),
-//                    b1.getContainer_type(), b1.getCode_empty(), b1.getWeight(), b1.getSealno(), moveName1, b1.getInoutmark(),
-//                    b1.getTransmark(), b1.getHolidays(), b1.getNight(), b1.getName(), "1", Global.getApplicationConfig().getUserName(), date,
-//                    b2.getShip_id(), b2.getSbayno(), b2.getContainer_no());
-//
-//            Log.i(LOG_TAG + "swapBay", "sql2 is " + sql2);
-//
-//            List<String> sqlList = new ArrayList<>();
-//            sqlList.add(sql1);
-//            sqlList.add(sql2);
-//            execSQL(sqlList);
-//
-//        } else if (b1.getSize_con().equals("20") && (b2.getSize_con().equals("40") || b2.getSize_con().equals("45"))) {
-//
-//            String bayno1 = b2.getSbayno();
-//            String bayno1Next = null;
-//            if ((Integer.parseInt(b2.getBay_num()) + 2) < 10){
-//
-//                bayno1Next = "0" + Integer.toString(Integer.parseInt(b2.getBay_num()) + 2) + b2.getBay_col() + b2.getBay_row();
-//
-//            }else {
-//
-//                bayno1Next = Integer.toString(Integer.parseInt(b2.getBay_num()) + 2) + b2.getBay_col() + b2.getBay_row();
-//
-//            }
-//            String bayno2 = null;
-//            if ((Integer.parseInt(b1.getBay_num()) + 1) < 10){
-//
-//                bayno2 = "0" + Integer.toString(Integer.parseInt(b1.getBay_num()) + 1) + b1.getBay_col() + b1.getBay_row();
-//            }else {
-//
-//                bayno2 = Integer.toString(Integer.parseInt(b1.getBay_num()) + 1) + b1.getBay_col() + b1.getBay_row();
-//
-//            }
-//            String bayno2Next = bayno2;
-//
-//            String sbayno1Next = null;
-//            if ((Integer.parseInt(b1.getBay_num()) + 2) < 10){
-//
-//                sbayno1Next = "0" + Integer.toString(Integer.parseInt(b1.getBay_num()) + 2) + b1.getBay_col() + b1.getBay_row();
-//            }else {
-//
-//                sbayno1Next = Integer.toString(Integer.parseInt(b1.getBay_num()) + 2) + b1.getBay_col() + b1.getBay_row();
-//
-//            }
-//            String sbayno2Next = null;
-//            if ((Integer.parseInt(b2.getBay_num()) + 2) < 10){
-//
-//                sbayno2Next = "0" + Integer.toString(Integer.parseInt(b2.getBay_num()) + 2) + b2.getBay_col() + b2.getBay_row();
-//            }else {
-//
-//                sbayno2Next = Integer.toString(Integer.parseInt(b2.getBay_num()) + 2) + b2.getBay_col() + b2.getBay_row();
-//
-//            }
-//
-//            String bayNum1 = b2.getBaynum();
-//            String bayNum1Next = null;
-//            if ((Integer.parseInt(b2.getBay_num()) + 2) < 10){
-//
-//                bayNum1Next = "0" + Integer.toString(Integer.parseInt(b2.getBay_num()) + 2);
-//            }else {
-//
-//                bayNum1Next = Integer.toString(Integer.parseInt(b2.getBay_num()) + 2);
-//
-//            }
-//            String bayNum2 = null;
-//            if ((Integer.parseInt(b1.getBay_num()) + 1) < 10){
-//
-//                bayNum2 = "0" + Integer.toString(Integer.parseInt(b1.getBay_num()) + 1);
-//            }else {
-//
-//                bayNum2 = Integer.toString(Integer.parseInt(b1.getBay_num()) + 1);
-//
-//            }
-//            String bayNum2Next = bayNum2;
-//
-//            Log.i(LOG_TAG + "swapBay", "bayno1 is " + bayno1);
-//            Log.i(LOG_TAG + "swapBay", "bayno1Next is " + bayno1Next);
-//            Log.i(LOG_TAG + "swapBay", "bayno2 is " + bayno2);
-//            Log.i(LOG_TAG + "swapBay", "bayno2Next is " + bayno2Next);
-//
-//            Log.i(LOG_TAG + "swapBay", "sbayno1Next is " + sbayno1Next);
-//            Log.i(LOG_TAG + "swapBay", "sbayno2Next is " + sbayno2Next);
-//
-//            Log.i(LOG_TAG + "swapBay", "bayNum1 is " + bayNum1);
-//            Log.i(LOG_TAG + "swapBay", "bayNum1Next is " + bayNum1Next);
-//            Log.i(LOG_TAG + "swapBay", "bayNum2 is " + bayNum2);
-//            Log.i(LOG_TAG + "swapBay", "bayNum2Next is " + bayNum2Next);
-//
-//
-//            String sql1 = String.format("update %s set CODE_LOAD_PORT='%s'," +
-//                            "CODE_UNLOAD_PORT='%s'," +
-//                            "DELIVERY='%s'," +
-//                            "MOVED='%s'," +
-//                            "UNLOAD_MARK='%s'," +
-//                            "WORK_NO='%s'," +
-//                            "DANGER_GRADE='%s'," +
-//                            "DEGREE_SETTING='%s'," +
-//                            "DEGREE_UNIT='%s'," +
-//                            "MIN_DEGREE='%s'," +
-//                            "MAX_DEGREE='%s'," +
-//                            "BAYNO='%s'," +
-//                            "OLDBAYNO='%s'," +
-//                            "CODE_CRANE='%s'," +
-//                            "BAYNUM='%s'," +
-//                            "BAYCOL='%s'," +
-//                            "BAYROW='%s'," +
-//                            "CONTAINER_NO='%s'," +
-//                            "SIZE_CON='%s'," +
-//                            "CONTAINER_TYPE='%s'," +
-//                            "CODE_EMPTY='%s'," +
-//                            "WEIGHT='%s'," +
-//                            "SEALNO='%s'," +
-//                            "MOVED_NAME='%s'," +
-//                            "INOUTMARK='%s'," +
-//                            "TransMark='%s'," +
-//                            "HOLIDAYS='%s'," +
-//                            "NIGHT='%s'," +
-//                            "NAME='%s'," +
-//                            "MARK_MODIFY='%s'," +
-//                            "MODIFIER='%s'," +
-//                            "MODIFYTIME='%s'" +
-//                            "where SHIP_ID='%s' and SBAYNO='%s' and CONTAINER_NO='%s'",
-//                    tableName,
-//                    b2.getCode_load_port(), b2.getCode_unload_port(), b2.getDelivery(), moved2, b2.getUnload_mark(), b2.getWork_no(),
-//                    b2.getDanger_grade(), b2.getDegree_setting(), b2.getDegree_unit(), b2.getMin_degree(), b2.getMax_degree(), bayno2,
-//                    oldbayno2, b2.getCode_crane(), bayNum2, b2.getBay_col(), b2.getBay_row(), b2.getContainer_no(), b2.getSize_con(),
-//                    b2.getContainer_type(), b2.getCode_empty(), b2.getWeight(), b2.getSealno(), moveName2, b2.getInoutmark(),
-//                    b2.getTransmark(), b2.getHolidays(), b2.getNight(), b2.getName(), "1", Global.getApplicationConfig().getUserName(), date,
-//                    b1.getShip_id(), b1.getSbayno(), b1.getContainer_no());
-//
-//            Log.i(LOG_TAG + "swapBay", "sql1 is " + sql1);
-//
-//            String sql2 = String.format("update %s set CODE_LOAD_PORT='%s'," +
-//                            "CODE_UNLOAD_PORT='%s'," +
-//                            "DELIVERY='%s'," +
-//                            "MOVED='%s'," +
-//                            "UNLOAD_MARK='%s'," +
-//                            "WORK_NO='%s'," +
-//                            "DANGER_GRADE='%s'," +
-//                            "DEGREE_SETTING='%s'," +
-//                            "DEGREE_UNIT='%s'," +
-//                            "MIN_DEGREE='%s'," +
-//                            "MAX_DEGREE='%s'," +
-//                            "BAYNO='%s'," +
-//                            "OLDBAYNO='%s'," +
-//                            "CODE_CRANE='%s'," +
-//                            "BAYNUM='%s'," +
-//                            "BAYCOL='%s'," +
-//                            "BAYROW='%s'," +
-//                            "CONTAINER_NO='%s'," +
-//                            "SIZE_CON='%s'," +
-//                            "CONTAINER_TYPE='%s'," +
-//                            "CODE_EMPTY='%s'," +
-//                            "WEIGHT='%s'," +
-//                            "SEALNO='%s'," +
-//                            "MOVED_NAME='%s'," +
-//                            "INOUTMARK='%s'," +
-//                            "TransMark='%s'," +
-//                            "HOLIDAYS='%s'," +
-//                            "NIGHT='%s'," +
-//                            "NAME='%s'," +
-//                            "MARK_MODIFY='%s'," +
-//                            "MODIFIER='%s'," +
-//                            "MODIFYTIME='%s'" +
-//                            "where SHIP_ID='%s' and SBAYNO='%s' and CONTAINER_NO='%s'",
-//                    tableName,
-//                    b1.getCode_load_port(), b1.getCode_unload_port(), b1.getDelivery(), moved1, b1.getUnload_mark(), b1.getWork_no(),
-//                    b1.getDanger_grade(), b1.getDegree_setting(), b1.getDegree_unit(), b1.getMin_degree(), b1.getMax_degree(), bayno1,
-//                    oldbayno1, b1.getCode_crane(), bayNum1, b1.getBay_col(), b1.getBay_row(), b1.getContainer_no(), b1.getSize_con(),
-//                    b1.getContainer_type(), b1.getCode_empty(), b1.getWeight(), b1.getSealno(), moveName1, b1.getInoutmark(),
-//                    b1.getTransmark(), b1.getHolidays(), b1.getNight(), b1.getName(), "1", Global.getApplicationConfig().getUserName(), date,
-//                    b2.getShip_id(), b2.getSbayno(), b2.getContainer_no());
-//
-//            Log.i(LOG_TAG + "swapBay", "sql2 is " + sql2);
-//
-//
-//            String sql1Next = String.format("update %s set CODE_LOAD_PORT='%s'," +
-//                            "CODE_UNLOAD_PORT='%s'," +
-//                            "DELIVERY='%s'," +
-//                            "MOVED='%s'," +
-//                            "UNLOAD_MARK='%s'," +
-//                            "WORK_NO='%s'," +
-//                            "DANGER_GRADE='%s'," +
-//                            "DEGREE_SETTING='%s'," +
-//                            "DEGREE_UNIT='%s'," +
-//                            "MIN_DEGREE='%s'," +
-//                            "MAX_DEGREE='%s'," +
-//                            "BAYNO='%s'," +
-//                            "OLDBAYNO='%s'," +
-//                            "CODE_CRANE='%s'," +
-//                            "BAYNUM='%s'," +
-//                            "BAYCOL='%s'," +
-//                            "BAYROW='%s'," +
-//                            "CONTAINER_NO='%s'," +
-//                            "SIZE_CON='%s'," +
-//                            "CONTAINER_TYPE='%s'," +
-//                            "CODE_EMPTY='%s'," +
-//                            "WEIGHT='%s'," +
-//                            "SEALNO='%s'," +
-//                            "MOVED_NAME='%s'," +
-//                            "INOUTMARK='%s'," +
-//                            "TransMark='%s'," +
-//                            "HOLIDAYS='%s'," +
-//                            "NIGHT='%s'," +
-//                            "NAME='%s'," +
-//                            "MARK_MODIFY='%s'," +
-//                            "MODIFIER='%s'," +
-//                            "MODIFYTIME='%s'" +
-//                            "where SHIP_ID='%s' and SBAYNO='%s' and CONTAINER_NO='%s'",
-//                    tableName,
-//                    b2.getCode_load_port(), b2.getCode_unload_port(), b2.getDelivery(), moved2, b2.getUnload_mark(), b2.getWork_no(),
-//                    b2.getDanger_grade(), b2.getDegree_setting(), b2.getDegree_unit(), b2.getMin_degree(), b2.getMax_degree(), bayno2Next,
-//                    oldbayno2, b2.getCode_crane(), bayNum2Next, b2.getBay_col(), b2.getBay_row(), b2.getContainer_no(), b2.getSize_con(),
-//                    b2.getContainer_type(), b2.getCode_empty(), b2.getWeight(), b2.getSealno(), moveName2, b2.getInoutmark(),
-//                    b2.getTransmark(), b2.getHolidays(), b2.getNight(), b2.getName(), "1", Global.getApplicationConfig().getUserName(), date,
-//                    b1.getShip_id(), sbayno1Next, b2.getContainer_no());
-//
-//            Log.i(LOG_TAG + "swapBay", "sql1Next is " + sql1Next);
-//
-//
-//            String sql2Next = String.format("update %s set CODE_LOAD_PORT='%s'," +
-//                            "CODE_UNLOAD_PORT='%s'," +
-//                            "DELIVERY='%s'," +
-//                            "MOVED='%s'," +
-//                            "UNLOAD_MARK='%s'," +
-//                            "WORK_NO='%s'," +
-//                            "DANGER_GRADE='%s'," +
-//                            "DEGREE_SETTING='%s'," +
-//                            "DEGREE_UNIT='%s'," +
-//                            "MIN_DEGREE='%s'," +
-//                            "MAX_DEGREE='%s'," +
-//                            "BAYNO='%s'," +
-//                            "OLDBAYNO='%s'," +
-//                            "CODE_CRANE='%s'," +
-//                            "BAYNUM='%s'," +
-//                            "BAYCOL='%s'," +
-//                            "BAYROW='%s'," +
-//                            "CONTAINER_NO='%s'," +
-//                            "SIZE_CON='%s'," +
-//                            "CONTAINER_TYPE='%s'," +
-//                            "CODE_EMPTY='%s'," +
-//                            "WEIGHT='%s'," +
-//                            "SEALNO='%s'," +
-//                            "MOVED_NAME='%s'," +
-//                            "INOUTMARK='%s'," +
-//                            "TransMark='%s'," +
-//                            "HOLIDAYS='%s'," +
-//                            "NIGHT='%s'," +
-//                            "NAME='%s'," +
-//                            "MARK_MODIFY='%s'," +
-//                            "MODIFIER='%s'," +
-//                            "MODIFYTIME='%s'" +
-//                            "where SHIP_ID='%s' and SBAYNO='%s'",
-//                    tableName,
-//                    b1.getCode_load_port(), b1.getCode_unload_port(), b1.getDelivery(), moved1, b1.getUnload_mark(), b1.getWork_no(),
-//                    b1.getDanger_grade(), b1.getDegree_setting(), b1.getDegree_unit(), b1.getMin_degree(), b1.getMax_degree(), bayno1Next,
-//                    oldbayno1, b1.getCode_crane(), bayNum1Next, b1.getBay_col(), b1.getBay_row(), b1.getContainer_no(), b1.getSize_con(),
-//                    b1.getContainer_type(), b1.getCode_empty(), b1.getWeight(), b1.getSealno(), moveName1, b1.getInoutmark(),
-//                    b1.getTransmark(), b1.getHolidays(), b1.getNight(), b1.getName(), "1", Global.getApplicationConfig().getUserName(), date,
-//                    b2.getShip_id(), sbayno2Next);
-//
-//            Log.i(LOG_TAG + "swapBay", "sql2Next is " + sql2Next);
-//
-//            List<String> sqlList = new ArrayList<>();
-//            sqlList.add(sql1);
-//            sqlList.add(sql2);
-//            sqlList.add(sql1Next);
-//            sqlList.add(sql2Next);
-//            execSQL(sqlList);
-//
-//        } else if (b1.getSize_con().equals("40")) {
-//
-//            String bayno1 = null;
-//            if ((Integer.parseInt(b2.getBay_num()) + 1) < 10){
-//
-//                bayno1 = "0" + Integer.toString(Integer.parseInt(b2.getBay_num()) + 1) + b2.getBay_col() + b2.getBay_row();
-//
-//            }else {
-//
-//                bayno1 = Integer.toString(Integer.parseInt(b2.getBay_num()) + 1) + b2.getBay_col() + b2.getBay_row();
-//
-//            }
-//            String bayno1Next = bayno1;
-//            String bayno2 = b2.getBayno().isEmpty() == true ? "" : b1.getSbayno();
-//            String bayno2Next = "";
-//
-//
-//            String sbayno1Next = null;
-//            if ((Integer.parseInt(b1.getBay_num()) + 2) < 10){
-//
-//                sbayno1Next = "0" + Integer.toString(Integer.parseInt(b1.getBay_num()) + 2) + b1.getBay_col() + b1.getBay_row();
-//
-//            }else {
-//
-//                sbayno1Next = Integer.toString(Integer.parseInt(b1.getBay_num()) + 2) + b1.getBay_col() + b1.getBay_row();
-//
-//            }
-//            String sbayno2Next = null;
-//            if ((Integer.parseInt(b2.getBay_num()) + 2) < 10){
-//
-//                sbayno2Next = "0" + Integer.toString(Integer.parseInt(b2.getBay_num()) + 2) + b2.getBay_col() + b2.getBay_row();
-//
-//            }else {
-//
-//                sbayno2Next = Integer.toString(Integer.parseInt(b2.getBay_num()) + 2) + b2.getBay_col() + b2.getBay_row();
-//
-//            }
-//
-//            String bayNum1 = null;
-//            if ((Integer.parseInt(b2.getBay_num()) + 1) < 10){
-//
-//                bayNum1 = "0" + Integer.toString(Integer.parseInt(b2.getBay_num()) + 1);
-//
-//            }else {
-//
-//                bayNum1 = Integer.toString(Integer.parseInt(b2.getBay_num()) + 1);
-//
-//            }
-//            String bayNum1Next = bayNum1;
-//            String bayNum2 = b2.getBayno().isEmpty() == true ? "" : b1.getBaynum();
-//            String bayNum2Next = "";
-//
-//            String bayCol1 = b2.getBay_col();
-//            String bayCol1Next = bayCol1;
-//            String bayCol2 = b2.getBayno().isEmpty() == true ? "" : b1.getBay_col();
-//            String bayCol2Next = "";
-//
-//            String bayRow1 = b2.getBay_row();
-//            String bayRow1Next = bayRow1;
-//            String bayRow2 = b2.getBayno().isEmpty() == true ? "" : b1.getBay_row();
-//            String bayRow2Next = "";
-//
-//            Log.i(LOG_TAG + "swapBay", "bayno1 is " + bayno1);
-//            Log.i(LOG_TAG + "swapBay", "bayno1Next is " + bayno1Next);
-//            Log.i(LOG_TAG + "swapBay", "bayno2 is " + bayno2);
-//            Log.i(LOG_TAG + "swapBay", "bayno2Next is " + bayno2Next);
-//
-//            Log.i(LOG_TAG + "swapBay", "sbayno1Next is " + sbayno1Next);
-//            Log.i(LOG_TAG + "swapBay", "sbayno2Next is " + sbayno2Next);
-//
-//            Log.i(LOG_TAG + "swapBay", "bayNum1 is " + bayNum1);
-//            Log.i(LOG_TAG + "swapBay", "bayNum1Next is " + bayNum1Next);
-//            Log.i(LOG_TAG + "swapBay", "bayNum2 is " + bayNum2);
-//            Log.i(LOG_TAG + "swapBay", "bayNum2Next is " + bayNum2Next);
-//
-//            Log.i(LOG_TAG + "swapBay", "bayCol1 is " + bayCol1);
-//            Log.i(LOG_TAG + "swapBay", "bayCol1Next is " + bayCol1Next);
-//            Log.i(LOG_TAG + "swapBay", "bayCol2 is " + bayCol2);
-//            Log.i(LOG_TAG + "swapBay", "bayCol2Next is " + bayCol2Next);
-//
-//            Log.i(LOG_TAG + "swapBay", "bayRow1 is " + bayRow1);
-//            Log.i(LOG_TAG + "swapBay", "bayRow1Next is " + bayRow1Next);
-//            Log.i(LOG_TAG + "swapBay", "bayRow2 is " + bayRow2);
-//            Log.i(LOG_TAG + "swapBay", "bayRow2Next is " + bayRow2Next);
-//
-//            String sql1 = String.format("update %s set CODE_LOAD_PORT='%s'," +
-//                            "CODE_UNLOAD_PORT='%s'," +
-//                            "DELIVERY='%s'," +
-//                            "MOVED='%s'," +
-//                            "UNLOAD_MARK='%s'," +
-//                            "WORK_NO='%s'," +
-//                            "DANGER_GRADE='%s'," +
-//                            "DEGREE_SETTING='%s'," +
-//                            "DEGREE_UNIT='%s'," +
-//                            "MIN_DEGREE='%s'," +
-//                            "MAX_DEGREE='%s'," +
-//                            "BAYNO='%s'," +
-//                            "OLDBAYNO='%s'," +
-//                            "CODE_CRANE='%s'," +
-//                            "BAYNUM='%s'," +
-//                            "BAYCOL='%s'," +
-//                            "BAYROW='%s'," +
-//                            "CONTAINER_NO='%s'," +
-//                            "SIZE_CON='%s'," +
-//                            "CONTAINER_TYPE='%s'," +
-//                            "CODE_EMPTY='%s'," +
-//                            "WEIGHT='%s'," +
-//                            "SEALNO='%s'," +
-//                            "MOVED_NAME='%s'," +
-//                            "INOUTMARK='%s'," +
-//                            "TransMark='%s'," +
-//                            "HOLIDAYS='%s'," +
-//                            "NIGHT='%s'," +
-//                            "NAME='%s'," +
-//                            "MARK_MODIFY='%s'," +
-//                            "MODIFIER='%s'," +
-//                            "MODIFYTIME='%s'" +
-//                            "where SHIP_ID='%s' and SBAYNO='%s' and CONTAINER_NO='%s'",
-//                    tableName,
-//                    b2.getCode_load_port(), b2.getCode_unload_port(), b2.getDelivery(), moved2, b2.getUnload_mark(), b2.getWork_no(),
-//                    b2.getDanger_grade(), b2.getDegree_setting(), b2.getDegree_unit(), b2.getMin_degree(), b2.getMax_degree(), bayno2,
-//                    oldbayno2, b2.getCode_crane(), bayNum2, bayCol2, b2.getBay_row(), b2.getContainer_no(), b2.getSize_con(),
-//                    b2.getContainer_type(), b2.getCode_empty(), b2.getWeight(), b2.getSealno(), moveName2, b2.getInoutmark(),
-//                    b2.getTransmark(), b2.getHolidays(), b2.getNight(), b2.getName(), "1", Global.getApplicationConfig().getUserName(), date,
-//                    b1.getShip_id(), b1.getSbayno());
-//
-//            Log.i(LOG_TAG + "swapBay", "sql1 is " + sql1);
-//
-//            String sql2 = String.format("update %s set CODE_LOAD_PORT='%s'," +
-//                            "CODE_UNLOAD_PORT='%s'," +
-//                            "DELIVERY='%s'," +
-//                            "MOVED='%s'," +
-//                            "UNLOAD_MARK='%s'," +
-//                            "WORK_NO='%s'," +
-//                            "DANGER_GRADE='%s'," +
-//                            "DEGREE_SETTING='%s'," +
-//                            "DEGREE_UNIT='%s'," +
-//                            "MIN_DEGREE='%s'," +
-//                            "MAX_DEGREE='%s'," +
-//                            "BAYNO='%s'," +
-//                            "OLDBAYNO='%s'," +
-//                            "CODE_CRANE='%s'," +
-//                            "BAYNUM='%s'," +
-//                            "BAYCOL='%s'," +
-//                            "BAYROW='%s'," +
-//                            "CONTAINER_NO='%s'," +
-//                            "SIZE_CON='%s'," +
-//                            "CONTAINER_TYPE='%s'," +
-//                            "CODE_EMPTY='%s'," +
-//                            "WEIGHT='%s'," +
-//                            "SEALNO='%s'," +
-//                            "MOVED_NAME='%s'," +
-//                            "INOUTMARK='%s'," +
-//                            "TransMark='%s'," +
-//                            "HOLIDAYS='%s'," +
-//                            "NIGHT='%s'," +
-//                            "NAME='%s'," +
-//                            "MARK_MODIFY='%s'," +
-//                            "MODIFIER='%s'," +
-//                            "MODIFYTIME='%s'" +
-//                            "where SHIP_ID='%s' and SBAYNO='%s' and CONTAINER_NO='%s'",
-//                    tableName,
-//                    b1.getCode_load_port(), b1.getCode_unload_port(), b1.getDelivery(), moved1, b1.getUnload_mark(), b1.getWork_no(),
-//                    b1.getDanger_grade(), b1.getDegree_setting(), b1.getDegree_unit(), b1.getMin_degree(), b1.getMax_degree(), bayno1,
-//                    oldbayno1, b1.getCode_crane(), bayNum1, b1.getBay_col(), b1.getBay_row(), b1.getContainer_no(), b1.getSize_con(),
-//                    b1.getContainer_type(), b1.getCode_empty(), b1.getWeight(), b1.getSealno(), moveName1, b1.getInoutmark(),
-//                    b1.getTransmark(), b1.getHolidays(), b1.getNight(), b1.getName(), "1", Global.getApplicationConfig().getUserName(), date,
-//                    b2.getShip_id(), b2.getSbayno());
-//
-//            Log.i(LOG_TAG + "swapBay", "sql2 is " + sql2);
-//
-//
-//            String sql1Next = String.format("update %s set CODE_LOAD_PORT='%s'," +
-//                            "CODE_UNLOAD_PORT='%s'," +
-//                            "DELIVERY='%s'," +
-//                            "MOVED='%s'," +
-//                            "UNLOAD_MARK='%s'," +
-//                            "WORK_NO='%s'," +
-//                            "DANGER_GRADE='%s'," +
-//                            "DEGREE_SETTING='%s'," +
-//                            "DEGREE_UNIT='%s'," +
-//                            "MIN_DEGREE='%s'," +
-//                            "MAX_DEGREE='%s'," +
-//                            "BAYNO='%s'," +
-//                            "OLDBAYNO='%s'," +
-//                            "CODE_CRANE='%s'," +
-//                            "BAYNUM='%s'," +
-//                            "BAYCOL='%s'," +
-//                            "BAYROW='%s'," +
-//                            "CONTAINER_NO='%s'," +
-//                            "SIZE_CON='%s'," +
-//                            "CONTAINER_TYPE='%s'," +
-//                            "CODE_EMPTY='%s'," +
-//                            "WEIGHT='%s'," +
-//                            "SEALNO='%s'," +
-//                            "MOVED_NAME='%s'," +
-//                            "INOUTMARK='%s'," +
-//                            "TransMark='%s'," +
-//                            "HOLIDAYS='%s'," +
-//                            "NIGHT='%s'," +
-//                            "NAME='%s'," +
-//                            "MARK_MODIFY='%s'," +
-//                            "MODIFIER='%s'," +
-//                            "MODIFYTIME='%s'" +
-//                            "where SHIP_ID='%s' and SBAYNO='%s' and CONTAINER_NO='%s'",
-//                    tableName,
-//                    b2.getCode_load_port(), b2.getCode_unload_port(), b2.getDelivery(), moved2, b2.getUnload_mark(), b2.getWork_no(),
-//                    b2.getDanger_grade(), b2.getDegree_setting(), b2.getDegree_unit(), b2.getMin_degree(), b2.getMax_degree(), bayno2Next,
-//                    oldbayno2, b2.getCode_crane(), bayNum2Next, b2.getBay_col(), b2.getBay_row(), b2.getContainer_no(), b2.getSize_con(),
-//                    b2.getContainer_type(), b2.getCode_empty(), b2.getWeight(), b2.getSealno(), moveName2, b2.getInoutmark(),
-//                    b2.getTransmark(), b2.getHolidays(), b2.getNight(), b2.getName(), "1", Global.getApplicationConfig().getUserName(), date,
-//                    b1.getShip_id(), sbayno1Next);
-//
-//            Log.i(LOG_TAG + "swapBay", "sql1Next is " + sql1Next);
-//
-//
-//            String sql2Next = String.format("update %s set CODE_LOAD_PORT='%s'," +
-//                            "CODE_UNLOAD_PORT='%s'," +
-//                            "DELIVERY='%s'," +
-//                            "MOVED='%s'," +
-//                            "UNLOAD_MARK='%s'," +
-//                            "WORK_NO='%s'," +
-//                            "DANGER_GRADE='%s'," +
-//                            "DEGREE_SETTING='%s'," +
-//                            "DEGREE_UNIT='%s'," +
-//                            "MIN_DEGREE='%s'," +
-//                            "MAX_DEGREE='%s'," +
-//                            "BAYNO='%s'," +
-//                            "OLDBAYNO='%s'," +
-//                            "CODE_CRANE='%s'," +
-//                            "BAYNUM='%s'," +
-//                            "BAYCOL='%s'," +
-//                            "BAYROW='%s'," +
-//                            "CONTAINER_NO='%s'," +
-//                            "SIZE_CON='%s'," +
-//                            "CONTAINER_TYPE='%s'," +
-//                            "CODE_EMPTY='%s'," +
-//                            "WEIGHT='%s'," +
-//                            "SEALNO='%s'," +
-//                            "MOVED_NAME='%s'," +
-//                            "INOUTMARK='%s'," +
-//                            "TransMark='%s'," +
-//                            "HOLIDAYS='%s'," +
-//                            "NIGHT='%s'," +
-//                            "NAME='%s'," +
-//                            "MARK_MODIFY='%s'," +
-//                            "MODIFIER='%s'," +
-//                            "MODIFYTIME='%s'" +
-//                            "where SHIP_ID='%s' and SBAYNO='%s' and CONTAINER_NO='%s'",
-//                    tableName,
-//                    b1.getCode_load_port(), b1.getCode_unload_port(), b1.getDelivery(), moved1, b1.getUnload_mark(), b1.getWork_no(),
-//                    b1.getDanger_grade(), b1.getDegree_setting(), b1.getDegree_unit(), b1.getMin_degree(), b1.getMax_degree(), bayno1Next,
-//                    oldbayno1, b1.getCode_crane(), bayNum1Next, b1.getBay_col(), b1.getBay_row(), b1.getContainer_no(), b1.getSize_con(),
-//                    b1.getContainer_type(), b1.getCode_empty(), b1.getWeight(), b1.getSealno(), moveName1, b1.getInoutmark(),
-//                    b1.getTransmark(), b1.getHolidays(), b1.getNight(), b1.getName(), "1", Global.getApplicationConfig().getUserName(), date,
-//                    b2.getShip_id(), sbayno2Next);
-//
-//            Log.i(LOG_TAG + "swapBay", "sql2Next is " + sql2Next);
-//
-//            List<String> sqlList = new ArrayList<>();
-//            sqlList.add(sql1);
-//            sqlList.add(sql2);
-//            sqlList.add(sql1Next);
-//            sqlList.add(sql2Next);
-//            execSQL(sqlList);
-//        }
-//    }
+    //    /**
+    //     * 对调贝位
+    //     *
+    //     * @param b1        贝位1
+    //     * @param b2        贝位2
+    //     * @param codeInOut 进出口编码
+    //     */
+    //    public void swapBay(ShipImage b1, ShipImage b2, String codeInOut) {
+    //
+    //        Log.i(LOG_TAG + "swapBay", "query param is " + b1.getSbayno() + " " + b2.getSbayno());
+    //
+    //        Log.i(LOG_TAG + "swapBay", "b1 getSbayno is " + b1.getSbayno());
+    //        Log.i(LOG_TAG + "swapBay", "b1 getBaynum is " + b1.getBaynum());
+    //        Log.i(LOG_TAG + "swapBay", "b1 getBaycol is " + b1.getBaycol());
+    //        Log.i(LOG_TAG + "swapBay", "b1 getBayrow is " + b1.getBayrow());
+    //
+    //        Log.i(LOG_TAG + "swapBay", "b2 getSbayno is " + b2.getSbayno());
+    //        Log.i(LOG_TAG + "swapBay", "b2 getBaynum is " + b2.getBaynum());
+    //        Log.i(LOG_TAG + "swapBay", "b2 getBaycol is " + b2.getBaycol());
+    //        Log.i(LOG_TAG + "swapBay", "b2 getBayrow is " + b2.getBayrow());
+    //
+    //
+    //        String moved1 = getMoved(b1, codeInOut);
+    //        String moved2 = getMoved(b2, codeInOut);
+    //        String moveName1 = moved1.equals("1") == true ? "捣箱" : "";
+    //        String moveName2 = moved2.equals("1") == true ? "捣箱" : "";
+    //        String oldbayno1 = b2.getOldbayno().isEmpty() == true ? b2.getBayno() : "";
+    //        String oldbayno2 = b1.getOldbayno().isEmpty() == true ? b1.getBayno() : "";
+    //
+    //        SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
+    //        String date = sDateFormat.format(new java.util.Date());
+    //
+    //        Log.i(LOG_TAG + "swapBay", "date is " +date);
+    //
+    //
+    //        Log.i(LOG_TAG + "swapBay", "Size_con is " + b1.getSize_con() + " " + b2.getSize_con
+    // ());
+    //
+    //        if (b1.getSize_con().equals("20") && (b2.getSize_con().equals("20") || b2
+    // .getSize_con().isEmpty())) {
+    //
+    //            String bayno1 = b2.getSbayno();
+    //            String bayno2 = b2.getBayno().isEmpty() == true ? "" : b1.getSbayno();
+    //
+    //            String bayNum1 = b2.getBay_num();
+    //            String bayNum2 = b2.getBayno().isEmpty() == true ? "" : b1.getBay_num();
+    //
+    //            String bayCol1 = b2.getBay_col();
+    //            String bayCol2 = b2.getBayno().isEmpty() == true ? "" : b1.getBay_col();
+    //
+    //            String bayRow1 = b2.getBay_row();
+    //            String bayRow2 = b2.getBayno().isEmpty() == true ? "" : b1.getBay_row();
+    //
+    //            Log.i(LOG_TAG + "swapBay", "bayno1 is " + bayno1);
+    //            Log.i(LOG_TAG + "swapBay", "bayno2 is " + bayno2);
+    //            Log.i(LOG_TAG + "swapBay", "bayNum1 is " + bayNum1);
+    //            Log.i(LOG_TAG + "swapBay", "bayNum2 is " + bayNum2);
+    //            Log.i(LOG_TAG + "swapBay", "bayCol1 is " + bayCol1);
+    //            Log.i(LOG_TAG + "swapBay", "bayCol2 is " + bayCol2);
+    //            Log.i(LOG_TAG + "swapBay", "bayRow1 is " + bayRow1);
+    //            Log.i(LOG_TAG + "swapBay", "bayRow2 is " + bayRow2);
+    //
+    //            String sql1 = String.format("update %s set CODE_LOAD_PORT='%s'," +
+    //                            "CODE_UNLOAD_PORT='%s'," +
+    //                            "DELIVERY='%s'," +
+    //                            "MOVED='%s'," +
+    //                            "UNLOAD_MARK='%s'," +
+    //                            "WORK_NO='%s'," +
+    //                            "DANGER_GRADE='%s'," +
+    //                            "DEGREE_SETTING='%s'," +
+    //                            "DEGREE_UNIT='%s'," +
+    //                            "MIN_DEGREE='%s'," +
+    //                            "MAX_DEGREE='%s'," +
+    //                            "BAYNO='%s'," +
+    //                            "OLDBAYNO='%s'," +
+    //                            "CODE_CRANE='%s'," +
+    //                            "BAYNUM='%s'," +
+    //                            "BAYCOL='%s'," +
+    //                            "BAYROW='%s'," +
+    //                            "CONTAINER_NO='%s'," +
+    //                            "SIZE_CON='%s'," +
+    //                            "CONTAINER_TYPE='%s'," +
+    //                            "CODE_EMPTY='%s'," +
+    //                            "WEIGHT='%s'," +
+    //                            "SEALNO='%s'," +
+    //                            "MOVED_NAME='%s'," +
+    //                            "INOUTMARK='%s'," +
+    //                            "TransMark='%s'," +
+    //                            "HOLIDAYS='%s'," +
+    //                            "NIGHT='%s'," +
+    //                            "NAME='%s'," +
+    //                            "MARK_MODIFY='%s'," +
+    //                            "MODIFIER='%s'," +
+    //                            "MODIFYTIME='%s'" +
+    //                            "where SHIP_ID='%s' and SBAYNO='%s' and CONTAINER_NO='%s'",
+    //                    tableName,
+    //                    b2.getCode_load_port(), b2.getCode_unload_port(), b2.getDelivery(),
+    // moved2, b2.getUnload_mark(), b2.getWork_no(),
+    //                    b2.getDanger_grade(), b2.getDegree_setting(), b2.getDegree_unit(), b2
+    // .getMin_degree(), b2.getMax_degree(), bayno2,
+    //                    oldbayno2, b2.getCode_crane(), bayNum2, bayCol2, bayRow2, b2
+    // .getContainer_no(), b2.getSize_con(),
+    //                    b2.getContainer_type(), b2.getCode_empty(), b2.getWeight(), b2
+    // .getSealno(), moveName2, b2.getInoutmark(),
+    //                    b2.getTransmark(), b2.getHolidays(), b2.getNight(), b2.getName(), "1",
+    // Global.getApplicationConfig().getUserName(), date,
+    //                    b1.getShip_id(), b1.getSbayno(), b1.getContainer_no());
+    //
+    //            Log.i(LOG_TAG + "swapBay", "sql1 is " + sql1);
+    //
+    //            String sql2 = String.format("update %s set CODE_LOAD_PORT='%s'," +
+    //                            "CODE_UNLOAD_PORT='%s'," +
+    //                            "DELIVERY='%s'," +
+    //                            "MOVED='%s'," +
+    //                            "UNLOAD_MARK='%s'," +
+    //                            "WORK_NO='%s'," +
+    //                            "DANGER_GRADE='%s'," +
+    //                            "DEGREE_SETTING='%s'," +
+    //                            "DEGREE_UNIT='%s'," +
+    //                            "MIN_DEGREE='%s'," +
+    //                            "MAX_DEGREE='%s'," +
+    //                            "BAYNO='%s'," +
+    //                            "OLDBAYNO='%s'," +
+    //                            "CODE_CRANE='%s'," +
+    //                            "BAYNUM='%s'," +
+    //                            "BAYCOL='%s'," +
+    //                            "BAYROW='%s'," +
+    //                            "CONTAINER_NO='%s'," +
+    //                            "SIZE_CON='%s'," +
+    //                            "CONTAINER_TYPE='%s'," +
+    //                            "CODE_EMPTY='%s'," +
+    //                            "WEIGHT='%s'," +
+    //                            "SEALNO='%s'," +
+    //                            "MOVED_NAME='%s'," +
+    //                            "INOUTMARK='%s'," +
+    //                            "TransMark='%s'," +
+    //                            "HOLIDAYS='%s'," +
+    //                            "NIGHT='%s'," +
+    //                            "NAME='%s'," +
+    //                            "MARK_MODIFY='%s'," +
+    //                            "MODIFIER='%s'," +
+    //                            "MODIFYTIME='%s'" +
+    //                            "where SHIP_ID='%s' and SBAYNO='%s' and CONTAINER_NO='%s'",
+    //                    tableName,
+    //                    b1.getCode_load_port(), b1.getCode_unload_port(), b1.getDelivery(),
+    // moved1, b1.getUnload_mark(), b1.getWork_no(),
+    //                    b1.getDanger_grade(), b1.getDegree_setting(), b1.getDegree_unit(), b1
+    // .getMin_degree(), b1.getMax_degree(), bayno1,
+    //                    oldbayno1, b1.getCode_crane(), bayNum1, bayCol1, bayRow1, b1
+    // .getContainer_no(), b1.getSize_con(),
+    //                    b1.getContainer_type(), b1.getCode_empty(), b1.getWeight(), b1
+    // .getSealno(), moveName1, b1.getInoutmark(),
+    //                    b1.getTransmark(), b1.getHolidays(), b1.getNight(), b1.getName(), "1",
+    // Global.getApplicationConfig().getUserName(), date,
+    //                    b2.getShip_id(), b2.getSbayno(), b2.getContainer_no());
+    //
+    //            Log.i(LOG_TAG + "swapBay", "sql2 is " + sql2);
+    //
+    //            List<String> sqlList = new ArrayList<>();
+    //            sqlList.add(sql1);
+    //            sqlList.add(sql2);
+    //            execSQL(sqlList);
+    //
+    //        } else if (b1.getSize_con().equals("20") && (b2.getSize_con().equals("40") || b2
+    // .getSize_con().equals("45"))) {
+    //
+    //            String bayno1 = b2.getSbayno();
+    //            String bayno1Next = null;
+    //            if ((Integer.parseInt(b2.getBay_num()) + 2) < 10){
+    //
+    //                bayno1Next = "0" + Integer.toString(Integer.parseInt(b2.getBay_num()) + 2)
+    // + b2.getBay_col() + b2.getBay_row();
+    //
+    //            }else {
+    //
+    //                bayno1Next = Integer.toString(Integer.parseInt(b2.getBay_num()) + 2) + b2
+    // .getBay_col() + b2.getBay_row();
+    //
+    //            }
+    //            String bayno2 = null;
+    //            if ((Integer.parseInt(b1.getBay_num()) + 1) < 10){
+    //
+    //                bayno2 = "0" + Integer.toString(Integer.parseInt(b1.getBay_num()) + 1) + b1
+    // .getBay_col() + b1.getBay_row();
+    //            }else {
+    //
+    //                bayno2 = Integer.toString(Integer.parseInt(b1.getBay_num()) + 1) + b1
+    // .getBay_col() + b1.getBay_row();
+    //
+    //            }
+    //            String bayno2Next = bayno2;
+    //
+    //            String sbayno1Next = null;
+    //            if ((Integer.parseInt(b1.getBay_num()) + 2) < 10){
+    //
+    //                sbayno1Next = "0" + Integer.toString(Integer.parseInt(b1.getBay_num()) + 2)
+    // + b1.getBay_col() + b1.getBay_row();
+    //            }else {
+    //
+    //                sbayno1Next = Integer.toString(Integer.parseInt(b1.getBay_num()) + 2) + b1
+    // .getBay_col() + b1.getBay_row();
+    //
+    //            }
+    //            String sbayno2Next = null;
+    //            if ((Integer.parseInt(b2.getBay_num()) + 2) < 10){
+    //
+    //                sbayno2Next = "0" + Integer.toString(Integer.parseInt(b2.getBay_num()) + 2)
+    // + b2.getBay_col() + b2.getBay_row();
+    //            }else {
+    //
+    //                sbayno2Next = Integer.toString(Integer.parseInt(b2.getBay_num()) + 2) + b2
+    // .getBay_col() + b2.getBay_row();
+    //
+    //            }
+    //
+    //            String bayNum1 = b2.getBaynum();
+    //            String bayNum1Next = null;
+    //            if ((Integer.parseInt(b2.getBay_num()) + 2) < 10){
+    //
+    //                bayNum1Next = "0" + Integer.toString(Integer.parseInt(b2.getBay_num()) + 2);
+    //            }else {
+    //
+    //                bayNum1Next = Integer.toString(Integer.parseInt(b2.getBay_num()) + 2);
+    //
+    //            }
+    //            String bayNum2 = null;
+    //            if ((Integer.parseInt(b1.getBay_num()) + 1) < 10){
+    //
+    //                bayNum2 = "0" + Integer.toString(Integer.parseInt(b1.getBay_num()) + 1);
+    //            }else {
+    //
+    //                bayNum2 = Integer.toString(Integer.parseInt(b1.getBay_num()) + 1);
+    //
+    //            }
+    //            String bayNum2Next = bayNum2;
+    //
+    //            Log.i(LOG_TAG + "swapBay", "bayno1 is " + bayno1);
+    //            Log.i(LOG_TAG + "swapBay", "bayno1Next is " + bayno1Next);
+    //            Log.i(LOG_TAG + "swapBay", "bayno2 is " + bayno2);
+    //            Log.i(LOG_TAG + "swapBay", "bayno2Next is " + bayno2Next);
+    //
+    //            Log.i(LOG_TAG + "swapBay", "sbayno1Next is " + sbayno1Next);
+    //            Log.i(LOG_TAG + "swapBay", "sbayno2Next is " + sbayno2Next);
+    //
+    //            Log.i(LOG_TAG + "swapBay", "bayNum1 is " + bayNum1);
+    //            Log.i(LOG_TAG + "swapBay", "bayNum1Next is " + bayNum1Next);
+    //            Log.i(LOG_TAG + "swapBay", "bayNum2 is " + bayNum2);
+    //            Log.i(LOG_TAG + "swapBay", "bayNum2Next is " + bayNum2Next);
+    //
+    //
+    //            String sql1 = String.format("update %s set CODE_LOAD_PORT='%s'," +
+    //                            "CODE_UNLOAD_PORT='%s'," +
+    //                            "DELIVERY='%s'," +
+    //                            "MOVED='%s'," +
+    //                            "UNLOAD_MARK='%s'," +
+    //                            "WORK_NO='%s'," +
+    //                            "DANGER_GRADE='%s'," +
+    //                            "DEGREE_SETTING='%s'," +
+    //                            "DEGREE_UNIT='%s'," +
+    //                            "MIN_DEGREE='%s'," +
+    //                            "MAX_DEGREE='%s'," +
+    //                            "BAYNO='%s'," +
+    //                            "OLDBAYNO='%s'," +
+    //                            "CODE_CRANE='%s'," +
+    //                            "BAYNUM='%s'," +
+    //                            "BAYCOL='%s'," +
+    //                            "BAYROW='%s'," +
+    //                            "CONTAINER_NO='%s'," +
+    //                            "SIZE_CON='%s'," +
+    //                            "CONTAINER_TYPE='%s'," +
+    //                            "CODE_EMPTY='%s'," +
+    //                            "WEIGHT='%s'," +
+    //                            "SEALNO='%s'," +
+    //                            "MOVED_NAME='%s'," +
+    //                            "INOUTMARK='%s'," +
+    //                            "TransMark='%s'," +
+    //                            "HOLIDAYS='%s'," +
+    //                            "NIGHT='%s'," +
+    //                            "NAME='%s'," +
+    //                            "MARK_MODIFY='%s'," +
+    //                            "MODIFIER='%s'," +
+    //                            "MODIFYTIME='%s'" +
+    //                            "where SHIP_ID='%s' and SBAYNO='%s' and CONTAINER_NO='%s'",
+    //                    tableName,
+    //                    b2.getCode_load_port(), b2.getCode_unload_port(), b2.getDelivery(),
+    // moved2, b2.getUnload_mark(), b2.getWork_no(),
+    //                    b2.getDanger_grade(), b2.getDegree_setting(), b2.getDegree_unit(), b2
+    // .getMin_degree(), b2.getMax_degree(), bayno2,
+    //                    oldbayno2, b2.getCode_crane(), bayNum2, b2.getBay_col(), b2.getBay_row
+    // (), b2.getContainer_no(), b2.getSize_con(),
+    //                    b2.getContainer_type(), b2.getCode_empty(), b2.getWeight(), b2
+    // .getSealno(), moveName2, b2.getInoutmark(),
+    //                    b2.getTransmark(), b2.getHolidays(), b2.getNight(), b2.getName(), "1",
+    // Global.getApplicationConfig().getUserName(), date,
+    //                    b1.getShip_id(), b1.getSbayno(), b1.getContainer_no());
+    //
+    //            Log.i(LOG_TAG + "swapBay", "sql1 is " + sql1);
+    //
+    //            String sql2 = String.format("update %s set CODE_LOAD_PORT='%s'," +
+    //                            "CODE_UNLOAD_PORT='%s'," +
+    //                            "DELIVERY='%s'," +
+    //                            "MOVED='%s'," +
+    //                            "UNLOAD_MARK='%s'," +
+    //                            "WORK_NO='%s'," +
+    //                            "DANGER_GRADE='%s'," +
+    //                            "DEGREE_SETTING='%s'," +
+    //                            "DEGREE_UNIT='%s'," +
+    //                            "MIN_DEGREE='%s'," +
+    //                            "MAX_DEGREE='%s'," +
+    //                            "BAYNO='%s'," +
+    //                            "OLDBAYNO='%s'," +
+    //                            "CODE_CRANE='%s'," +
+    //                            "BAYNUM='%s'," +
+    //                            "BAYCOL='%s'," +
+    //                            "BAYROW='%s'," +
+    //                            "CONTAINER_NO='%s'," +
+    //                            "SIZE_CON='%s'," +
+    //                            "CONTAINER_TYPE='%s'," +
+    //                            "CODE_EMPTY='%s'," +
+    //                            "WEIGHT='%s'," +
+    //                            "SEALNO='%s'," +
+    //                            "MOVED_NAME='%s'," +
+    //                            "INOUTMARK='%s'," +
+    //                            "TransMark='%s'," +
+    //                            "HOLIDAYS='%s'," +
+    //                            "NIGHT='%s'," +
+    //                            "NAME='%s'," +
+    //                            "MARK_MODIFY='%s'," +
+    //                            "MODIFIER='%s'," +
+    //                            "MODIFYTIME='%s'" +
+    //                            "where SHIP_ID='%s' and SBAYNO='%s' and CONTAINER_NO='%s'",
+    //                    tableName,
+    //                    b1.getCode_load_port(), b1.getCode_unload_port(), b1.getDelivery(),
+    // moved1, b1.getUnload_mark(), b1.getWork_no(),
+    //                    b1.getDanger_grade(), b1.getDegree_setting(), b1.getDegree_unit(), b1
+    // .getMin_degree(), b1.getMax_degree(), bayno1,
+    //                    oldbayno1, b1.getCode_crane(), bayNum1, b1.getBay_col(), b1.getBay_row
+    // (), b1.getContainer_no(), b1.getSize_con(),
+    //                    b1.getContainer_type(), b1.getCode_empty(), b1.getWeight(), b1
+    // .getSealno(), moveName1, b1.getInoutmark(),
+    //                    b1.getTransmark(), b1.getHolidays(), b1.getNight(), b1.getName(), "1",
+    // Global.getApplicationConfig().getUserName(), date,
+    //                    b2.getShip_id(), b2.getSbayno(), b2.getContainer_no());
+    //
+    //            Log.i(LOG_TAG + "swapBay", "sql2 is " + sql2);
+    //
+    //
+    //            String sql1Next = String.format("update %s set CODE_LOAD_PORT='%s'," +
+    //                            "CODE_UNLOAD_PORT='%s'," +
+    //                            "DELIVERY='%s'," +
+    //                            "MOVED='%s'," +
+    //                            "UNLOAD_MARK='%s'," +
+    //                            "WORK_NO='%s'," +
+    //                            "DANGER_GRADE='%s'," +
+    //                            "DEGREE_SETTING='%s'," +
+    //                            "DEGREE_UNIT='%s'," +
+    //                            "MIN_DEGREE='%s'," +
+    //                            "MAX_DEGREE='%s'," +
+    //                            "BAYNO='%s'," +
+    //                            "OLDBAYNO='%s'," +
+    //                            "CODE_CRANE='%s'," +
+    //                            "BAYNUM='%s'," +
+    //                            "BAYCOL='%s'," +
+    //                            "BAYROW='%s'," +
+    //                            "CONTAINER_NO='%s'," +
+    //                            "SIZE_CON='%s'," +
+    //                            "CONTAINER_TYPE='%s'," +
+    //                            "CODE_EMPTY='%s'," +
+    //                            "WEIGHT='%s'," +
+    //                            "SEALNO='%s'," +
+    //                            "MOVED_NAME='%s'," +
+    //                            "INOUTMARK='%s'," +
+    //                            "TransMark='%s'," +
+    //                            "HOLIDAYS='%s'," +
+    //                            "NIGHT='%s'," +
+    //                            "NAME='%s'," +
+    //                            "MARK_MODIFY='%s'," +
+    //                            "MODIFIER='%s'," +
+    //                            "MODIFYTIME='%s'" +
+    //                            "where SHIP_ID='%s' and SBAYNO='%s' and CONTAINER_NO='%s'",
+    //                    tableName,
+    //                    b2.getCode_load_port(), b2.getCode_unload_port(), b2.getDelivery(),
+    // moved2, b2.getUnload_mark(), b2.getWork_no(),
+    //                    b2.getDanger_grade(), b2.getDegree_setting(), b2.getDegree_unit(), b2
+    // .getMin_degree(), b2.getMax_degree(), bayno2Next,
+    //                    oldbayno2, b2.getCode_crane(), bayNum2Next, b2.getBay_col(), b2
+    // .getBay_row(), b2.getContainer_no(), b2.getSize_con(),
+    //                    b2.getContainer_type(), b2.getCode_empty(), b2.getWeight(), b2
+    // .getSealno(), moveName2, b2.getInoutmark(),
+    //                    b2.getTransmark(), b2.getHolidays(), b2.getNight(), b2.getName(), "1",
+    // Global.getApplicationConfig().getUserName(), date,
+    //                    b1.getShip_id(), sbayno1Next, b2.getContainer_no());
+    //
+    //            Log.i(LOG_TAG + "swapBay", "sql1Next is " + sql1Next);
+    //
+    //
+    //            String sql2Next = String.format("update %s set CODE_LOAD_PORT='%s'," +
+    //                            "CODE_UNLOAD_PORT='%s'," +
+    //                            "DELIVERY='%s'," +
+    //                            "MOVED='%s'," +
+    //                            "UNLOAD_MARK='%s'," +
+    //                            "WORK_NO='%s'," +
+    //                            "DANGER_GRADE='%s'," +
+    //                            "DEGREE_SETTING='%s'," +
+    //                            "DEGREE_UNIT='%s'," +
+    //                            "MIN_DEGREE='%s'," +
+    //                            "MAX_DEGREE='%s'," +
+    //                            "BAYNO='%s'," +
+    //                            "OLDBAYNO='%s'," +
+    //                            "CODE_CRANE='%s'," +
+    //                            "BAYNUM='%s'," +
+    //                            "BAYCOL='%s'," +
+    //                            "BAYROW='%s'," +
+    //                            "CONTAINER_NO='%s'," +
+    //                            "SIZE_CON='%s'," +
+    //                            "CONTAINER_TYPE='%s'," +
+    //                            "CODE_EMPTY='%s'," +
+    //                            "WEIGHT='%s'," +
+    //                            "SEALNO='%s'," +
+    //                            "MOVED_NAME='%s'," +
+    //                            "INOUTMARK='%s'," +
+    //                            "TransMark='%s'," +
+    //                            "HOLIDAYS='%s'," +
+    //                            "NIGHT='%s'," +
+    //                            "NAME='%s'," +
+    //                            "MARK_MODIFY='%s'," +
+    //                            "MODIFIER='%s'," +
+    //                            "MODIFYTIME='%s'" +
+    //                            "where SHIP_ID='%s' and SBAYNO='%s'",
+    //                    tableName,
+    //                    b1.getCode_load_port(), b1.getCode_unload_port(), b1.getDelivery(),
+    // moved1, b1.getUnload_mark(), b1.getWork_no(),
+    //                    b1.getDanger_grade(), b1.getDegree_setting(), b1.getDegree_unit(), b1
+    // .getMin_degree(), b1.getMax_degree(), bayno1Next,
+    //                    oldbayno1, b1.getCode_crane(), bayNum1Next, b1.getBay_col(), b1
+    // .getBay_row(), b1.getContainer_no(), b1.getSize_con(),
+    //                    b1.getContainer_type(), b1.getCode_empty(), b1.getWeight(), b1
+    // .getSealno(), moveName1, b1.getInoutmark(),
+    //                    b1.getTransmark(), b1.getHolidays(), b1.getNight(), b1.getName(), "1",
+    // Global.getApplicationConfig().getUserName(), date,
+    //                    b2.getShip_id(), sbayno2Next);
+    //
+    //            Log.i(LOG_TAG + "swapBay", "sql2Next is " + sql2Next);
+    //
+    //            List<String> sqlList = new ArrayList<>();
+    //            sqlList.add(sql1);
+    //            sqlList.add(sql2);
+    //            sqlList.add(sql1Next);
+    //            sqlList.add(sql2Next);
+    //            execSQL(sqlList);
+    //
+    //        } else if (b1.getSize_con().equals("40")) {
+    //
+    //            String bayno1 = null;
+    //            if ((Integer.parseInt(b2.getBay_num()) + 1) < 10){
+    //
+    //                bayno1 = "0" + Integer.toString(Integer.parseInt(b2.getBay_num()) + 1) + b2
+    // .getBay_col() + b2.getBay_row();
+    //
+    //            }else {
+    //
+    //                bayno1 = Integer.toString(Integer.parseInt(b2.getBay_num()) + 1) + b2
+    // .getBay_col() + b2.getBay_row();
+    //
+    //            }
+    //            String bayno1Next = bayno1;
+    //            String bayno2 = b2.getBayno().isEmpty() == true ? "" : b1.getSbayno();
+    //            String bayno2Next = "";
+    //
+    //
+    //            String sbayno1Next = null;
+    //            if ((Integer.parseInt(b1.getBay_num()) + 2) < 10){
+    //
+    //                sbayno1Next = "0" + Integer.toString(Integer.parseInt(b1.getBay_num()) + 2)
+    // + b1.getBay_col() + b1.getBay_row();
+    //
+    //            }else {
+    //
+    //                sbayno1Next = Integer.toString(Integer.parseInt(b1.getBay_num()) + 2) + b1
+    // .getBay_col() + b1.getBay_row();
+    //
+    //            }
+    //            String sbayno2Next = null;
+    //            if ((Integer.parseInt(b2.getBay_num()) + 2) < 10){
+    //
+    //                sbayno2Next = "0" + Integer.toString(Integer.parseInt(b2.getBay_num()) + 2)
+    // + b2.getBay_col() + b2.getBay_row();
+    //
+    //            }else {
+    //
+    //                sbayno2Next = Integer.toString(Integer.parseInt(b2.getBay_num()) + 2) + b2
+    // .getBay_col() + b2.getBay_row();
+    //
+    //            }
+    //
+    //            String bayNum1 = null;
+    //            if ((Integer.parseInt(b2.getBay_num()) + 1) < 10){
+    //
+    //                bayNum1 = "0" + Integer.toString(Integer.parseInt(b2.getBay_num()) + 1);
+    //
+    //            }else {
+    //
+    //                bayNum1 = Integer.toString(Integer.parseInt(b2.getBay_num()) + 1);
+    //
+    //            }
+    //            String bayNum1Next = bayNum1;
+    //            String bayNum2 = b2.getBayno().isEmpty() == true ? "" : b1.getBaynum();
+    //            String bayNum2Next = "";
+    //
+    //            String bayCol1 = b2.getBay_col();
+    //            String bayCol1Next = bayCol1;
+    //            String bayCol2 = b2.getBayno().isEmpty() == true ? "" : b1.getBay_col();
+    //            String bayCol2Next = "";
+    //
+    //            String bayRow1 = b2.getBay_row();
+    //            String bayRow1Next = bayRow1;
+    //            String bayRow2 = b2.getBayno().isEmpty() == true ? "" : b1.getBay_row();
+    //            String bayRow2Next = "";
+    //
+    //            Log.i(LOG_TAG + "swapBay", "bayno1 is " + bayno1);
+    //            Log.i(LOG_TAG + "swapBay", "bayno1Next is " + bayno1Next);
+    //            Log.i(LOG_TAG + "swapBay", "bayno2 is " + bayno2);
+    //            Log.i(LOG_TAG + "swapBay", "bayno2Next is " + bayno2Next);
+    //
+    //            Log.i(LOG_TAG + "swapBay", "sbayno1Next is " + sbayno1Next);
+    //            Log.i(LOG_TAG + "swapBay", "sbayno2Next is " + sbayno2Next);
+    //
+    //            Log.i(LOG_TAG + "swapBay", "bayNum1 is " + bayNum1);
+    //            Log.i(LOG_TAG + "swapBay", "bayNum1Next is " + bayNum1Next);
+    //            Log.i(LOG_TAG + "swapBay", "bayNum2 is " + bayNum2);
+    //            Log.i(LOG_TAG + "swapBay", "bayNum2Next is " + bayNum2Next);
+    //
+    //            Log.i(LOG_TAG + "swapBay", "bayCol1 is " + bayCol1);
+    //            Log.i(LOG_TAG + "swapBay", "bayCol1Next is " + bayCol1Next);
+    //            Log.i(LOG_TAG + "swapBay", "bayCol2 is " + bayCol2);
+    //            Log.i(LOG_TAG + "swapBay", "bayCol2Next is " + bayCol2Next);
+    //
+    //            Log.i(LOG_TAG + "swapBay", "bayRow1 is " + bayRow1);
+    //            Log.i(LOG_TAG + "swapBay", "bayRow1Next is " + bayRow1Next);
+    //            Log.i(LOG_TAG + "swapBay", "bayRow2 is " + bayRow2);
+    //            Log.i(LOG_TAG + "swapBay", "bayRow2Next is " + bayRow2Next);
+    //
+    //            String sql1 = String.format("update %s set CODE_LOAD_PORT='%s'," +
+    //                            "CODE_UNLOAD_PORT='%s'," +
+    //                            "DELIVERY='%s'," +
+    //                            "MOVED='%s'," +
+    //                            "UNLOAD_MARK='%s'," +
+    //                            "WORK_NO='%s'," +
+    //                            "DANGER_GRADE='%s'," +
+    //                            "DEGREE_SETTING='%s'," +
+    //                            "DEGREE_UNIT='%s'," +
+    //                            "MIN_DEGREE='%s'," +
+    //                            "MAX_DEGREE='%s'," +
+    //                            "BAYNO='%s'," +
+    //                            "OLDBAYNO='%s'," +
+    //                            "CODE_CRANE='%s'," +
+    //                            "BAYNUM='%s'," +
+    //                            "BAYCOL='%s'," +
+    //                            "BAYROW='%s'," +
+    //                            "CONTAINER_NO='%s'," +
+    //                            "SIZE_CON='%s'," +
+    //                            "CONTAINER_TYPE='%s'," +
+    //                            "CODE_EMPTY='%s'," +
+    //                            "WEIGHT='%s'," +
+    //                            "SEALNO='%s'," +
+    //                            "MOVED_NAME='%s'," +
+    //                            "INOUTMARK='%s'," +
+    //                            "TransMark='%s'," +
+    //                            "HOLIDAYS='%s'," +
+    //                            "NIGHT='%s'," +
+    //                            "NAME='%s'," +
+    //                            "MARK_MODIFY='%s'," +
+    //                            "MODIFIER='%s'," +
+    //                            "MODIFYTIME='%s'" +
+    //                            "where SHIP_ID='%s' and SBAYNO='%s' and CONTAINER_NO='%s'",
+    //                    tableName,
+    //                    b2.getCode_load_port(), b2.getCode_unload_port(), b2.getDelivery(),
+    // moved2, b2.getUnload_mark(), b2.getWork_no(),
+    //                    b2.getDanger_grade(), b2.getDegree_setting(), b2.getDegree_unit(), b2
+    // .getMin_degree(), b2.getMax_degree(), bayno2,
+    //                    oldbayno2, b2.getCode_crane(), bayNum2, bayCol2, b2.getBay_row(), b2
+    // .getContainer_no(), b2.getSize_con(),
+    //                    b2.getContainer_type(), b2.getCode_empty(), b2.getWeight(), b2
+    // .getSealno(), moveName2, b2.getInoutmark(),
+    //                    b2.getTransmark(), b2.getHolidays(), b2.getNight(), b2.getName(), "1",
+    // Global.getApplicationConfig().getUserName(), date,
+    //                    b1.getShip_id(), b1.getSbayno());
+    //
+    //            Log.i(LOG_TAG + "swapBay", "sql1 is " + sql1);
+    //
+    //            String sql2 = String.format("update %s set CODE_LOAD_PORT='%s'," +
+    //                            "CODE_UNLOAD_PORT='%s'," +
+    //                            "DELIVERY='%s'," +
+    //                            "MOVED='%s'," +
+    //                            "UNLOAD_MARK='%s'," +
+    //                            "WORK_NO='%s'," +
+    //                            "DANGER_GRADE='%s'," +
+    //                            "DEGREE_SETTING='%s'," +
+    //                            "DEGREE_UNIT='%s'," +
+    //                            "MIN_DEGREE='%s'," +
+    //                            "MAX_DEGREE='%s'," +
+    //                            "BAYNO='%s'," +
+    //                            "OLDBAYNO='%s'," +
+    //                            "CODE_CRANE='%s'," +
+    //                            "BAYNUM='%s'," +
+    //                            "BAYCOL='%s'," +
+    //                            "BAYROW='%s'," +
+    //                            "CONTAINER_NO='%s'," +
+    //                            "SIZE_CON='%s'," +
+    //                            "CONTAINER_TYPE='%s'," +
+    //                            "CODE_EMPTY='%s'," +
+    //                            "WEIGHT='%s'," +
+    //                            "SEALNO='%s'," +
+    //                            "MOVED_NAME='%s'," +
+    //                            "INOUTMARK='%s'," +
+    //                            "TransMark='%s'," +
+    //                            "HOLIDAYS='%s'," +
+    //                            "NIGHT='%s'," +
+    //                            "NAME='%s'," +
+    //                            "MARK_MODIFY='%s'," +
+    //                            "MODIFIER='%s'," +
+    //                            "MODIFYTIME='%s'" +
+    //                            "where SHIP_ID='%s' and SBAYNO='%s' and CONTAINER_NO='%s'",
+    //                    tableName,
+    //                    b1.getCode_load_port(), b1.getCode_unload_port(), b1.getDelivery(),
+    // moved1, b1.getUnload_mark(), b1.getWork_no(),
+    //                    b1.getDanger_grade(), b1.getDegree_setting(), b1.getDegree_unit(), b1
+    // .getMin_degree(), b1.getMax_degree(), bayno1,
+    //                    oldbayno1, b1.getCode_crane(), bayNum1, b1.getBay_col(), b1.getBay_row
+    // (), b1.getContainer_no(), b1.getSize_con(),
+    //                    b1.getContainer_type(), b1.getCode_empty(), b1.getWeight(), b1
+    // .getSealno(), moveName1, b1.getInoutmark(),
+    //                    b1.getTransmark(), b1.getHolidays(), b1.getNight(), b1.getName(), "1",
+    // Global.getApplicationConfig().getUserName(), date,
+    //                    b2.getShip_id(), b2.getSbayno());
+    //
+    //            Log.i(LOG_TAG + "swapBay", "sql2 is " + sql2);
+    //
+    //
+    //            String sql1Next = String.format("update %s set CODE_LOAD_PORT='%s'," +
+    //                            "CODE_UNLOAD_PORT='%s'," +
+    //                            "DELIVERY='%s'," +
+    //                            "MOVED='%s'," +
+    //                            "UNLOAD_MARK='%s'," +
+    //                            "WORK_NO='%s'," +
+    //                            "DANGER_GRADE='%s'," +
+    //                            "DEGREE_SETTING='%s'," +
+    //                            "DEGREE_UNIT='%s'," +
+    //                            "MIN_DEGREE='%s'," +
+    //                            "MAX_DEGREE='%s'," +
+    //                            "BAYNO='%s'," +
+    //                            "OLDBAYNO='%s'," +
+    //                            "CODE_CRANE='%s'," +
+    //                            "BAYNUM='%s'," +
+    //                            "BAYCOL='%s'," +
+    //                            "BAYROW='%s'," +
+    //                            "CONTAINER_NO='%s'," +
+    //                            "SIZE_CON='%s'," +
+    //                            "CONTAINER_TYPE='%s'," +
+    //                            "CODE_EMPTY='%s'," +
+    //                            "WEIGHT='%s'," +
+    //                            "SEALNO='%s'," +
+    //                            "MOVED_NAME='%s'," +
+    //                            "INOUTMARK='%s'," +
+    //                            "TransMark='%s'," +
+    //                            "HOLIDAYS='%s'," +
+    //                            "NIGHT='%s'," +
+    //                            "NAME='%s'," +
+    //                            "MARK_MODIFY='%s'," +
+    //                            "MODIFIER='%s'," +
+    //                            "MODIFYTIME='%s'" +
+    //                            "where SHIP_ID='%s' and SBAYNO='%s' and CONTAINER_NO='%s'",
+    //                    tableName,
+    //                    b2.getCode_load_port(), b2.getCode_unload_port(), b2.getDelivery(),
+    // moved2, b2.getUnload_mark(), b2.getWork_no(),
+    //                    b2.getDanger_grade(), b2.getDegree_setting(), b2.getDegree_unit(), b2
+    // .getMin_degree(), b2.getMax_degree(), bayno2Next,
+    //                    oldbayno2, b2.getCode_crane(), bayNum2Next, b2.getBay_col(), b2
+    // .getBay_row(), b2.getContainer_no(), b2.getSize_con(),
+    //                    b2.getContainer_type(), b2.getCode_empty(), b2.getWeight(), b2
+    // .getSealno(), moveName2, b2.getInoutmark(),
+    //                    b2.getTransmark(), b2.getHolidays(), b2.getNight(), b2.getName(), "1",
+    // Global.getApplicationConfig().getUserName(), date,
+    //                    b1.getShip_id(), sbayno1Next);
+    //
+    //            Log.i(LOG_TAG + "swapBay", "sql1Next is " + sql1Next);
+    //
+    //
+    //            String sql2Next = String.format("update %s set CODE_LOAD_PORT='%s'," +
+    //                            "CODE_UNLOAD_PORT='%s'," +
+    //                            "DELIVERY='%s'," +
+    //                            "MOVED='%s'," +
+    //                            "UNLOAD_MARK='%s'," +
+    //                            "WORK_NO='%s'," +
+    //                            "DANGER_GRADE='%s'," +
+    //                            "DEGREE_SETTING='%s'," +
+    //                            "DEGREE_UNIT='%s'," +
+    //                            "MIN_DEGREE='%s'," +
+    //                            "MAX_DEGREE='%s'," +
+    //                            "BAYNO='%s'," +
+    //                            "OLDBAYNO='%s'," +
+    //                            "CODE_CRANE='%s'," +
+    //                            "BAYNUM='%s'," +
+    //                            "BAYCOL='%s'," +
+    //                            "BAYROW='%s'," +
+    //                            "CONTAINER_NO='%s'," +
+    //                            "SIZE_CON='%s'," +
+    //                            "CONTAINER_TYPE='%s'," +
+    //                            "CODE_EMPTY='%s'," +
+    //                            "WEIGHT='%s'," +
+    //                            "SEALNO='%s'," +
+    //                            "MOVED_NAME='%s'," +
+    //                            "INOUTMARK='%s'," +
+    //                            "TransMark='%s'," +
+    //                            "HOLIDAYS='%s'," +
+    //                            "NIGHT='%s'," +
+    //                            "NAME='%s'," +
+    //                            "MARK_MODIFY='%s'," +
+    //                            "MODIFIER='%s'," +
+    //                            "MODIFYTIME='%s'" +
+    //                            "where SHIP_ID='%s' and SBAYNO='%s' and CONTAINER_NO='%s'",
+    //                    tableName,
+    //                    b1.getCode_load_port(), b1.getCode_unload_port(), b1.getDelivery(),
+    // moved1, b1.getUnload_mark(), b1.getWork_no(),
+    //                    b1.getDanger_grade(), b1.getDegree_setting(), b1.getDegree_unit(), b1
+    // .getMin_degree(), b1.getMax_degree(), bayno1Next,
+    //                    oldbayno1, b1.getCode_crane(), bayNum1Next, b1.getBay_col(), b1
+    // .getBay_row(), b1.getContainer_no(), b1.getSize_con(),
+    //                    b1.getContainer_type(), b1.getCode_empty(), b1.getWeight(), b1
+    // .getSealno(), moveName1, b1.getInoutmark(),
+    //                    b1.getTransmark(), b1.getHolidays(), b1.getNight(), b1.getName(), "1",
+    // Global.getApplicationConfig().getUserName(), date,
+    //                    b2.getShip_id(), sbayno2Next);
+    //
+    //            Log.i(LOG_TAG + "swapBay", "sql2Next is " + sql2Next);
+    //
+    //            List<String> sqlList = new ArrayList<>();
+    //            sqlList.add(sql1);
+    //            sqlList.add(sql2);
+    //            sqlList.add(sql1Next);
+    //            sqlList.add(sql2Next);
+    //            execSQL(sqlList);
+    //        }
+    //    }
 
     private void execSQL(List<String> sqlList) {
 
@@ -2151,12 +2271,14 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
      *
      * @param b         贝位
      * @param codeInOut 进出口编码
+     *
      * @return 捣箱
      */
     private String getMoved(ShipImage b, String codeInOut) {
         String moved = "0";
 
-        Log.e(LOG_TAG + "getMoved", "params is " + codeInOut + " " + b.getCode_unload_port() + " " + b.getCode_load_port());
+        Log.e(LOG_TAG + "getMoved", "params is " + codeInOut + " " + b.getCode_unload_port() + " " +
+                "" + b.getCode_load_port());
 
         if (codeInOut.equals("0") && !b.getCode_unload_port().equals("CNLYG")) {
 
@@ -2180,6 +2302,7 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
      * 根据航次编码查询已修改的船图数据
      *
      * @param shipId 航次编码
+     *
      * @return 数据对象，没有返回null
      */
     public List<ShipImage> queryShipImageOfModify(String shipId) {

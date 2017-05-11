@@ -188,6 +188,23 @@ public class VoyageOperator extends BaseOperator<Voyage> {
         return query(sql);
     }
 
+    /**
+     * 查询未上传成功航次列表数据
+     * @return 对象
+     */
+    public List<Voyage> queryNotUploadedVoyageList()
+    {
+        Log.i(LOG_TAG + "queryNotUploadedVoyageList", "queryNotUploadedVoyageList is invoked");
+
+        // 查询语句
+        String sql = String.format("select * from %s a where EXISTS (select * from %s b where " +
+                "a.ship_id = b.ship_id and b.mark_modify='%s')",
+                tableName, "tb_ship_Image", "1");
+
+        Log.i(LOG_TAG + "queryAllVoyageList", "sql is " + sql);
+
+        return query(sql);
+    }
 
     /**
      * 查询航次进出口

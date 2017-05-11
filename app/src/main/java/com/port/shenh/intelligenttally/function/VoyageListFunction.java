@@ -259,6 +259,20 @@ public class VoyageListFunction {
     }
 
     /**
+     * 从数据库获取未上传成功航次列表
+     *
+     * @return 数据集合
+     */
+    public List<Voyage> onLoadNotUploadedVoyageListFromDataBase() {
+        if (operator == null || operator.isEmpty()) {
+            Log.i(LOG_TAG + "onLoadFromDataBase", "database null");
+            return null;
+        }
+
+        return operator.queryNotUploadedVoyageList();
+    }
+
+    /**
      * 从数据库获取航次进出口编码
      *
      * @param shipId 航次编码

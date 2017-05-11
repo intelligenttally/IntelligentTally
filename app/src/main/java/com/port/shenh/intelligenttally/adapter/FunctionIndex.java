@@ -7,9 +7,10 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.port.shenh.intelligenttally.activity.FullStatisticsActivity;
+import com.port.shenh.intelligenttally.activity.NotUploadedVoyageSelectActivity;
+import com.port.shenh.intelligenttally.activity.SingleStatisticsActivity;
 import com.port.shenh.intelligenttally.activity.VoyageDownloadActivity;
 import com.port.shenh.intelligenttally.activity.VoyageSelectActivity;
-import com.port.shenh.intelligenttally.activity.VoyageSelectActivity2;
 
 /**
  * 主界面功能索引
@@ -42,12 +43,17 @@ public class FunctionIndex {
                 break;
             case 2:
                 // 个统计
-                intent = new Intent(context, VoyageSelectActivity2.class);
+                intent = new Intent(context, SingleStatisticsActivity.class);
                 break;
             case 3:
                 // 全统计
                 intent = new Intent(context, FullStatisticsActivity.class);
                 break;
+            case 4:
+                // 未上传
+                intent = new Intent(context, NotUploadedVoyageSelectActivity.class);
+                break;
+
 
         }
 

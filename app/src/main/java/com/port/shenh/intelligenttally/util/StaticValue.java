@@ -89,21 +89,41 @@ public interface StaticValue {
         String HTTP_UPLOAD_SHIP_IMAGE_URL = HTTP_IP_URL + "M_Znlh/Ship/UploadShipImages.aspx";
 
         /**
-         * 获取全统计数据
+         * 获取普通全统计数据
          */
         String HTTP_FULL_STATISTICS_URL = HTTP_IP_URL + "M_Znlh/Statistics/GetFullStatisticsOfVoyage.aspx";
 
         /**
-         * 获取个统计理货员数据
+         * 获取捣箱全统计数据
+         */
+        String HTTP_MOVED_FULL_STATISTICS_URL = HTTP_IP_URL +
+                "M_Znlh/Statistics/GetMovedFullStatisticsOfVoyage.aspx";
+
+
+        /**
+         * 获取普通个统计理货员数据
          */
         String HTTP_SINGLE_STATISTICS_TALLY_URL = HTTP_IP_URL +
                         "M_Znlh/Statistics/GetSingleStatisticsTallyOfVoyage.aspx";
 
         /**
-         * 获取个统计操作员数据
+         * 获取普通个统计操作员数据
          */
         String HTTP_SINGLE_STATISTICS_OPERATE_URL = HTTP_IP_URL +
                 "M_Znlh/Statistics/GetSingleStatisticsOperateOfVoyage.aspx";
+
+        /**
+         * 获取捣箱个统计理货员数据
+         */
+        String HTTP_MOVED_SINGLE_STATISTICS_TALLY_URL = HTTP_IP_URL +
+                "M_Znlh/Statistics/GetMovedSingleStatisticsTallyOfVoyage.aspx";
+
+        /**
+         * 获取捣箱个统计操作员数据
+         */
+        String HTTP_MOVED_SINGLE_STATISTICS_OPERATE_URL = HTTP_IP_URL +
+                "M_Znlh/Statistics/GetMoveSingleStatisticsOperateOfVoyage.aspx";
+
 
     }
 

@@ -34,13 +34,15 @@
             android:value="@integer/google_play_services_version"/>
 
         <activity android:name=".activity.BayNumSelectActivity"/>
-        <activity android:name=".activity.GeneralFullStatisticsActivity"/>
         <activity android:name=".activity.VoyageSelectActivity3"/>
-        <activity android:name=".activity.VoyageSelectActivity2"/>
-        <activity android:name=".activity.GeneralSingleStatisticsActivity">
-        </activity>
-        <activity android:name=".activity.FullStatisticsActivity">
-        </activity>
+        <activity android:name=".activity.NotUploadedVoyageSelectActivity"/>
+        <activity android:name=".activity.GeneralSingleStatisticsActivity"/>
+        <activity android:name=".activity.GeneralFullStatisticsActivity"/>
+        <activity android:name=".activity.FullStatisticsActivity"/>
+        <activity android:name=".activity.SingleStatisticsActivity"/>
+        <activity android:name=".activity.MovedSingleStatisticsActivity"/>
+        <activity android:name=".activity.MovedFullStatisticsActivity"/>
+
     </application>
 
 </manifest>
