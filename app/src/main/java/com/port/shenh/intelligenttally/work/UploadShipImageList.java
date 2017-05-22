@@ -43,7 +43,8 @@ public class UploadShipImageList extends SimpleWorkModel<Object, Void> {
         Gson gson = new Gson();
         dataMap.put("ShipImageList", gson.toJson(list));
 
-        Log.i(LOG_TAG + " onFillRequestParameters", " ShipImageList is " + parameters[0]);
+        Log.i(LOG_TAG + " onFillRequestParameters", " List<ShipImage> count is " + list.size());
+        Log.i(LOG_TAG + " onFillRequestParameters", " ShipImageList is " +  gson.toJson(list));
 
     }
 

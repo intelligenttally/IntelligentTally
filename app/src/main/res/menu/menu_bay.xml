@@ -12,24 +12,24 @@
         android:icon="@mipmap/down"
         android:title="@string/down_bay"
         app:showAsAction="always"/>
-    <item
-        android:id="@+id/menu_bay_num_select"
-        android:title="@string/bay_num_select"
-        app:showAsAction="never|withText"/>
-    <item
-        android:id="@+id/menu_last_bay"
-        android:icon="@mipmap/last"
-        android:title="@string/last_bay"
-        app:showAsAction="never|withText"/>
-    <item
-        android:id="@+id/menu_next_bay"
-        android:icon="@mipmap/next"
-        android:title="@string/next_bay"
-        app:showAsAction="never|withText"/>
+    <!--<item-->
+        <!--android:id="@+id/menu_bay_num_select"-->
+        <!--android:title="@string/bay_num_select"-->
+        <!--app:showAsAction="never|withText"/>-->
+    <!--<item-->
+        <!--android:id="@+id/menu_last_bay"-->
+        <!--android:icon="@mipmap/last"-->
+        <!--android:title="@string/last_bay"-->
+        <!--app:showAsAction="never|withText"/>-->
+    <!--<item-->
+        <!--android:id="@+id/menu_next_bay"-->
+        <!--android:icon="@mipmap/next"-->
+        <!--android:title="@string/next_bay"-->
+        <!--app:showAsAction="never|withText"/>-->
     <item
         android:id="@+id/menu_refresh_bay"
         android:icon="@mipmap/refresh"
         android:title="@string/refresh_bay"
-        app:showAsAction="never|withText"/>
+        app:showAsAction="always"/>
 
 </menu>

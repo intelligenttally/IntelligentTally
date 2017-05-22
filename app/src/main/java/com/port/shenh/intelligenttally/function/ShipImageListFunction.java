@@ -541,22 +541,56 @@ public class ShipImageListFunction {
 
         } else {
 
+            //贝位2是否通贝
             if (operator.isJoint(b2.getShip_id(), b2.getBay_num())) {
 
-                ShipImage b2Next = isContainerOfNextBayNo(b2);
+                //贝位2是否有箱子
+                if (!b2.getBayno().isEmpty()) {
 
-                if (b2Next != null) {
+                    if (b2.getSize_con().equals("20")) {
+                        ShipImage b2Next = isContainerOfNextBayNo(b2);
 
-                    Log.i(LOG_TAG + "MoveBay", "贝位1箱子40，贝位2通贝，贝位2Next有箱子");
+                        if (b2Next != null) {
 
-                    return String.format(b2Next.getSbayno() + "贝位存在箱子，请重新操作");
+                            Log.i(LOG_TAG + "MoveBay", "贝位1箱子40，贝位2通贝，贝位2箱子20，贝位2Next有箱子");
+
+                            return String.format(b2Next.getSbayno() + "贝位存在箱子，请重新操作");
+
+                        } else {
+
+                            Log.i(LOG_TAG + "MoveBay", "贝位1箱子40，贝位2通贝，贝位2箱子20，贝位2Next无箱子");
+
+                            //对调处理
+                            swapBay(b1, b2, codeInOut);
+
+                        }
+
+                    } else {
+
+                        Log.i(LOG_TAG + "MoveBay", "贝位1箱子40，贝位2通贝，贝位2箱子40");
+
+                        //对调处理
+                        swapBay(b1, b2, codeInOut);
+                    }
 
                 } else {
 
-                    Log.i(LOG_TAG + "MoveBay", "贝位1箱子40，贝位2通贝，贝位2Next无箱子");
+                    ShipImage b2Next = isContainerOfNextBayNo(b2);
 
-                    //对调处理
-                    swapBay(b1, b2, codeInOut);
+                    if (b2Next != null) {
+
+                        Log.i(LOG_TAG + "MoveBay", "贝位1箱子40，贝位2通贝，贝位2没有箱子，贝位2Next有箱子");
+
+                        return String.format(b2Next.getSbayno() + "贝位存在箱子，请重新操作");
+
+                    } else {
+
+                        Log.i(LOG_TAG + "MoveBay", "贝位1箱子40，贝位2通贝，贝位2没有箱子，贝位2Next无箱子");
+
+                        //对调处理
+                        swapBay(b1, b2, codeInOut);
+
+                    }
 
                 }
 
@@ -680,6 +714,22 @@ public class ShipImageListFunction {
                     break;
                 }
             }
+        }
+
+        if (shipImage!=null){
+
+            Log.i(LOG_TAG + "swapBay", "getContainer_no is " + shipImage.getContainer_no());
+
+            Log.i(LOG_TAG + "swapBay", "getBay_num is " + shipImage.getBay_num());
+            Log.i(LOG_TAG + "swapBay", "getBay_col is " + shipImage.getBay_col());
+            Log.i(LOG_TAG + "swapBay", "getBay_row is " + shipImage.getBay_row());
+            Log.i(LOG_TAG + "swapBay", "-----------------------------");
+            Log.i(LOG_TAG + "swapBay", "getBayno is " + shipImage.getBayno());
+            Log.i(LOG_TAG + "swapBay", "getSbayno is " + shipImage.getSbayno());
+            Log.i(LOG_TAG + "swapBay", "shipImage is " + shipImage.getBaynum());
+            Log.i(LOG_TAG + "swapBay", "getBaycol is " + shipImage.getBaycol());
+            Log.i(LOG_TAG + "swapBay", "getBayrow is " + shipImage.getBayrow());
+
         }
 
         return shipImage;

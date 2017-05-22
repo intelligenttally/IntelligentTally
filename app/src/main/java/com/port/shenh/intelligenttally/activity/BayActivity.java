@@ -13,9 +13,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupWindow;
@@ -149,9 +151,8 @@ public class BayActivity extends AppCompatActivity {
     /**
      * 缩放比例因子
      */
-    final private float scaleArray[] = new float[]{0.5f, 0.6f, 0.7f, 0.8f, 0.9f, 1.0f,
-                                                   1.1f, 1.2f, 1.3f, 1.4f, 1.5f, 1.6f,
-                                                   1.7f, 1.8f, 2.0f, 2.2f};
+    final private float scaleArray[] = new float[]{0.5f , 0.6f , 0.7f , 0.8f , 0.9f , 1.0f , 1.1f
+            , 1.2f , 1.3f , 1.4f , 1.5f , 1.6f , 1.7f , 1.8f , 2.0f , 2.2f};
 
     /**
      * 缩放比例因子索引
@@ -169,6 +170,43 @@ public class BayActivity extends AppCompatActivity {
         initViewHolder();
 
         initView();
+    }
+
+    /**
+     * 按键点击事件
+     *
+     * @param keyCode
+     * @param event
+     *
+     * @return
+     */
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        switch (keyCode) {
+            //音量减小
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+                Log.i(LOG_TAG + "onKeyDown", "volume dec is invoked");
+
+                //下一贝
+                doNextBay();
+
+                return true;
+
+
+            //音量增大
+            case KeyEvent.KEYCODE_VOLUME_UP:
+                Log.i(LOG_TAG + "onKeyDown", "volume dec is invoked");
+
+                // 上一贝
+                doLastBay();
+
+                return true;
+
+        }
+
+
+        return super.onKeyDown(keyCode, event);
     }
 
     /**
@@ -199,6 +237,17 @@ public class BayActivity extends AppCompatActivity {
         // 初始化Toolbar
         ToolbarInitialize.initToolbar(this, R.string.bay, true, true);
         titleTextView = (TextView) findViewById(R.id.toolbar_title);
+
+        titleTextView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                //贝号选择
+                doBayNumSelect();
+
+                return false;
+            }
+        });
 
         // 初始化弹出框
         initPopupWindow();
@@ -257,7 +306,10 @@ public class BayActivity extends AppCompatActivity {
 
                 bayNumberPosition = Integer.parseInt(s);
 
-                loadBay();
+//                loadBay();
+
+                //刷新
+                doRefresh_bay();
 
                 popupWindow.dismiss();
 
@@ -478,18 +530,18 @@ public class BayActivity extends AppCompatActivity {
                 //刷新
                 doRefresh_bay();
                 break;
-            case R.id.menu_last_bay:
-                // 上一贝
-                doLastBay();
-                break;
-            case R.id.menu_next_bay:
-                //下一贝
-                doNextBay();
-                break;
-            case R.id.menu_bay_num_select:
-                //贝号选择
-                doBayNumSelect();
-                break;
+//            case R.id.menu_last_bay:
+//                // 上一贝
+//                doLastBay();
+//                break;
+//            case R.id.menu_next_bay:
+//                //下一贝
+//                doNextBay();
+//                break;
+//            case R.id.menu_bay_num_select:
+//                //贝号选择
+//                doBayNumSelect();
+//                break;
             case R.id.menu_up_bay:
                 //放大贝
                 doUpBay();
@@ -505,7 +557,7 @@ public class BayActivity extends AppCompatActivity {
     /**
      * 刷新贝
      */
-    private void doRefresh_bay() {
+    public void doRefresh_bay() {
         operator.onBack();
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -543,21 +595,25 @@ public class BayActivity extends AppCompatActivity {
         count.incrementAndGet();
         function.onUpdate(shipId, bayNumber);
 
-        String bayNumberNext = Integer.toString(Integer.parseInt(bayNumber) + 2);
-        //        int bayNumberNextIndex = function.onLoadBayNumListFromDataBase(shipId).indexOf
-        //                (bayNumberNext);
-        //
-        //        Log.i(LOG_TAG + "doRefresh_bay", "bayNumNext is " + bayNumberNext);
-        //        Log.i(LOG_TAG + "doRefresh_bay", "bayNumberNextIndex is " + bayNumberNextIndex);
-
-        if (function.isJoint(shipId, bayNumber) && (function.onLoadBayNumListFromDataBase(shipId)
-                .indexOf(bayNumberNext) != -1)) {
-
-            count.incrementAndGet();
-
-            function.onUpdate(shipId, bayNumberNext);
-
-        }
+//        String bayNumberNext = null;
+//        if ((Integer.parseInt(bayNumber) + 2) < 10) {
+//
+//            bayNumberNext = "0" + Integer.toString(Integer.parseInt(bayNumber) + 2);
+//
+//        } else {
+//
+//            bayNumberNext = Integer.toString(Integer.parseInt(bayNumber) + 2);
+//
+//        }
+//
+//        if (function.isJoint(shipId, bayNumber) && (function.onLoadBayNumListFromDataBase(shipId)
+//                .indexOf(bayNumberNext) != -1)) {
+//
+//            count.incrementAndGet();
+//
+//            function.onUpdate(shipId, bayNumberNext);
+//
+//        }
 
         count.decrementAndGet();
 
@@ -569,7 +625,9 @@ public class BayActivity extends AppCompatActivity {
     private void doLastBay() {
         if (bayNumberPosition > 0) {
             bayNumberPosition--;
-            loadBay();
+//            loadBay();
+            //刷新
+            doRefresh_bay();
         }
     }
 
@@ -579,7 +637,9 @@ public class BayActivity extends AppCompatActivity {
     private void doNextBay() {
         if (bayNumberList != null && bayNumberPosition < bayNumberList.size() - 1) {
             bayNumberPosition++;
-            loadBay();
+//            loadBay();
+            //刷新
+            doRefresh_bay();
         }
     }
 
