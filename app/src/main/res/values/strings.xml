@@ -4,6 +4,7 @@
     <string name="vayage_downloaded">已下载航次</string>
     <string name="full_statistics">全统计</string>
     <string name="single_statistics">个统计</string>
+    <string name="container_no_search">箱号搜索</string>
 
 
     <string name="clear_cache">清除缓存</string>
@@ -16,6 +17,9 @@
     <string name="up_bay">放大贝</string>
     <string name="down_bay">缩小贝</string>
     <string name="refresh_bay">刷新</string>
+    <string name="query_Container_no">查询</string>
+    <string name="search_title">搜索</string>
+    <string name="search_hint">输入查询箱号</string>
 
     <string name="data_loading">数据下载中...</string>
     <string name="not_selected">未选中</string>
@@ -38,5 +42,6 @@
     <string name="title_general">普通</string>
     <string name="title_moved">捣箱</string>
     <string name="voyage_select">航次选择</string>
+    <string name="title_activity_container_no_query">ContainerNoQueryActivity</string>
 
 </resources>

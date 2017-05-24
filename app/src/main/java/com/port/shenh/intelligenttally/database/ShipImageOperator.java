@@ -734,6 +734,27 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
     }
 
     /**
+     * 根据箱号查询船图数据
+     *
+     * @param container_no 箱号
+     *
+     * @return 数据对象
+     */
+    public List<ShipImage> getShipImageListByContainerNo(String container_no) {
+        Log.i(LOG_TAG + "getShipImageList", "query param is " + container_no);
+
+        // 查询语句
+        String sql = String.format("select * from %s where %s='%s'", tableName,
+                "container_no", container_no);
+
+        Log.i(LOG_TAG + "queryShipImage", "query sql is " + sql);
+
+        List<ShipImage> list = query(sql);
+
+        return list;
+    }
+
+    /**
      * 根据航次编码更新船图数据修改标志
      *
      * @param shipId 航次编码
@@ -2603,4 +2624,50 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
 
         return list;
     }
+
+    /**
+     * 根据航次编码查询箱号数据
+     *
+     * @param shipId 航次编码
+     * @param query 箱号查询条件
+     *
+     * @return 数据对象，没有返回null
+     */
+    public List<String> getContainerNoList(String shipId, String query) {
+        Log.i(LOG_TAG + "getContainerNoList", "shipId is " + shipId);
+        Log.i(LOG_TAG + "getContainerNoList", "query is " + query);
+
+        List<String> containerNolist = new ArrayList<>();
+
+        // 查询语句
+        String sql = null;
+        if (query == null){
+            sql = String.format("select distinct container_no from %s where ship_id='%s' and "
+                            + "container_no is not null and ltrim(container_no) <> '' order by container_no " +
+                            "asc",
+                    tableName, shipId);
+        }else {
+            sql = "select distinct container_no from " + tableName + " where ship_id=" + shipId +
+                    " and container_no like " + "'%" + query + "%'"  + " order by container_no asc";
+        }
+
+
+        Log.i(LOG_TAG + "getContainerNoList", "sql is " + sql);
+        // 查询数据
+        Cursor cursor = sqLiteHelper.getReadableDatabase().rawQuery(sql, null);
+
+        // 列索引
+        int container_no = cursor.getColumnIndex("container_no");
+
+        while (cursor.moveToNext()) {
+            containerNolist.add(cursor.getString(container_no));
+        }
+
+        // 关闭数据库
+        cursor.close();
+        close(sqLiteHelper);
+
+        return containerNolist;
+    }
+
 }

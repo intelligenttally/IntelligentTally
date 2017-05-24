@@ -6,18 +6,23 @@
 
     <TableRow>
 
-        <TextView android:text="贝位："/>
+        <!--<TextView android:text="贝位："/>-->
 
         <TextView
-            android:id="@+id/layout_bottom_sheet_info_bay_textView"/>
+            android:id="@+id/layout_bottom_sheet_info_bay_textView"
+            android:textSize="@dimen/default_table_text_size"
+            android:textStyle="bold"
+            android:layout_span="2"/>
 
-        <TextView
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:text="箱号："/>
+        <!--<TextView-->
+            <!--android:layout_marginLeft="@dimen/activity_horizontal_margin"-->
+            <!--android:text="箱号："/>-->
 
         <TextView
             android:id="@+id/layout_bottom_sheet_info_box_number_textView"
-            android:layout_span="3"/>
+            android:textSize="@dimen/default_table_text_size"
+            android:textStyle="bold"
+            android:layout_span="4"/>
 
         <TextView
             android:id="@+id/layout_bottom_sheet_info_inverted_textView"

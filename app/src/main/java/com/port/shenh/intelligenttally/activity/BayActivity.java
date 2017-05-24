@@ -29,6 +29,7 @@ import com.port.shenh.intelligenttally.R;
 import com.port.shenh.intelligenttally.adapter.BayGridAdapter;
 import com.port.shenh.intelligenttally.bean.Bay;
 import com.port.shenh.intelligenttally.bean.ShipImage;
+import com.port.shenh.intelligenttally.fragment.BayMoveBottomFragment;
 import com.port.shenh.intelligenttally.fragment.BayNormalBottomFragment;
 import com.port.shenh.intelligenttally.function.BayNumSelectList;
 import com.port.shenh.intelligenttally.function.BottomBayCommonOperator;
@@ -158,6 +159,11 @@ public class BayActivity extends AppCompatActivity {
      * 缩放比例因子索引
      */
     private int scaleIndex = 5;
+
+    /**
+     * 箱号查询响应码
+     */
+    private static final int SELECT_RECEIVE = 100;
 
 
     @Override
@@ -306,7 +312,7 @@ public class BayActivity extends AppCompatActivity {
 
                 bayNumberPosition = Integer.parseInt(s);
 
-//                loadBay();
+                //                loadBay();
 
                 //刷新
                 doRefresh_bay();
@@ -526,22 +532,26 @@ public class BayActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
+            case R.id.menu_query_container_no:
+                //查询
+                doQuery_Container_No();
+                break;
             case R.id.menu_refresh_bay:
                 //刷新
                 doRefresh_bay();
                 break;
-//            case R.id.menu_last_bay:
-//                // 上一贝
-//                doLastBay();
-//                break;
-//            case R.id.menu_next_bay:
-//                //下一贝
-//                doNextBay();
-//                break;
-//            case R.id.menu_bay_num_select:
-//                //贝号选择
-//                doBayNumSelect();
-//                break;
+            //            case R.id.menu_last_bay:
+            //                // 上一贝
+            //                doLastBay();
+            //                break;
+            //            case R.id.menu_next_bay:
+            //                //下一贝
+            //                doNextBay();
+            //                break;
+            //            case R.id.menu_bay_num_select:
+            //                //贝号选择
+            //                doBayNumSelect();
+            //                break;
             case R.id.menu_up_bay:
                 //放大贝
                 doUpBay();
@@ -595,25 +605,26 @@ public class BayActivity extends AppCompatActivity {
         count.incrementAndGet();
         function.onUpdate(shipId, bayNumber);
 
-//        String bayNumberNext = null;
-//        if ((Integer.parseInt(bayNumber) + 2) < 10) {
-//
-//            bayNumberNext = "0" + Integer.toString(Integer.parseInt(bayNumber) + 2);
-//
-//        } else {
-//
-//            bayNumberNext = Integer.toString(Integer.parseInt(bayNumber) + 2);
-//
-//        }
-//
-//        if (function.isJoint(shipId, bayNumber) && (function.onLoadBayNumListFromDataBase(shipId)
-//                .indexOf(bayNumberNext) != -1)) {
-//
-//            count.incrementAndGet();
-//
-//            function.onUpdate(shipId, bayNumberNext);
-//
-//        }
+        //        String bayNumberNext = null;
+        //        if ((Integer.parseInt(bayNumber) + 2) < 10) {
+        //
+        //            bayNumberNext = "0" + Integer.toString(Integer.parseInt(bayNumber) + 2);
+        //
+        //        } else {
+        //
+        //            bayNumberNext = Integer.toString(Integer.parseInt(bayNumber) + 2);
+        //
+        //        }
+        //
+        //        if (function.isJoint(shipId, bayNumber) && (function
+        // .onLoadBayNumListFromDataBase(shipId)
+        //                .indexOf(bayNumberNext) != -1)) {
+        //
+        //            count.incrementAndGet();
+        //
+        //            function.onUpdate(shipId, bayNumberNext);
+        //
+        //        }
 
         count.decrementAndGet();
 
@@ -625,7 +636,7 @@ public class BayActivity extends AppCompatActivity {
     private void doLastBay() {
         if (bayNumberPosition > 0) {
             bayNumberPosition--;
-//            loadBay();
+            loadBay();
             //刷新
             doRefresh_bay();
         }
@@ -637,9 +648,9 @@ public class BayActivity extends AppCompatActivity {
     private void doNextBay() {
         if (bayNumberList != null && bayNumberPosition < bayNumberList.size() - 1) {
             bayNumberPosition++;
-//            loadBay();
+            loadBay();
             //刷新
-            doRefresh_bay();
+            //            doRefresh_bay();
         }
     }
 
@@ -694,6 +705,21 @@ public class BayActivity extends AppCompatActivity {
 
         }
 
+
+    }
+
+    /**
+     * 查询箱号
+     */
+    private void doQuery_Container_No() {
+
+        if (isBottomShow) {
+            operator.onBack();
+        }
+
+        Intent intent = new Intent(BayActivity.this, ContainerNoQueryActivity.class);
+        intent.putExtra(StaticValue.IntentTag.VOYAGE_TAG, shipId);
+        startActivityForResult(intent, SELECT_RECEIVE);
 
     }
 
@@ -761,6 +787,53 @@ public class BayActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+
+            case SELECT_RECEIVE:
+                switch (resultCode) {
+                    case RESULT_OK:
+
+                        final String container_no = data.getStringExtra(StaticValue.IntentTag
+                                .CONTAINER_NO_TAG);
+
+                        Log.i(LOG_TAG + "onActivityResult", "container_no is " + container_no);
+
+                        if (container_no != null) {
+
+                            BayMoveBottomFragment moveBottomFragment = null;
+                            if (moveBottomFragment == null) {
+                                moveBottomFragment = new BayMoveBottomFragment();
+                                moveBottomFragment.setOnMoveListener(new EmptyParameterListener() {
+                                    @Override
+                                    public void onInvoke() {
+
+                                        onBackMe();
+                                    }
+                                });
+                            }
+
+                            ShipImage shipImage = function.onLoadgetShipImageListFromDataBase
+                                    (container_no);
+                            Log.i(LOG_TAG + "onActivityResult", "onActivityResult is " + "invoked");
+                            Log.i(LOG_TAG + "onActivityResult", "bayno is " + shipImage.getBayno());
+                            Log.i(LOG_TAG + "onActivityResult", "container_no is " + shipImage
+                                    .getContainer_no());
+                            moveBottomFragment.setBayData(shipImage);
+                            onChangeBottomFragment(moveBottomFragment);
+                            showBottomLayout();
+
+                        }
+
+                        break;
+                }
+        }
+
+    }
+
+    @Override
     public void onBackPressed() {
 
         if (isBottomShow) {
@@ -769,4 +842,19 @@ public class BayActivity extends AppCompatActivity {
             super.onBackPressed();
         }
     }
+
+
+    /**
+     * 从子功能片段返回自身
+     */
+    private void onBackMe() {
+        if (beforeHolder != null) {
+            beforeHolder.itemView.setSelected(false);
+            beforeHolder = null;
+        }
+        onChangeBottomFragment(new BayNormalBottomFragment());
+        hideBottomLayout();
+    }
+
+
 }

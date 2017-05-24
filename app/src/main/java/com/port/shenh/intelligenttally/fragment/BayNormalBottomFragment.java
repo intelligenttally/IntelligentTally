@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,12 @@ import org.mobile.library.model.operate.EmptyParameterListener;
  * @since 1.0
  */
 public class BayNormalBottomFragment extends Fragment implements BottomBayCommonOperator {
+
+
+    /**
+     * 日志标签前缀
+     */
+    private static final String LOG_TAG = "BayNormalBottomFragment.";
 
     /**
      * 控件集
@@ -95,17 +102,22 @@ public class BayNormalBottomFragment extends Fragment implements BottomBayCommon
             @Override
             public void onClick(View v) {
                 holder.activity.hideBottomLayout(new EmptyParameterListener() {
-                    @Override
+                        @Override
                     public void onInvoke() {
                         if (holder.moveBottomFragment == null) {
                             holder.moveBottomFragment = new BayMoveBottomFragment();
                             holder.moveBottomFragment.setOnMoveListener(new EmptyParameterListener() {
                                 @Override
                                 public void onInvoke() {
+                                    holder.moveBottomFragment = null;
                                     onBackMe();
                                 }
                             });
                         }
+
+                        Log.i(LOG_TAG + "initMove", "initMove is invoked");
+                        Log.i(LOG_TAG + "initMove", "bayno is " + holder.function.getData().getBayno());
+                        Log.i(LOG_TAG + "initMove", "container_no is " + holder.function.getData().getContainer_no());
 
                         holder.moveBottomFragment.setBayData(holder.function.getData());
                         holder.activity.onChangeBottomFragment(holder.moveBottomFragment);
@@ -135,6 +147,9 @@ public class BayNormalBottomFragment extends Fragment implements BottomBayCommon
      */
     private void setBayData(ShipImage data) {
         holder.function.bindData(data);
+        Log.i(LOG_TAG + "setBayData", "bayno is " + data.getBayno());
+        Log.i(LOG_TAG + "setBayData", "container_no is " + data.getContainer_no());
+
     }
 
     @Override
@@ -143,6 +158,9 @@ public class BayNormalBottomFragment extends Fragment implements BottomBayCommon
         if (holder != this.holder.activity.beforeHolder) {
             if (!TextUtils.isEmpty(data.getBayno())) {
                 setBayData(data);
+                Log.i(LOG_TAG + "onBayClick", "bayno is " + data.getBayno());
+                Log.i(LOG_TAG + "onBayClick", "container_no is " + data.getContainer_no());
+
 
                 if (data.getBaynum().compareTo(data.getBay_num()) < 0) {
                     this.holder.bayMoveView.setVisibility(View.INVISIBLE);

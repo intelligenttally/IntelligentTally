@@ -469,7 +469,7 @@ public class ShipImageListFunction {
 
         Log.i(LOG_TAG + "MoveBay", "query param is " + b1.getSbayno() + " " + sbayno2);
 
-        List<ShipImage> shipImages = getShipImageList(b1.getShip_id(), sbayno2);
+        List<ShipImage> shipImages = onLoadgetShipImageListFromDataBase(b1.getShip_id(), sbayno2);
 
         Log.i(LOG_TAG + "MoveBay", "贝位箱子数量：shipImages is " + shipImages.size());
 
@@ -499,7 +499,7 @@ public class ShipImageListFunction {
                     Log.i(LOG_TAG + "MoveBay", "贝位1箱子20，贝位2有箱子，箱子20");
 
                     //对调处理
-                    swapBay(b1, b2, codeInOut);
+                    onSwapBay(b1, b2, codeInOut);
 
                 } else {
 
@@ -517,7 +517,7 @@ public class ShipImageListFunction {
                             Log.i(LOG_TAG + "MoveBay", "贝位1箱子20，贝位2有箱子，箱子40，贝位1通贝，贝位1Next无箱子");
 
                             //对调处理
-                            swapBay(b1, b2, codeInOut);
+                            onSwapBay(b1, b2, codeInOut);
 
                         }
 
@@ -535,7 +535,7 @@ public class ShipImageListFunction {
                 Log.i(LOG_TAG + "MoveBay", "贝位1箱子20，贝位2无箱子");
 
                 //对调处理
-                swapBay(b1, b2, codeInOut);
+                onSwapBay(b1, b2, codeInOut);
 
             }
 
@@ -561,7 +561,7 @@ public class ShipImageListFunction {
                             Log.i(LOG_TAG + "MoveBay", "贝位1箱子40，贝位2通贝，贝位2箱子20，贝位2Next无箱子");
 
                             //对调处理
-                            swapBay(b1, b2, codeInOut);
+                            onSwapBay(b1, b2, codeInOut);
 
                         }
 
@@ -570,7 +570,7 @@ public class ShipImageListFunction {
                         Log.i(LOG_TAG + "MoveBay", "贝位1箱子40，贝位2通贝，贝位2箱子40");
 
                         //对调处理
-                        swapBay(b1, b2, codeInOut);
+                        onSwapBay(b1, b2, codeInOut);
                     }
 
                 } else {
@@ -588,7 +588,7 @@ public class ShipImageListFunction {
                         Log.i(LOG_TAG + "MoveBay", "贝位1箱子40，贝位2通贝，贝位2没有箱子，贝位2Next无箱子");
 
                         //对调处理
-                        swapBay(b1, b2, codeInOut);
+                        onSwapBay(b1, b2, codeInOut);
 
                     }
 
@@ -656,8 +656,43 @@ public class ShipImageListFunction {
     }
 
 
+    /**
+     * 根据航次编码查询箱号数据
+     *
+     * @param shipId 航次编码
+     *
+     * @param query 箱号查询条件
+     *
+     * @return 数据对象
+     */
+    public List<String> onLoadContainerNoListFromDataBase(String shipId, String query) {
+        if (operator == null || operator.isEmpty()) {
+            Log.i(LOG_TAG + "onLoadFromDataBase", "database null");
+            return null;
+        }
+        Log.i(LOG_TAG + "onLoadContainerNoListFromDataBase", "onLoadContainerNoListFromDataBase is invoked");
 
+        return operator.getContainerNoList(shipId, query);
 
+    }
+
+    /**
+     * 根据箱号查询船图数据
+     *
+     * @param container_no 箱号
+     *
+     * @return 数据对象
+     */
+    public ShipImage onLoadgetShipImageListFromDataBase(String container_no) {
+        if (operator == null || operator.isEmpty()) {
+            Log.i(LOG_TAG + "onLoadFromDataBase", "database null");
+            return null;
+        }
+        Log.i(LOG_TAG + "onLoadgetShipImageListFromDataBase", "onLoadgetShipImageListFromDataBase is invoked");
+
+        return operator.getShipImageListByContainerNo(container_no).get(0);
+
+    }
 
 
     /**
@@ -667,7 +702,7 @@ public class ShipImageListFunction {
      * @param b2        贝位2
      * @param codeInOut 进出口编码
      */
-    private void swapBay(ShipImage b1, ShipImage b2, String codeInOut) {
+    private void onSwapBay(ShipImage b1, ShipImage b2, String codeInOut) {
         if (operator == null || operator.isEmpty()) {
             Log.i(LOG_TAG + "onLoadFromDataBase", "database null");
             return;
@@ -744,16 +779,17 @@ public class ShipImageListFunction {
      *
      * @return 数据对象
      */
-    private List<ShipImage> getShipImageList(String shipId, String sbayno) {
+    private List<ShipImage> onLoadgetShipImageListFromDataBase(String shipId, String sbayno) {
         if (operator == null || operator.isEmpty()) {
             Log.i(LOG_TAG + "onLoadFromDataBase", "database null");
             return null;
         }
-        Log.i(LOG_TAG + "getShipImageList", "getShipImageList is invoked");
+        Log.i(LOG_TAG + "onLoadgetShipImageListFromDataBase", "onLoadgetShipImageListFromDataBase is invoked");
 
         return operator.getShipImageList(shipId, sbayno);
 
     }
+
 
 
 

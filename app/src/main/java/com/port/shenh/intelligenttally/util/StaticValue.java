@@ -45,6 +45,11 @@ public interface StaticValue {
          * 进出口
          */
         String CODE_INOUT_TAG = "inout_tag";
+
+        /**
+         * 箱号
+         */
+        String CONTAINER_NO_TAG = "container_no_tag";
     }
 
     /**

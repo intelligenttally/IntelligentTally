@@ -132,6 +132,10 @@ public class BayMoveBottomFragment extends Fragment implements BottomBayCommonOp
      * @param rootView 根布局
      */
     private void initShip(View rootView) {
+        Log.i(LOG_TAG + "initShip", "initShip is invoked");
+        Log.i(LOG_TAG + "initShip", "bayno is " + dataShipImage.getBayno());
+        Log.i(LOG_TAG + "initShip", "container_no is " + dataShipImage.getContainer_no());
+
         function = new BottomBayInfoFunction(rootView);
         function.bindData(dataShipImage);
     }

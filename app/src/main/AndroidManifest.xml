@@ -42,7 +42,8 @@
         <activity android:name=".activity.SingleStatisticsActivity"/>
         <activity android:name=".activity.MovedSingleStatisticsActivity"/>
         <activity android:name=".activity.MovedFullStatisticsActivity"/>
-
+        <activity android:name=".activity.ContainerNoQueryActivity">
+        </activity>
     </application>
 
 </manifest>
