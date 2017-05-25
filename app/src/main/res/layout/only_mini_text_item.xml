@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     android:textAppearance="?android:attr/textAppearanceListItemSmall"
     android:gravity="center"
+    android:textSize="@dimen/default_text_size"
     android:background="@drawable/text_shape"
     android:foreground="?selectableItemBackground"
     android:minHeight="?android:attr/listPreferredItemHeightSmall" >

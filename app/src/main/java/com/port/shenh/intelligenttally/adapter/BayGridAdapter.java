@@ -502,6 +502,7 @@ public class BayGridAdapter {
     private void onSetNumberView(ViewHolder holder, String number) {
         holder.itemView.getBackground().setLevel(0);
         holder.labelTextView.setText(number);
+        holder.labelTextView.setTextSize(16);
         holder.labelTextView.setTextColor(defaultTextColor);
     }
 

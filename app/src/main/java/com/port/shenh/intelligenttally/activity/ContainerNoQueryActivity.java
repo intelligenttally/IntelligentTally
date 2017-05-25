@@ -1,6 +1,7 @@
 package com.port.shenh.intelligenttally.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -10,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import com.port.shenh.intelligenttally.R;
 import com.port.shenh.intelligenttally.function.ShipImageListFunction;
@@ -119,6 +121,11 @@ public class ContainerNoQueryActivity extends AppCompatActivity {
         if (searchView != null) {
 
             searchView.setQueryHint(getString(R.string.search_hint));
+            int id = searchView.getContext().getResources().getIdentifier
+                    ("android:id/search_src_text", null, null);
+            TextView textView = (TextView) searchView.findViewById(id);
+            textView.setTextColor(Color.RED);//字体颜色
+            textView.setTextSize(26);//字体、提示字体大小
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {

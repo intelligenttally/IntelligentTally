@@ -42,6 +42,8 @@
                 android:layout_height="match_parent"
                 android:hint="@string/hint_input_bay_number_text"
                 android:inputType="number"
+                android:textSize="@dimen/action_text_size2"
+                android:textStyle="bold"
                 android:maxLength="6"/>
 
         </android.support.design.widget.TextInputLayout>
@@ -55,7 +57,9 @@
             android:gravity="center"
             android:paddingLeft="@dimen/layout_default_spacing"
             android:paddingRight="@dimen/layout_default_spacing"
-            android:text="@android:string/ok"/>
+            android:text="@android:string/ok"
+            android:textSize="@dimen/action_text_size2"
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/fragment_bottom_sheet_move_cancel_textView"
@@ -64,6 +68,8 @@
             android:gravity="center"
             android:paddingLeft="@dimen/layout_default_spacing"
             android:paddingRight="@dimen/layout_default_spacing"
+            android:textStyle="bold"
+            android:textSize="@dimen/action_text_size2"
             android:text="@android:string/cancel"/>
 
     </LinearLayout>

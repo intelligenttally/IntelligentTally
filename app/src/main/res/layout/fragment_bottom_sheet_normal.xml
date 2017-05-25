@@ -42,7 +42,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/action_space"
                 android:text="移贝"
-                android:textSize="@dimen/action_text_size"/>
+                android:textSize="@dimen/action_text_size"
+                android:textStyle="bold"/>
 
         </LinearLayout>
 

@@ -18,7 +18,7 @@
     <SearchView
         android:id="@+id/activity_container_no_query_search"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/default_searchview_height"
         android:iconifiedByDefault="false"
         android:inputType="textFilter"
         android:queryHint="输入查询箱号"

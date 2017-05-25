@@ -26,6 +26,7 @@
 
         <TextView
             android:id="@+id/layout_bottom_sheet_info_inverted_textView"
+            android:textStyle="bold"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"/>
 
     </TableRow>
@@ -35,28 +36,32 @@
         <TextView android:text="卸货港："/>
 
         <TextView
-            android:id="@+id/layout_bottom_sheet_info_unload_textView"/>
+            android:id="@+id/layout_bottom_sheet_info_unload_textView"
+            android:textStyle="bold"/>
 
         <TextView
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:text="尺寸："/>
 
         <TextView
-            android:id="@+id/layout_bottom_sheet_info_size_textView"/>
+            android:id="@+id/layout_bottom_sheet_info_size_textView"
+            android:textStyle="bold"/>
 
         <TextView
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:text="箱型："/>
 
         <TextView
-            android:id="@+id/layout_bottom_sheet_info_type_textView"/>
+            android:id="@+id/layout_bottom_sheet_info_type_textView"
+            android:textStyle="bold"/>
 
         <TextView
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:text="空重："/>
 
         <TextView
-            android:id="@+id/layout_bottom_sheet_info_empty_textView"/>
+            android:id="@+id/layout_bottom_sheet_info_empty_textView"
+            android:textStyle="bold"/>
     </TableRow>
 
     <TableRow android:layout_marginTop="@dimen/layout_default_spacing">
@@ -65,6 +70,7 @@
 
         <TextView
             android:id="@+id/layout_bottom_sheet_info_sealno_textView"
+            android:textStyle="bold"
             android:layout_span="2"/>
 
     </TableRow>

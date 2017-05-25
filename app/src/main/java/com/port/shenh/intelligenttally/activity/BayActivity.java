@@ -648,9 +648,9 @@ public class BayActivity extends AppCompatActivity {
     private void doNextBay() {
         if (bayNumberList != null && bayNumberPosition < bayNumberList.size() - 1) {
             bayNumberPosition++;
-            loadBay();
+            //            loadBay();
             //刷新
-            //            doRefresh_bay();
+            doRefresh_bay();
         }
     }
 
