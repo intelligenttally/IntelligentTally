@@ -2,8 +2,8 @@ package com.port.shenh.intelligenttally.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
@@ -15,10 +15,12 @@ import com.port.shenh.intelligenttally.adapter.MainFunctionRecyclerViewAdapter;
 import com.port.shenh.intelligenttally.function.ShipImageListFunction;
 import com.port.shenh.intelligenttally.function.VoyageListFunction;
 import com.port.shenh.intelligenttally.holder.MainFunctionItemViewHolder;
+
 import org.mobile.library.common.function.CheckUpdate;
 import org.mobile.library.common.function.ToolbarInitialize;
 import org.mobile.library.global.Global;
 import org.mobile.library.model.operate.OnItemClickListenerForRecyclerViewItem;
+
 import static com.port.shenh.intelligenttally.adapter.FunctionIndex.toFunction;
 
 /**
@@ -156,6 +158,11 @@ public class MainActivity extends AppCompatActivity {
      * 退出操作
      */
     private void doLogout() {
+
+        // 清空保存记录
+        Global.getApplicationConfig().setPassword(null);
+        Global.getApplicationConfig().Save();
+
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();

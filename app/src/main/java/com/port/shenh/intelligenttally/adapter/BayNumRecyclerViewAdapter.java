@@ -5,7 +5,6 @@ package com.port.shenh.intelligenttally.adapter;
 
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +12,6 @@ import android.view.ViewGroup;
 
 import com.port.shenh.intelligenttally.R;
 import com.port.shenh.intelligenttally.holder.BayNumItemViewHolder;
-import com.port.shenh.intelligenttally.holder.VoyageItemViewHolder;
 
 import org.mobile.library.model.operate.OnItemClickListenerForRecyclerViewItem;
 
@@ -160,7 +158,7 @@ public class BayNumRecyclerViewAdapter extends RecyclerView.Adapter<BayNumItemVi
 
         int color = 0;
         if (selectedItems.get(position, false)) {
-            color = Color.parseColor("#E0FFFF");
+            color = Color.parseColor("#00008B");
         } else {
             color = Color.parseColor("#FFFFFF");
         }

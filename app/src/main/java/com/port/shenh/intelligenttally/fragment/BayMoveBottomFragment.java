@@ -272,14 +272,14 @@ public class BayMoveBottomFragment extends Fragment implements BottomBayCommonOp
 
         Log.i(LOG_TAG + " onUpload", "Ship_id is " + dataShipImage.getShip_id());
 
-        if(!(dataShipImage.getShip_id().equals("196") || dataShipImage.getShip_id().equals("195"))){
-
-            Toast.makeText(getContext(), "暂不支持“新海悦”以外的船舶", Toast
-                    .LENGTH_SHORT).show();
-
-            return;
-
-        }
+//        if(!(dataShipImage.getShip_id().equals("196") || dataShipImage.getShip_id().equals("195"))){
+//
+//            Toast.makeText(getContext(), "暂不支持“新海悦”以外的船舶", Toast
+//                    .LENGTH_SHORT).show();
+//
+//            return;
+//
+//        }
 
         startProgressDialog();
 

@@ -202,7 +202,7 @@ public class VoyageOfInPortRecyclerViewAdapter extends RecyclerView.Adapter<Voya
 
         int color = 0;
         if (selectedItems.get(position, false)) {
-            color = Color.parseColor("#E0FFFF");
+            color = Color.parseColor("#00008B");
         } else {
             color = Color.parseColor("#FFFFFF");
         }

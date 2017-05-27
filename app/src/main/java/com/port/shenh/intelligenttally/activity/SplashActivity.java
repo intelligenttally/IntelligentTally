@@ -174,6 +174,7 @@ public class SplashActivity extends Activity {
     private void jump() {
         Log.i(LOG_TAG + "jump", "jump is invoked");
 
+        Log.i(LOG_TAG + "jump", "getLoginStatus is " + Global.getLoginStatus().isLogin());
         if (Global.getLoginStatus().isLogin()) {
             // 已登录
             Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
