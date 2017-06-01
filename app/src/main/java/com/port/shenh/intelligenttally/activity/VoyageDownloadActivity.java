@@ -27,6 +27,7 @@ import com.port.shenh.intelligenttally.holder.VoyageItemViewHolder;
 import com.port.shenh.intelligenttally.work.PullVoyageListOfInPort;
 
 import org.mobile.library.common.function.ToolbarInitialize;
+import org.mobile.library.global.Global;
 import org.mobile.library.model.operate.OnItemClickListenerForRecyclerViewItem;
 import org.mobile.library.model.work.DefaultWorkModel;
 import org.mobile.library.model.work.WorkBack;
@@ -166,8 +167,7 @@ public class VoyageDownloadActivity extends AppCompatActivity {
     /**
      * 初始化列表
      */
-    private void
-    initListView() {
+    private void initListView() {
 
         // RecyclerView列表对象
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id
@@ -297,7 +297,7 @@ public class VoyageDownloadActivity extends AppCompatActivity {
 
         // 执行任务
         pullVoyageList.beginExecute(String.valueOf(viewHolder.recyclerViewAdapter.getItemCount())
-                , String.valueOf(ROW_COUNT));
+                , String.valueOf(ROW_COUNT), Global.getLoginStatus().getUserID());
 
         // 保存新的加载任务对象
         viewHolder.beforeLoadWork = pullVoyageList;
@@ -369,7 +369,8 @@ public class VoyageDownloadActivity extends AppCompatActivity {
                     }
                 });
 
-                viewHolder.voyageListFunction.setOnLoadEndListener(new VoyageListFunction.OnLoadEndListener() {
+                viewHolder.voyageListFunction.setOnLoadEndListener(new VoyageListFunction
+                        .OnLoadEndListener() {
                     @Override
                     public void OnLoadEnd() {
                         Log.i(LOG_TAG + "OnLoadEnd", "count is" + count.get());
@@ -408,7 +409,6 @@ public class VoyageDownloadActivity extends AppCompatActivity {
                 }
 
                 count.decrementAndGet();
-
 
 
             }

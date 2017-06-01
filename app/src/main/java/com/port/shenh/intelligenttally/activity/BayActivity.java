@@ -315,7 +315,7 @@ public class BayActivity extends AppCompatActivity {
                 //                loadBay();
 
                 //刷新
-                doRefresh_bay();
+                doRefresh_bay(true);
 
                 popupWindow.dismiss();
 
@@ -538,7 +538,7 @@ public class BayActivity extends AppCompatActivity {
                 break;
             case R.id.menu_refresh_bay:
                 //刷新
-                doRefresh_bay();
+                doRefresh_bay(true);
                 break;
             //            case R.id.menu_last_bay:
             //                // 上一贝
@@ -566,8 +566,10 @@ public class BayActivity extends AppCompatActivity {
 
     /**
      * 刷新贝
+     *
+     * @param isJointRefresh 表示是否通贝刷新，ture表示通贝刷新
      */
-    public void doRefresh_bay() {
+    public void doRefresh_bay(boolean isJointRefresh) {
         operator.onBack();
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -605,26 +607,28 @@ public class BayActivity extends AppCompatActivity {
         count.incrementAndGet();
         function.onUpdate(shipId, bayNumber);
 
-        //        String bayNumberNext = null;
-        //        if ((Integer.parseInt(bayNumber) + 2) < 10) {
-        //
-        //            bayNumberNext = "0" + Integer.toString(Integer.parseInt(bayNumber) + 2);
-        //
-        //        } else {
-        //
-        //            bayNumberNext = Integer.toString(Integer.parseInt(bayNumber) + 2);
-        //
-        //        }
-        //
-        //        if (function.isJoint(shipId, bayNumber) && (function
-        // .onLoadBayNumListFromDataBase(shipId)
-        //                .indexOf(bayNumberNext) != -1)) {
-        //
-        //            count.incrementAndGet();
-        //
-        //            function.onUpdate(shipId, bayNumberNext);
-        //
-        //        }
+        if (isJointRefresh) {
+            String bayNumberNext = null;
+            if ((Integer.parseInt(bayNumber) + 2) < 10) {
+
+                bayNumberNext = "0" + Integer.toString(Integer.parseInt(bayNumber) + 2);
+
+            } else {
+
+                bayNumberNext = Integer.toString(Integer.parseInt(bayNumber) + 2);
+
+            }
+
+            if (function.isJoint(shipId, bayNumber) && (function.onLoadBayNumListFromDataBase
+                    (shipId).indexOf(bayNumberNext) != -1)) {
+
+                count.incrementAndGet();
+
+                function.onUpdate(shipId, bayNumberNext);
+
+            }
+        }
+
 
         count.decrementAndGet();
 
@@ -638,7 +642,7 @@ public class BayActivity extends AppCompatActivity {
             bayNumberPosition--;
             loadBay();
             //刷新
-            doRefresh_bay();
+            doRefresh_bay(false);
         }
     }
 
@@ -650,7 +654,7 @@ public class BayActivity extends AppCompatActivity {
             bayNumberPosition++;
             //            loadBay();
             //刷新
-            doRefresh_bay();
+            doRefresh_bay(false);
         }
     }
 

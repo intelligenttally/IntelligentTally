@@ -404,7 +404,7 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
         String sql = String.format("select  count(*) from %s a, %s b where a.%s=b.%s and a" + "" +
                 ".%s=%s", "tb_voyage", tableName, "ship_id", "ship_id", "ship_id", shipId);
 
-        Log.i(LOG_TAG + "queryByShipId", "query sql is " + sql);
+        Log.i(LOG_TAG + "isExistByShipId", "query sql is " + sql);
 
         Cursor cursor = sqLiteHelper.getReadableDatabase().rawQuery(sql, null);
         if (cursor.moveToNext()) {
@@ -670,6 +670,32 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
         return bay;
     }
 
+    /**
+     * 判断是否有未上传航次
+     * @return true/false
+     */
+    public boolean isExistUploadedVoyage(){
+
+        Log.i(LOG_TAG + "isExistUploadedVoyage", "isExistUploadedVoyage is invoked");
+
+        // 查询语句
+        String sql = String.format("select  count(*) from %s where mark_modify='1'", tableName);
+        Log.i(LOG_TAG + "isExistUploadedVoyage", "query sql is " + sql);
+
+        Cursor cursor = sqLiteHelper.getReadableDatabase().rawQuery(sql, null);
+        if (cursor.moveToNext()) {
+            if (cursor.getInt(0) > 0) {
+                cursor.close();
+                close(sqLiteHelper);
+                return true;
+            }
+        }
+        cursor.close();
+        close(sqLiteHelper);
+
+        return false;
+    }
+
 
     /**
      * 根据航次编码、贝号判断是否通贝
@@ -687,8 +713,8 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
         boolean isJoint = false;
 
         // 查询语句
-        String sql = String.format("select joint from %s where %s='%s' and %s='%s' and %s='%s'",
-                tableName, "ship_id", shipId, "bay_num", bayNum, "location", "cabin");
+        String sql = String.format("select joint from %s where %s='%s' and %s='%s'",
+                tableName, "ship_id", shipId, "bay_num", bayNum);
         Log.i(LOG_TAG + "queryBay", "sql is " + sql);
         // 查询数据
         Cursor cursor = sqLiteHelper.getReadableDatabase().rawQuery(sql, null);

@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.port.shenh.intelligenttally.R;
 
 /**
@@ -17,6 +18,11 @@ import com.port.shenh.intelligenttally.R;
  * @since 1.0
  */
 public class MainFunctionItemViewHolder extends RecyclerView.ViewHolder {
+
+    /**
+     * 叉型图标
+     */
+    public ImageView iconCrossImageView = null;
 
     /**
      * 功能图标
@@ -30,6 +36,8 @@ public class MainFunctionItemViewHolder extends RecyclerView.ViewHolder {
 
     public MainFunctionItemViewHolder(View itemView) {
         super(itemView);
+
+        iconCrossImageView = (ImageView) itemView.findViewById(R.id.function_grid_item_cross_image);
 
         iconImageView = (ImageView) itemView.findViewById(R.id.function_grid_item_image);
 

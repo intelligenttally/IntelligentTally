@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.port.shenh.intelligenttally.R;
+import com.port.shenh.intelligenttally.function.ShipImageListFunction;
 import com.port.shenh.intelligenttally.holder.MainFunctionItemViewHolder;
 
 import org.mobile.library.model.operate.OnItemClickListenerForRecyclerViewItem;
@@ -37,6 +38,12 @@ public class MainFunctionRecyclerViewAdapter extends RecyclerView
     private TypedArray images = null;
 
     /**
+     * 船图数据功能类
+     */
+    public ShipImageListFunction shipImageListFunction = null;
+
+
+    /**
      * item点击事件监听器
      */
     private OnItemClickListenerForRecyclerViewItem<String[], MainFunctionItemViewHolder>
@@ -50,6 +57,8 @@ public class MainFunctionRecyclerViewAdapter extends RecyclerView
         functionTitle = context.getResources().getStringArray(R.array.grid_item_function_name_list);
         // 加载图标
         images = context.getResources().obtainTypedArray(R.array.grid_item_function_image_list);
+        //加载船图数据
+        shipImageListFunction = new ShipImageListFunction(context);
     }
 
     /**
@@ -78,6 +87,10 @@ public class MainFunctionRecyclerViewAdapter extends RecyclerView
         // 数据绑定
         holder.titleTextView.setText(functionTitle[position]);
         holder.iconImageView.setImageResource(images.getResourceId(position, R.mipmap.ic_launcher));
+
+        if (position == 4 && shipImageListFunction.isExistUploadedVoyage()){
+            holder.iconCrossImageView.setImageResource(R.mipmap.cross);
+        }
 
         // 绑定监听事件
         if (onItemClickListener != null) {

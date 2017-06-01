@@ -181,7 +181,9 @@ public class VoyageOperator extends BaseOperator<Voyage> {
         Log.i(LOG_TAG + "queryAllVoyageList", "queryAllVoyageList is invoked");
 
         // 查询语句
-        String sql = String.format("select * from %s order by ship_id desc", tableName);
+        String sql = String.format("select * from %s a where EXISTS (select * from %s b where " +
+                        "a.ship_id = b.ship_id)  order by ship_id desc",
+                tableName, "tb_ship_Image");
 
         Log.i(LOG_TAG + "queryAllVoyageList", "sql is " + sql);
 
@@ -198,7 +200,7 @@ public class VoyageOperator extends BaseOperator<Voyage> {
 
         // 查询语句
         String sql = String.format("select * from %s a where EXISTS (select * from %s b where " +
-                "a.ship_id = b.ship_id and b.mark_modify='%s')",
+                "a.ship_id = b.ship_id and b.mark_modify='%s') order by ship_id desc",
                 tableName, "tb_ship_Image", "1");
 
         Log.i(LOG_TAG + "queryAllVoyageList", "sql is " + sql);

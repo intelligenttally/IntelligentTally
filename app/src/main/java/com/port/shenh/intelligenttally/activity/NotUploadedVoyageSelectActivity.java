@@ -223,6 +223,7 @@ public class NotUploadedVoyageSelectActivity extends AppCompatActivity {
                                 if (state) {
 
                                     viewHolder.shipImageListFunction.onUpdateModifyMark(viewHolder.recyclerViewAdapter.getSelectedData().getShip_id());
+                                    initListView();
 
                                     Toast.makeText(getBaseContext(), R.string.upload_success, Toast
                                             .LENGTH_SHORT).show();

@@ -39,6 +39,8 @@ public class PullVoyageListOfInPort extends SimpleWorkModel<String, List<Voyage>
         Log.i(LOG_TAG + " onFillRequestParameters", " StartRow is " + parameters[0]);
         dataMap.put("Count", parameters[1]);
         Log.i(LOG_TAG + " onFillRequestParameters", " Count is " + parameters[1]);
+        dataMap.put("UserId", parameters[2]);
+        Log.i(LOG_TAG + " onFillRequestParameters", "UserId is " + parameters[2]);
     }
 
     @Override

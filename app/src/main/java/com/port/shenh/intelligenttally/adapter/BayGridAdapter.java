@@ -174,6 +174,11 @@ public class BayGridAdapter {
     private int currentMaxColumn = 0;
 
     /**
+     * 左侧编号文本大小
+     */
+    private int leftGridTextSize = 16;
+
+    /**
      * 构造函数
      *
      * @param activity 引用的界面，用于获取表格控件
@@ -458,6 +463,8 @@ public class BayGridAdapter {
      */
     private void onInitLeftGridLayout() {
 
+        getLeftGridTextSize(currentMaxColumn);
+
         if (currentUpGridIndexMaxRow > 0) {
             // 甲板编号
             for (int i = currentUpGridIndexMaxRow; i >= currentUpGridIndexMinRow; i--) {
@@ -467,9 +474,10 @@ public class BayGridAdapter {
                 holder.itemGrid = 3;
 
                 // 设置编号和样式
-                onSetNumberView(holder, String.valueOf((i - currentUpGridIndexMinRow + 1) * 2 +
-                        80));
-
+                // onSetNumberView(holder, String.valueOf((i - currentUpGridIndexMinRow + 1) * 2 +
+                //                        80));
+                onSetNumberView(holder, String.valueOf((i - 1) * 2 + 80));
+                //
                 onResetViewLayoutParams(holder.itemView);
                 upLeftGridLayout.addView(holder.itemView);
             }
@@ -494,6 +502,23 @@ public class BayGridAdapter {
     }
 
     /**
+     * 获取左侧编号文本大小
+     *
+     * @param maxColumn 最大列数
+     */
+    private void getLeftGridTextSize(int maxColumn) {
+
+        if (maxColumn <= 10) {
+            leftGridTextSize = 22;
+        } else if (maxColumn < 16 & maxColumn > 10) {
+            leftGridTextSize = 18;
+        } else if (maxColumn >= 16) {
+            leftGridTextSize = 14;
+        }
+
+    }
+
+    /**
      * 设置一个编号item
      *
      * @param holder 控件管理器
@@ -502,7 +527,7 @@ public class BayGridAdapter {
     private void onSetNumberView(ViewHolder holder, String number) {
         holder.itemView.getBackground().setLevel(0);
         holder.labelTextView.setText(number);
-        holder.labelTextView.setTextSize(16);
+        holder.labelTextView.setTextSize(leftGridTextSize);
         holder.labelTextView.setTextColor(defaultTextColor);
     }
 

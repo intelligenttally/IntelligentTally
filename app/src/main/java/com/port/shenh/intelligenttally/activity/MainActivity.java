@@ -8,6 +8,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.port.shenh.intelligenttally.R;
@@ -42,14 +43,37 @@ public class MainActivity extends AppCompatActivity {
      */
     private ProgressDialog progressDialog = null;
 
+    /**
+     * 船图
+     */
+    ShipImageListFunction shipImageListFunction = null;
+
+    /**
+     * 航次
+     */
+    VoyageListFunction voyageListFunction = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // 初始化控件引用
+        initViewHolder();
+
         // 加载界面
         initView();
     }
+
+    @Override
+    protected void onResume() {
+
+        // 初始化功能布局
+        initGridView();
+
+        super.onResume();
+    }
+
 
     /**
      * 初始化控件
@@ -57,6 +81,8 @@ public class MainActivity extends AppCompatActivity {
     private void initView() {
         // 初始化Toolbar
         ToolbarInitialize.initToolbar(this, R.string.app_name, true, false );
+        TextView titleTextView = (TextView) findViewById(R.id.toolbar_title);
+        titleTextView.setText("理货员" + Global.getApplicationConfig().getUserName());
 
         // 初始化功能布局
         initGridView();
@@ -64,6 +90,15 @@ public class MainActivity extends AppCompatActivity {
         // 执行检查更新
         checkUpdate();
 
+    }
+
+    /**
+     * 初始化控件引用
+     */
+    private void initViewHolder(){
+
+        shipImageListFunction = new ShipImageListFunction(getApplication());
+        voyageListFunction = new VoyageListFunction(getApplication());
     }
 
 
@@ -160,8 +195,11 @@ public class MainActivity extends AppCompatActivity {
     private void doLogout() {
 
         // 清空保存记录
-        Global.getApplicationConfig().setPassword(null);
+        Global.getApplicationConfig().setPassword("");
         Global.getApplicationConfig().Save();
+
+        shipImageListFunction.onClear();
+        voyageListFunction.onClear();
 
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
@@ -174,9 +212,6 @@ public class MainActivity extends AppCompatActivity {
     private void doClearCache() {
 
 //        startProgressDialog();
-
-        ShipImageListFunction shipImageListFunction = new ShipImageListFunction(getApplication());
-        VoyageListFunction voyageListFunction = new VoyageListFunction(getApplication());
 //        shipImageListFunction.setOnClearEndListener(new ShipImageListFunction.OnClearEndListener() {
 //            @Override
 //            public void OnClearEnd() {

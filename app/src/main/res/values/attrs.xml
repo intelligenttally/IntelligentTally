@@ -17,7 +17,6 @@
         <item>@mipmap/upload</item>
     </array>
 
-
     <string-array name="full_statistics_title">
         <item>@string/title_general</item>
         <item>@string/title_moved</item>

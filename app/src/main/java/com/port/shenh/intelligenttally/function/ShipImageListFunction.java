@@ -639,6 +639,20 @@ public class ShipImageListFunction {
     }
 
     /**
+     * 判断是否有未上传航次
+     * @return true/false
+     */
+    public boolean isExistUploadedVoyage(){
+        if (operator == null || operator.isEmpty()) {
+            Log.i(LOG_TAG + "onLoadFromDataBase", "database null");
+            return false;
+        }
+        Log.i(LOG_TAG + "isExistUploadedVoyage", "isExistUploadedVoyage is invoked");
+
+        return operator.isExistUploadedVoyage();
+    }
+
+    /**
      * 根据航次编码、贝号判断是否通贝
      *
      * @param shipId 航次编码

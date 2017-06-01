@@ -245,7 +245,7 @@ public class VoyageListFunction {
     }
 
     /**
-     * 从数据库获取单个航次列表
+     * 从数据库获取航次列表
      *
      * @return 数据集合
      */
