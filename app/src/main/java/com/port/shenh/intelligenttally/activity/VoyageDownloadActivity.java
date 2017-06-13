@@ -35,6 +35,8 @@ import org.mobile.library.model.work.WorkBack;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static android.widget.Toast.makeText;
+
 /**
  * 航次下载Activity
  *
@@ -258,25 +260,38 @@ public class VoyageDownloadActivity extends AppCompatActivity {
         pullVoyageList.setWorkEndListener(new WorkBack<List<Voyage>>() {
             @Override
             public void doEndWork(boolean state, List<Voyage> data) {
-                if (state && data != null) {
 
-                    for (int i = 0; i < data.size(); i++) {
-                        Voyage voyage = data.get(i);
+                if (state) {
+                    if (data != null) {
 
-                        if (viewHolder.shipImageListFunction.isDownloaded(voyage.getShip_id())) {
-                            voyage.setDownloaded(true);
+                        for (int i = 0; i < data.size(); i++) {
+                            Voyage voyage = data.get(i);
+
+                            Log.i(LOG_TAG + "loadData", "voyage ship_id is " + voyage.getShip_id());
+
+                            if (viewHolder.shipImageListFunction.isDownloaded(voyage.getShip_id()
+                            )) {
+                                voyage.setDownloaded(true);
+                            }
+                        }
+
+                        // 插入新数据
+                        viewHolder.recyclerViewAdapter.addData(viewHolder.recyclerViewAdapter
+                                .getItemCount(), data);
+
+                        if (data.size() == ROW_COUNT) {
+                            // 取到了预期条数的数据
+                            viewHolder.hasMoreData = true;
                         }
                     }
+                } else {
 
-                    // 插入新数据
-                    viewHolder.recyclerViewAdapter.addData(viewHolder.recyclerViewAdapter
-                            .getItemCount(), data);
+                    makeText(getBaseContext(), R.string.error_field_required, Toast.LENGTH_SHORT)
+                            .show();
 
-                    if (data.size() == ROW_COUNT) {
-                        // 取到了预期条数的数据
-                        viewHolder.hasMoreData = true;
-                    }
                 }
+
+
                 //停止进度条
                 stopProgressDialog();
                 // 改变请求状态
@@ -330,7 +345,7 @@ public class VoyageDownloadActivity extends AppCompatActivity {
 
         if (viewHolder.recyclerViewAdapter.getSelectedItemCount() == 0) {
 
-            Toast.makeText(this, R.string.not_selected, Toast.LENGTH_SHORT).show();
+            makeText(this, R.string.not_selected, Toast.LENGTH_SHORT).show();
 
             return;
 
@@ -353,26 +368,41 @@ public class VoyageDownloadActivity extends AppCompatActivity {
                 viewHolder.shipImageListFunction.setOnLoadEndListener(new ShipImageListFunction
                         .OnLoadEndListener() {
                     @Override
-                    public void OnLoadEnd() {
+                    public void OnLoadEnd(boolean state) {
                         Log.i(LOG_TAG + "OnLoadEnd", "count is" + count.get());
-                        if (count.decrementAndGet() == 0) {
+
+                        if (state) {
+                            if (count.decrementAndGet() == 0) {
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        loadData(true);
+                                        makeText(getBaseContext(), R.string.download_success,
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+                        } else {
 
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    loadData(true);
-                                    Toast.makeText(getBaseContext(), R.string.download_success,
-                                            Toast.LENGTH_SHORT).show();
+                                    //停止进度条
+                                    stopProgressDialog();
+                                    Toast.makeText(getBaseContext(), R.string
+                                            .download_error_field_required, Toast.LENGTH_SHORT).show();
                                 }
                             });
                         }
+
                     }
                 });
 
                 viewHolder.voyageListFunction.setOnLoadEndListener(new VoyageListFunction
                         .OnLoadEndListener() {
                     @Override
-                    public void OnLoadEnd() {
+                    public void OnLoadEnd(boolean state) {
                         Log.i(LOG_TAG + "OnLoadEnd", "count is" + count.get());
                         if (count.decrementAndGet() == 0) {
 
@@ -380,8 +410,8 @@ public class VoyageDownloadActivity extends AppCompatActivity {
                                 @Override
                                 public void run() {
                                     loadData(true);
-                                    Toast.makeText(getBaseContext(), R.string.download_success,
-                                            Toast.LENGTH_SHORT).show();
+                                    makeText(getBaseContext(), R.string.download_success, Toast
+                                            .LENGTH_SHORT).show();
                                 }
                             });
                         }

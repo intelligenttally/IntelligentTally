@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.port.shenh.intelligenttally.R;
 import com.port.shenh.intelligenttally.bean.FullStatistics;
@@ -27,6 +28,8 @@ import org.mobile.library.common.function.ToolbarInitialize;
 import org.mobile.library.model.function.ISelectList;
 import org.mobile.library.model.work.DefaultWorkModel;
 import org.mobile.library.model.work.WorkBack;
+
+import static android.widget.Toast.makeText;
 
 public class GeneralFullStatisticsActivity extends AppCompatActivity {
 
@@ -233,10 +236,18 @@ public class GeneralFullStatisticsActivity extends AppCompatActivity {
 
                 Log.i(LOG_TAG + "loadData", "PullFullStatistics state is " + state);
 
-                if (state && data != null) {
+                if (state){
+                    if (data != null) {
 
-                    fillData(data);
+                        fillData(data);
+                    }
+                }else {
+
+                    makeText(getBaseContext(), R.string.error_field_required, Toast.LENGTH_SHORT)
+                            .show();
+
                 }
+
 
                 // 停止动画
                 refreshLayout.setRefreshing(false);

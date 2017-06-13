@@ -228,7 +228,7 @@ public class NotUploadedVoyageSelectActivity extends AppCompatActivity {
                                     Toast.makeText(getBaseContext(), R.string.upload_success, Toast
                                             .LENGTH_SHORT).show();
                                 } else {
-                                    Toast.makeText(getBaseContext(), R.string.upload_failure, Toast
+                                    Toast.makeText(getBaseContext(), R.string.upload_error_field_required, Toast
                                             .LENGTH_SHORT).show();
                                 }
 

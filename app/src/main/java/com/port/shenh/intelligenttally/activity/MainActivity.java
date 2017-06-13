@@ -223,6 +223,9 @@ public class MainActivity extends AppCompatActivity {
         voyageListFunction.onClear();
 
         Toast.makeText(getApplication(), R.string.clear_success, Toast.LENGTH_SHORT).show();
+
+        // 初始化功能布局
+        initGridView();
     }
 
     /**

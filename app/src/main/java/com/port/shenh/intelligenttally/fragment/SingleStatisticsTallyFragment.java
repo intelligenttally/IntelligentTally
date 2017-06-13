@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.port.shenh.intelligenttally.R;
 import com.port.shenh.intelligenttally.adapter.SingleStatisticsRecyclerViewAdapter;
@@ -20,6 +21,8 @@ import org.mobile.library.model.work.DefaultWorkModel;
 import org.mobile.library.model.work.WorkBack;
 
 import java.util.List;
+
+import static android.widget.Toast.makeText;
 
 /**
  * 个统计理货员布局
@@ -168,11 +171,17 @@ public class SingleStatisticsTallyFragment extends Fragment {
         pullSingleStatisticsTally.setWorkEndListener(new WorkBack<List<SingleStatistics>>() {
             @Override
             public void doEndWork(boolean state, List<SingleStatistics> data) {
-                if (state && data != null) {
 
-                    // 插入新数据
-                    viewHolder.recyclerViewAdapter.addData(viewHolder.recyclerViewAdapter
-                            .getItemCount(), data);
+                if(state){
+                    if (data != null) {
+
+                        // 插入新数据
+                        viewHolder.recyclerViewAdapter.addData(viewHolder.recyclerViewAdapter
+                                .getItemCount(), data);
+                    }
+                }else {
+                    makeText(getContext(), R.string.error_field_required, Toast.LENGTH_SHORT)
+                            .show();
                 }
 
             }

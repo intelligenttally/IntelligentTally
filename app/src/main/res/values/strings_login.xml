@@ -13,6 +13,7 @@
     <string name="login_auto">自动登录</string>
     <string name="login_alert">未登录，请登录后操作</string>
     <string name="not_login">未登录</string>
+    <string name="net_set">网络</string>
 
 
 

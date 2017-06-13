@@ -1,5 +1,8 @@
 package com.port.shenh.intelligenttally.util;
+
 import android.app.Application;
+
+import com.port.shenh.intelligenttally.function.HttpIpSet;
 
 import org.mobile.library.global.ApplicationAttribute;
 import org.mobile.library.global.Global;
@@ -18,6 +21,8 @@ public class MyApplication extends Application {
         Global.init(this);
 
         //配置系统参数
-        ApplicationAttribute.create().requestSign(true).appCode(StaticValue.APP_CODE).appToken(StaticValue.APP_TOKEN).loginUrl(StaticValue.Url.HTTP_LOGIN_URL);
+        ApplicationAttribute.create().requestSign(true).appCode(StaticValue.APP_CODE).appToken
+                (StaticValue.APP_TOKEN).loginUrl(HttpIpSet.getHttp_ip() + StaticValue.Url
+                .HTTP_LOGIN_URL);
     }
 }

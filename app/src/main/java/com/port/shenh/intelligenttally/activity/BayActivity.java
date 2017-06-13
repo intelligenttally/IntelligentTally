@@ -582,20 +582,35 @@ public class BayActivity extends AppCompatActivity {
 
         String bayNumber = bayNumberList.get(bayNumberPosition);
 
+
         function.setOnLoadEndListener(new ShipImageListFunction.OnLoadEndListener() {
             @Override
-            public void OnLoadEnd() {
+            public void OnLoadEnd(boolean state) {
 
-                Log.i(LOG_TAG + "OnLoadEnd", "count is" + count.get());
+                Log.i(LOG_TAG + "OnLoadEnd", "count is " + count.get());
 
-                if (count.decrementAndGet() == 0) {
+                if (state){
+                    if (count.decrementAndGet() == 0) {
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                loadBay();
+                                progressDialog.dismiss();
+                                Toast.makeText(getBaseContext(), R.string.download_success, Toast
+                                        .LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                }else {
+
+                    Log.i(LOG_TAG + "OnLoadEnd", "makeText is invoked");
 
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            loadBay();
                             progressDialog.dismiss();
-                            Toast.makeText(getBaseContext(), R.string.download_success, Toast
+                            Toast.makeText(getBaseContext(), R.string.download_error_field_required, Toast
                                     .LENGTH_SHORT).show();
                         }
                     });

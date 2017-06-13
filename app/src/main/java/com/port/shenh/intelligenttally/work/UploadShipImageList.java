@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.port.shenh.intelligenttally.bean.ShipImage;
+import com.port.shenh.intelligenttally.function.HttpIpSet;
 import com.port.shenh.intelligenttally.util.StaticValue;
 
 import org.json.JSONObject;
@@ -60,7 +61,7 @@ public class UploadShipImageList extends SimpleWorkModel<Object, Void> {
 
     @Override
     protected String onTaskUri() {
-        return StaticValue.Url.HTTP_UPLOAD_SHIP_IMAGE_URL;
+        return HttpIpSet.getHttp_ip() + StaticValue.Url.HTTP_UPLOAD_SHIP_IMAGE_URL;
     }
 
 

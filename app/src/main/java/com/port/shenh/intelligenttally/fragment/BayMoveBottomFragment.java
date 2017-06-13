@@ -217,8 +217,8 @@ public class BayMoveBottomFragment extends Fragment implements BottomBayCommonOp
             return;
         }
 
-        String result = shipFunction.onMoveBay(dataShipImage, bayNumberEditText.getText().toString(),
-                codeInOut);
+        String result = shipFunction.onMoveBay(dataShipImage, bayNumberEditText.getText()
+                .toString(), codeInOut);
 
         if (result == null) {
             onMoveListener.onInvoke();
@@ -252,7 +252,30 @@ public class BayMoveBottomFragment extends Fragment implements BottomBayCommonOp
     @Override
     public void onBayClick(BayGridAdapter.ViewHolder holder, ShipImage data) {
         bayNumberEditText.setError(null);
-        bayNumberEditText.setText(data.getSbayno());
+
+        /**
+         * 按箱子大小输入实际贝位
+         * 40箱子，输入偶数贝；
+         * 20箱子，输入基数贝；
+         */
+        String bayno = null;
+        if (this.dataShipImage.getSize_con().equals("40")) {
+
+            if ((Integer.parseInt(data.getBay_num()) + 1) < 10) {
+
+                bayno = "0" + Integer.toString(Integer.parseInt(data.getBay_num()) + 1) + data.
+                        getBay_col() + data.getBay_row();
+            } else {
+
+                bayno = Integer.toString(Integer.parseInt(data.getBay_num()) + 1) + data
+                        .getBay_col() + data.getBay_row();
+            }
+
+        } else {
+            bayno = data.getSbayno();
+        }
+
+        bayNumberEditText.setText(bayno);
     }
 
     @Override
@@ -266,20 +289,21 @@ public class BayMoveBottomFragment extends Fragment implements BottomBayCommonOp
     }
 
     /**
-     *  数据上传
+     * 数据上传
      */
-    private void onUpload(){
+    private void onUpload() {
 
         Log.i(LOG_TAG + " onUpload", "Ship_id is " + dataShipImage.getShip_id());
 
-//        if(!(dataShipImage.getShip_id().equals("196") || dataShipImage.getShip_id().equals("195"))){
-//
-//            Toast.makeText(getContext(), "暂不支持“新海悦”以外的船舶", Toast
-//                    .LENGTH_SHORT).show();
-//
-//            return;
-//
-//        }
+        //        if(!(dataShipImage.getShip_id().equals("196") || dataShipImage.getShip_id()
+        // .equals("195"))){
+        //
+        //            Toast.makeText(getContext(), "暂不支持“新海悦”以外的船舶", Toast
+        //                    .LENGTH_SHORT).show();
+        //
+        //            return;
+        //
+        //        }
 
         startProgressDialog();
 
@@ -295,10 +319,10 @@ public class BayMoveBottomFragment extends Fragment implements BottomBayCommonOp
 
                     shipFunction.onUpdateModifyMark(dataShipImage.getShip_id());
 
-                    Toast.makeText(getContext(), R.string.upload_success, Toast
-                            .LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.upload_success, Toast.LENGTH_SHORT)
+                            .show();
                 } else {
-                    Toast.makeText(getContext(), R.string.upload_failure, Toast
+                    Toast.makeText(getContext(), R.string.upload_error_field_required, Toast
                             .LENGTH_SHORT).show();
                 }
 
@@ -308,8 +332,8 @@ public class BayMoveBottomFragment extends Fragment implements BottomBayCommonOp
         });
 
         String shipImageList = null;
-        List<ShipImage> list = shipFunction
-                .onLoadShipImageListOfModifyFromDataBase(dataShipImage.getShip_id());
+        List<ShipImage> list = shipFunction.onLoadShipImageListOfModifyFromDataBase(dataShipImage
+                .getShip_id());
 
         // 执行任务
         uploadShipImageList.beginExecute(list);

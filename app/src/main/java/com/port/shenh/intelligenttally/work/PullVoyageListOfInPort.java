@@ -4,8 +4,11 @@ package com.port.shenh.intelligenttally.work;
  */
 
 import android.util.Log;
+
 import com.port.shenh.intelligenttally.bean.Voyage;
+import com.port.shenh.intelligenttally.function.HttpIpSet;
 import com.port.shenh.intelligenttally.util.StaticValue;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.mobile.library.model.work.SimpleWorkModel;
@@ -82,7 +85,7 @@ public class PullVoyageListOfInPort extends SimpleWorkModel<String, List<Voyage>
 
     @Override
     protected String onTaskUri() {
-        return StaticValue.Url.HTTP_VOYAGE_LIST_OF_IN_PORT_URL;
+        return HttpIpSet.getHttp_ip() + StaticValue.Url.HTTP_VOYAGE_LIST_OF_IN_PORT_URL;
     }
 }
 

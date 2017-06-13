@@ -67,7 +67,7 @@ public class VoyageListFunction {
 
     public interface OnLoadEndListener {
 
-        void OnLoadEnd();
+        void OnLoadEnd(boolean state);
     }
 
     OnLoadEndListener onLoadEndListener;
@@ -202,7 +202,7 @@ public class VoyageListFunction {
         // 加载结束
         loading = false;
 
-        onLoadEndListener.OnLoadEnd();
+        onLoadEndListener.OnLoadEnd(state);
     }
 
     /**

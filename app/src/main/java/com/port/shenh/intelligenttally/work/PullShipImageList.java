@@ -6,11 +6,13 @@ package com.port.shenh.intelligenttally.work;
 import android.util.Log;
 
 import com.port.shenh.intelligenttally.bean.ShipImage;
+import com.port.shenh.intelligenttally.function.HttpIpSet;
 import com.port.shenh.intelligenttally.util.StaticValue;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.mobile.library.model.work.SimpleWorkModel;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -124,7 +126,7 @@ public class PullShipImageList extends SimpleWorkModel<String, List<ShipImage>> 
 
     @Override
     protected String onTaskUri() {
-        return StaticValue.Url.HTTP_SHIP_IMAGE_URL;
+        return HttpIpSet.getHttp_ip() + StaticValue.Url.HTTP_SHIP_IMAGE_URL;
     }
 }
 

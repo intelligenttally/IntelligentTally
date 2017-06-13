@@ -3,6 +3,7 @@ package com.port.shenh.intelligenttally.work;
 import android.util.Log;
 
 import com.port.shenh.intelligenttally.bean.SingleStatistics;
+import com.port.shenh.intelligenttally.function.HttpIpSet;
 import com.port.shenh.intelligenttally.util.StaticValue;
 
 import org.json.JSONArray;
@@ -80,6 +81,6 @@ public class PullMovedSingleStatisticsTally extends SimpleWorkModel<String, List
     @Override
     protected String onTaskUri() {
 
-        return StaticValue.Url.HTTP_MOVED_SINGLE_STATISTICS_TALLY_URL;
+        return HttpIpSet.getHttp_ip() + StaticValue.Url.HTTP_MOVED_SINGLE_STATISTICS_TALLY_URL;
     }
 }

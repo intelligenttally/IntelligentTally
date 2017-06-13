@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.port.shenh.intelligenttally.R;
 import com.port.shenh.intelligenttally.function.ShipImageListFunction;
@@ -20,6 +21,8 @@ import com.port.shenh.intelligenttally.util.StaticValue;
 import org.mobile.library.common.function.ToolbarInitialize;
 
 import java.util.List;
+
+import static android.widget.Toast.makeText;
 
 
 /**
@@ -177,6 +180,13 @@ public class ContainerNoQueryActivity extends AppCompatActivity {
         final List<String> list = shipImageListFunction.onLoadContainerNoListFromDataBase
                 (ship_id, this.query);
         Log.i(LOG_TAG + "loadData", "list count is " + list.size());
+
+        if (list.size() == 0){
+
+            makeText(this, R.string.not_search_container_no, Toast.LENGTH_SHORT)
+                    .show();
+            return;
+        }
 
         listView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,
                 list));

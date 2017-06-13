@@ -8,6 +8,7 @@
 
 
     <string name="clear_cache">清除缓存</string>
+    <string name="net">网络</string>
     <string name="download">下载</string>
     <string name="upload">上传</string>
     <string name="bay">贝位图</string>
@@ -44,4 +45,8 @@
     <string name="voyage_select">航次选择</string>
     <string name="title_activity_container_no_query">ContainerNoQueryActivity</string>
 
+    <string name="error_field_required">请求失败，请检查网络</string>
+    <string name="upload_error_field_required">上传失败，请检查网络</string>
+    <string name="download_error_field_required">下载失败，请检查网络</string>
+    <string name="not_search_container_no">未找到相关箱号</string>
 </resources>

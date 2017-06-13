@@ -3,6 +3,7 @@ package com.port.shenh.intelligenttally.work;
 import android.util.Log;
 
 import com.port.shenh.intelligenttally.bean.FullStatistics;
+import com.port.shenh.intelligenttally.function.HttpIpSet;
 import com.port.shenh.intelligenttally.util.StaticValue;
 
 import org.json.JSONArray;
@@ -82,6 +83,6 @@ public class PullFullStatistics extends SimpleWorkModel<String, FullStatistics> 
     @Override
     protected String onTaskUri() {
 
-        return StaticValue.Url.HTTP_FULL_STATISTICS_URL;
+        return HttpIpSet.getHttp_ip() + StaticValue.Url.HTTP_FULL_STATISTICS_URL;
     }
 }

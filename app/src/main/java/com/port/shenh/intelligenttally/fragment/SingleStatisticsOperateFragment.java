@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.port.shenh.intelligenttally.R;
 import com.port.shenh.intelligenttally.adapter.SingleStatisticsRecyclerViewAdapter;
@@ -20,6 +21,8 @@ import org.mobile.library.model.work.DefaultWorkModel;
 import org.mobile.library.model.work.WorkBack;
 
 import java.util.List;
+
+import static android.widget.Toast.makeText;
 
 /**
  * 个统计操作员布局
@@ -70,7 +73,8 @@ public class SingleStatisticsOperateFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable
+            Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_statistics_single_operate, container, false);
 
@@ -166,18 +170,23 @@ public class SingleStatisticsOperateFragment extends Fragment {
         pullSingleStatisticsOpearte.setWorkEndListener(new WorkBack<List<SingleStatistics>>() {
             @Override
             public void doEndWork(boolean state, List<SingleStatistics> data) {
-                if (state && data != null) {
 
-                    // 插入新数据
-                    viewHolder.recyclerViewAdapter.addData(viewHolder.recyclerViewAdapter
-                            .getItemCount(), data);
+                if (state) {
+                    if (data != null) {
+
+                        // 插入新数据
+                        viewHolder.recyclerViewAdapter.addData(viewHolder.recyclerViewAdapter
+                                .getItemCount(), data);
+                    }
+                } else {
+                    makeText(getContext(), R.string.error_field_required, Toast.LENGTH_SHORT)
+                            .show();
                 }
             }
         });
 
         // 执行任务
-        pullSingleStatisticsOpearte.beginExecute(this.ship_id, this
-                .code_inout);
+        pullSingleStatisticsOpearte.beginExecute(this.ship_id, this.code_inout);
     }
 
     /**

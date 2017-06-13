@@ -41,4 +41,11 @@
         <item>@color/gold</item>
     </array>
 
+    <string-array name="net">
+        <item>外网</item>
+        <item>内网</item>
+    </string-array>
+
+
+
 </resources>

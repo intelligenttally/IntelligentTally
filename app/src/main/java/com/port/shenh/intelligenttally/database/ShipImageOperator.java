@@ -19,6 +19,7 @@ import org.mobile.library.model.database.BaseOperator;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -672,9 +673,10 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
 
     /**
      * 判断是否有未上传航次
+     *
      * @return true/false
      */
-    public boolean isExistUploadedVoyage(){
+    public boolean isExistUploadedVoyage() {
 
         Log.i(LOG_TAG + "isExistUploadedVoyage", "isExistUploadedVoyage is invoked");
 
@@ -713,8 +715,8 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
         boolean isJoint = false;
 
         // 查询语句
-        String sql = String.format("select joint from %s where %s='%s' and %s='%s'",
-                tableName, "ship_id", shipId, "bay_num", bayNum);
+        String sql = String.format("select joint from %s where %s='%s' and %s='%s'", tableName,
+                "ship_id", shipId, "bay_num", bayNum);
         Log.i(LOG_TAG + "queryBay", "sql is " + sql);
         // 查询数据
         Cursor cursor = sqLiteHelper.getReadableDatabase().rawQuery(sql, null);
@@ -746,7 +748,8 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
      * @return 数据对象
      */
     public List<ShipImage> getShipImageList(String shipId, String sbayno) {
-        Log.i(LOG_TAG + "getShipImageList", "query param is " + sbayno);
+        Log.i(LOG_TAG + "getShipImageList", "shipId param is " + shipId);
+        Log.i(LOG_TAG + "getShipImageList", "sbayno param is " + sbayno);
 
         // 查询语句
         String sql = String.format("select * from %s where %s='%s' and %s='%s'", tableName,
@@ -760,6 +763,39 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
     }
 
     /**
+     * 根据航次编码和输入实际贝位号判断输入贝位号是否存在
+     *
+     * @param shipId 航次编码
+     * @param bayno  实际贝位号
+     *
+     * @return true/false
+     */
+    public boolean isExistBayno(String shipId, String bayno) {
+
+        Log.i(LOG_TAG + "isExistBayno", "shipId param is " + shipId);
+        Log.i(LOG_TAG + "isExistBayno", "bayno param is " + bayno);
+
+        // 查询语句
+        String sql = String.format("select count(*) from %s where ship_id='%s' and user_char='1' " +
+                "and (sbayno='%s' or tbayno='%s')", tableName, shipId, bayno, bayno);
+        Log.i(LOG_TAG + "isExistBayno", "query sql is " + sql);
+
+        Cursor cursor = sqLiteHelper.getReadableDatabase().rawQuery(sql, null);
+        if (cursor.moveToNext()) {
+            if (cursor.getInt(0) > 0) {
+                cursor.close();
+                close(sqLiteHelper);
+                return true;
+            }
+        }
+        cursor.close();
+        close(sqLiteHelper);
+
+        return false;
+    }
+
+
+    /**
      * 根据箱号查询船图数据
      *
      * @param container_no 箱号
@@ -770,8 +806,8 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
         Log.i(LOG_TAG + "getShipImageList", "query param is " + container_no);
 
         // 查询语句
-        String sql = String.format("select * from %s where %s='%s'", tableName,
-                "container_no", container_no);
+        String sql = String.format("select * from %s where %s='%s'", tableName, "container_no",
+                container_no);
 
         Log.i(LOG_TAG + "queryShipImage", "query sql is " + sql);
 
@@ -860,8 +896,12 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
         String oldbayno1 = b2.getOldbayno().isEmpty() == true ? b2.getBayno() : "";
         String oldbayno2 = b1.getOldbayno().isEmpty() == true ? b1.getBayno() : "";
 
-        SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
-        String date = sDateFormat.format(new java.util.Date());
+        //        SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
+        //        String date = sDateFormat.format(new java.util.Date());
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
+        Date cuDate = new Date(System.currentTimeMillis());//获取当前时间
+        String date = formatter.format(cuDate);
 
         Log.i(LOG_TAG + "swapBay", "date is " + date);
 
@@ -1043,17 +1083,17 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
 
             String bayno1 = b2.getSbayno();
             String bayno1Next = null;
-            if ((Integer.parseInt(b2.getBay_num()) + 2) < 10) {
-
-                bayno1Next = "0" + Integer.toString(Integer.parseInt(b2.getBay_num()) + 2) + b2
-                        .getBay_col() + b2.getBay_row();
-
-            } else {
-
-                bayno1Next = Integer.toString(Integer.parseInt(b2.getBay_num()) + 2) + b2
-                        .getBay_col() + b2.getBay_row();
-
-            }
+//            if ((Integer.parseInt(b2.getBay_num()) + 2) < 10) {
+//
+//                bayno1Next = "0" + Integer.toString(Integer.parseInt(b2.getBay_num()) + 2) + b2
+//                        .getBay_col() + b2.getBay_row();
+//
+//            } else {
+//
+//                bayno1Next = Integer.toString(Integer.parseInt(b2.getBay_num()) + 2) + b2
+//                        .getBay_col() + b2.getBay_row();
+//
+//            }
             String bayno2 = null;
             if ((Integer.parseInt(b1.getBay_num()) + 1) < 10) {
 
@@ -1063,7 +1103,6 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
 
                 bayno2 = Integer.toString(Integer.parseInt(b1.getBay_num()) + 1) + b1.getBay_col
                         () + b1.getBay_row();
-
             }
             String bayno2Next = bayno2;
 
@@ -1090,16 +1129,16 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
 
             }
 
-            String bayNum1 = b2.getBaynum();
+            String bayNum1 = b2.getBay_num();
             String bayNum1Next = null;
-            if ((Integer.parseInt(b2.getBay_num()) + 2) < 10) {
-
-                bayNum1Next = "0" + Integer.toString(Integer.parseInt(b2.getBay_num()) + 2);
-            } else {
-
-                bayNum1Next = Integer.toString(Integer.parseInt(b2.getBay_num()) + 2);
-
-            }
+//            if ((Integer.parseInt(b2.getBay_num()) + 2) < 10) {
+//
+//                bayNum1Next = "0" + Integer.toString(Integer.parseInt(b2.getBay_num()) + 2);
+//            } else {
+//
+//                bayNum1Next = Integer.toString(Integer.parseInt(b2.getBay_num()) + 2);
+//
+//            }
             String bayNum2 = null;
             if ((Integer.parseInt(b1.getBay_num()) + 1) < 10) {
 
@@ -1368,7 +1407,7 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
 
             }
             String bayNum1Next = bayNum1;
-            String bayNum2 = b2.getBayno().isEmpty() == true ? "" : b1.getBaynum();
+            String bayNum2 = b2.getBayno().isEmpty() == true ? "" : b1.getBay_num();
             String bayNum2Next = "";
 
             String bayCol1 = b2.getBay_col();
@@ -2655,7 +2694,7 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
      * 根据航次编码查询箱号数据
      *
      * @param shipId 航次编码
-     * @param query 箱号查询条件
+     * @param query  箱号查询条件
      *
      * @return 数据对象，没有返回null
      */
@@ -2667,14 +2706,14 @@ public class ShipImageOperator extends BaseOperator<ShipImage> {
 
         // 查询语句
         String sql = null;
-        if (query == null){
-            sql = String.format("select distinct container_no from %s where ship_id='%s' and "
-                            + "container_no is not null and ltrim(container_no) <> '' order by container_no " +
-                            "asc",
-                    tableName, shipId);
-        }else {
+        if (query == null) {
+            sql = String.format("select distinct container_no from %s where ship_id='%s' and " +
+                    "container_no is not null and ltrim(container_no) <> '' order by container_no" +
+                    " " +
+                    "asc", tableName, shipId);
+        } else {
             sql = "select distinct container_no from " + tableName + " where ship_id=" + shipId +
-                    " and container_no like " + "'%" + query + "%'"  + " order by container_no asc";
+                    " and container_no like " + "'%" + query + "%'" + " order by container_no asc";
         }
 
 
