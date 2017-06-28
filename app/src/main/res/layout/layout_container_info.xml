@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TableRow
+        android:layout_marginTop="@dimen/table_layout_row_margin"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:minHeight="30dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <TextView android:text="贝位号："/>
+
+        <TextView
+            android:id="@+id/layout_container_info_bay_textView"
+            android:layout_width="50dp"
+            android:text=" "
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:text="铅封号："/>
+
+        <TextView
+            android:id="@+id/layout_container_info_sealno_textView"
+            android:layout_width="56dp"
+            android:text=" "
+            android:textStyle="bold"/>
+
+
+        <!--<TextView-->
+        <!--android:layout_marginLeft="@dimen/activity_horizontal_margin"-->
+        <!--android:text="箱型："/>-->
+
+        <TextView
+            android:id="@+id/layout_container_info_type_textView"
+            android:layout_width="50dp"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:text=" "
+            android:textStyle="bold"/>
+
+        <!--<TextView-->
+        <!--android:text="空重："/>-->
+
+        <TextView
+            android:id="@+id/layout_container_info_empty_textView"
+            android:layout_width="50dp"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:text=" "
+            android:textStyle="bold"/>
+
+
+
+
+    </TableRow>
+
+    <TableRow
+        android:background="@color/white"
+        android:minHeight="30dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <TextView android:text="卸货港："/>
+
+        <TextView
+            android:id="@+id/layout_container_info_code_unload_port_textView"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:text="尺寸："/>
+
+        <TextView
+            android:id="@+id/layout_container_info_size_textView"
+            android:text=" "
+            android:textStyle="bold"/>
+
+
+        <TextView
+            android:id="@+id/layout_container_info_inverted_textView"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:text=" "
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/layout_container_info_unload_textView"
+            android:text=" "
+            android:textStyle="bold"/>
+
+
+    </TableRow>
+
+</TableLayout>

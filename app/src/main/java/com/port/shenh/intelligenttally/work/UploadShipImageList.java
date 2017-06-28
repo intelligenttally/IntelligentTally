@@ -33,7 +33,7 @@ public class UploadShipImageList extends SimpleWorkModel<Object, Void> {
     /**
      * 日志标签前缀
      */
-    private static final String LOG_TAG = "UploadShipImageList";
+    private static final String LOG_TAG = "UploadShipImageList.";
 
 
     @Override

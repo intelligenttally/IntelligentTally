@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <include layout="@layout/toolbar"/>
+
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/table_layout_row_margin">
+
+        <TableRow
+            android:layout_marginTop="@dimen/row_default_divide_height"
+            android:background="@color/white"
+            android:minHeight="@dimen/edit_default_height">
+
+            <SearchView
+                android:id="@+id/activity_double_lift_search1"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/default_searchview_height"
+                android:iconifiedByDefault="false"
+                android:imeOptions="actionGo"
+                android:inputType="number"
+                android:queryHint="输入查询箱号1"
+                android:textColor="#ABABAB"
+                android:textColorHint="#ABABAB"/>
+
+        </TableRow>
+    </TableLayout>
+
+    <!--<TableLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content">-->
+
+        <!--<TableRow-->
+            <!--android:layout_marginTop="@dimen/table_layout_row_margin"-->
+            <!--android:background="@color/white"-->
+            <!--android:gravity="center_vertical"-->
+            <!--android:minHeight="30dp"-->
+            <!--android:paddingLeft="10dp"-->
+            <!--android:paddingRight="10dp">-->
+
+            <!--<TextView android:text="贝位号："/>-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/activity_double_lift_bay_textView1"-->
+                <!--android:layout_width="50dp"-->
+                <!--android:text=" "-->
+                <!--android:textStyle="bold"/>-->
+
+            <!--<TextView-->
+                <!--android:layout_marginLeft="@dimen/activity_horizontal_margin"-->
+                <!--android:text="铅封号："/>-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/activity_double_lift_sealno_textView1"-->
+                <!--android:layout_width="50dp"-->
+                <!--android:text=" "-->
+                <!--android:textStyle="bold"/>-->
+
+
+            <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_marginLeft="@dimen/activity_horizontal_margin"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:text="箱型："/>&ndash;&gt;-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/activity_double_lift_type_textView1"-->
+                <!--android:layout_width="50dp"-->
+                <!--android:layout_marginLeft="@dimen/activity_horizontal_margin"-->
+                <!--android:text=" "-->
+                <!--android:textStyle="bold"/>-->
+
+            <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+            <!--&lt;!&ndash;android:text="空重："/>&ndash;&gt;-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/activity_double_lift_empty_textView1"-->
+                <!--android:layout_width="50dp"-->
+                <!--android:layout_marginLeft="@dimen/activity_horizontal_margin"-->
+                <!--android:text=" "-->
+                <!--android:textStyle="bold"/>-->
+
+
+
+
+        <!--</TableRow>-->
+
+        <!--<TableRow-->
+            <!--android:background="@color/white"-->
+            <!--android:minHeight="30dp"-->
+            <!--android:paddingLeft="10dp"-->
+            <!--android:paddingRight="10dp">-->
+
+            <!--<TextView android:text="卸货港："/>-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/activity_double_lift_code_unload_port_textView1"-->
+                <!--android:textStyle="bold"/>-->
+
+            <!--<TextView-->
+                <!--android:layout_marginLeft="@dimen/activity_horizontal_margin"-->
+                <!--android:text="尺寸："/>-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/activity_double_lift_size_textView1"-->
+                <!--android:text=" "-->
+                <!--android:textStyle="bold"/>-->
+
+
+            <!--<TextView-->
+                <!--android:id="@+id/activity_double_lift_inverted_textView1"-->
+                <!--android:layout_marginLeft="@dimen/activity_horizontal_margin"-->
+                <!--android:text=" "-->
+                <!--android:textStyle="bold"/>-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/activity_double_lift_unload_textView1"-->
+                <!--android:text=" "-->
+                <!--android:textStyle="bold"/>-->
+
+
+        <!--</TableRow>-->
+
+    <!--</TableLayout>-->
+
+    <include layout="@layout/layout_container_info"/>
+
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/table_layout_row_margin">
+
+        <TableRow
+            android:layout_marginTop="@dimen/row_default_divide_height"
+            android:background="@color/white"
+            android:minHeight="@dimen/edit_default_height">
+
+            <SearchView
+                android:id="@+id/activity_double_lift_search2"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/default_searchview_height"
+                android:iconifiedByDefault="false"
+                android:imeOptions="actionGo"
+                android:inputType="number"
+                android:queryHint="输入查询箱号2"
+                android:textColor="#ABABAB"
+                android:textColorHint="#ABABAB"/>
+        </TableRow>
+    </TableLayout>
+
+    <!--<TableLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content">-->
+
+        <!--<TableRow-->
+            <!--android:layout_marginTop="@dimen/table_layout_row_margin"-->
+            <!--android:background="@color/white"-->
+            <!--android:gravity="center_vertical"-->
+            <!--android:minHeight="30dp"-->
+            <!--android:paddingLeft="10dp"-->
+            <!--android:paddingRight="10dp">-->
+
+            <!--<TextView android:text="贝位号："/>-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/activity_double_lift_bay_textView2"-->
+                <!--android:layout_width="50dp"-->
+                <!--android:text=" "-->
+                <!--android:textStyle="bold"/>-->
+
+            <!--<TextView-->
+                <!--android:layout_marginLeft="@dimen/activity_horizontal_margin"-->
+                <!--android:text="铅封号："/>-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/activity_double_lift_sealno_textView2"-->
+                <!--android:layout_width="50dp"-->
+                <!--android:text=" "-->
+                <!--android:textStyle="bold"/>-->
+
+
+            <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_marginLeft="@dimen/activity_horizontal_margin"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:text="箱型："/>&ndash;&gt;-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/activity_double_lift_type_textView2"-->
+                <!--android:layout_width="50dp"-->
+                <!--android:layout_marginLeft="@dimen/activity_horizontal_margin"-->
+                <!--android:text=" "-->
+                <!--android:textStyle="bold"/>-->
+
+            <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+            <!--&lt;!&ndash;android:text="空重："/>&ndash;&gt;-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/activity_double_lift_empty_textView2"-->
+                <!--android:layout_width="50dp"-->
+                <!--android:layout_marginLeft="@dimen/activity_horizontal_margin"-->
+                <!--android:text=" "-->
+                <!--android:textStyle="bold"/>-->
+
+
+
+
+        <!--</TableRow>-->
+
+        <!--<TableRow-->
+            <!--android:background="@color/white"-->
+            <!--android:minHeight="30dp"-->
+            <!--android:paddingLeft="10dp"-->
+            <!--android:paddingRight="10dp">-->
+
+            <!--<TextView android:text="卸货港："/>-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/activity_double_lift_code_unload_port_textView2"-->
+                <!--android:textStyle="bold"/>-->
+
+            <!--<TextView-->
+                <!--android:layout_marginLeft="@dimen/activity_horizontal_margin"-->
+                <!--android:text="尺寸："/>-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/activity_double_lift_size_textView2"-->
+                <!--android:text=" "-->
+                <!--android:textStyle="bold"/>-->
+
+
+            <!--<TextView-->
+                <!--android:id="@+id/activity_double_lift_inverted_textView2"-->
+                <!--android:layout_marginLeft="@dimen/activity_horizontal_margin"-->
+                <!--android:text=" "-->
+                <!--android:textStyle="bold"/>-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/activity_double_lift_unload_textView2"-->
+                <!--android:text=" "-->
+                <!--android:textStyle="bold"/>-->
+
+
+        <!--</TableRow>-->
+
+    <!--</TableLayout>-->
+
+    <include layout="@layout/layout_container_info2"/>
+
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/table_layout_row_margin">
+
+        <TableRow
+            android:layout_marginTop="@dimen/row_default_divide_height"
+            android:background="@color/white"
+            android:gravity="center"
+            android:minHeight="@dimen/edit_default_height">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_column="0"
+                android:layout_weight="2"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/text_view_default_text_padding_left"
+                android:paddingRight="@dimen/text_view_default_text_padding_right"
+                android:text="目标贝位"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_view_default_text_size"/>
+
+            <EditText
+                android:id="@+id/activity_double_lift_end_bayno_edit"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_column="1"
+                android:layout_weight="5"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:hint="@string/search_hint_bayno"
+                android:paddingLeft="@dimen/edit_default_padding_left"
+                android:inputType="number"
+                android:textColor="@color/black"
+                android:maxLength="6"
+                android:textSize="@dimen/text_view_default_text_size"/>
+
+        </TableRow>
+
+        <Button
+            android:id="@+id/activity_double_lift_submit_button"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/edit_default_height"
+            android:layout_margin="30dp"
+            android:layout_marginBottom="10dp"
+            android:background="@color/orange"
+            android:text="提交"
+            android:textColor="@color/white"
+            android:textSize="@dimen/button_default_text_size"
+            android:textStyle="bold"/>
+
+        <TableRow
+            android:layout_marginTop="10dp">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"/>
+        </TableRow>
+    </TableLayout>
+
+</LinearLayout>

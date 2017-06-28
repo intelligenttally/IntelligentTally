@@ -148,6 +148,7 @@ public class VoyageSelectActivity extends AppCompatActivity {
                     Intent intent = new Intent(VoyageSelectActivity.this, BayActivity.class);
                     intent.putExtra(StaticValue.IntentTag.BAYNUM_SELECT_TAG, 0);
                     intent.putExtra(StaticValue.IntentTag.VOYAGE_TAG, voyage.getShip_id());
+                    intent.putExtra(StaticValue.IntentTag.V_ID_TAG, voyage.getV_id());
                     // 跳转到详情页面
                     startActivity(intent);
                 }

@@ -30,7 +30,7 @@ public class VoyageDownloadedSelectList implements ISelectList<View, Voyage> {
     /**
      * 日志前缀
      */
-    private static final String LOG_TAG = "BayNumSelectList.";
+    private static final String LOG_TAG = "VoyageDownloadedSelectList.";
 
     /**
      * 上下文

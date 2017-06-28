@@ -6,7 +6,7 @@
         <item>贝位图</item>
         <item>个统计</item>
         <item>全统计</item>
-        <item>未上传</item>
+        <!--<item>未上传</item>-->
     </string-array>
 
     <array name="grid_item_function_image_list">
@@ -14,7 +14,7 @@
         <item>@mipmap/bay</item>
         <item>@mipmap/single</item>
         <item>@mipmap/all</item>
-        <item>@mipmap/upload</item>
+        <!--<item>@mipmap/upload</item>-->
     </array>
 
     <string-array name="full_statistics_title">

@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.port.shenh.intelligenttally.R;
+import com.port.shenh.intelligenttally.bean.ShipImage;
 import com.port.shenh.intelligenttally.function.ShipImageListFunction;
 import com.port.shenh.intelligenttally.util.StaticValue;
 
@@ -83,7 +84,7 @@ public class ContainerNoQueryActivity extends AppCompatActivity {
         initView();
 
         //初始化数据
-//        initData();
+        //        initData();
 
 
     }
@@ -99,10 +100,9 @@ public class ContainerNoQueryActivity extends AppCompatActivity {
 
         shipImageListFunction = new ShipImageListFunction(this);
 
-        ship_id = (String) getIntent().getSerializableExtra(StaticValue.IntentTag
-         .VOYAGE_TAG);
+        ship_id = (String) getIntent().getSerializableExtra(StaticValue.IntentTag.VOYAGE_TAG);
 
-        Log.i(LOG_TAG + "initViewHolder", "ship_id is " + ship_id );
+        Log.i(LOG_TAG + "initViewHolder", "ship_id is " + ship_id);
 
     }
 
@@ -139,7 +139,7 @@ public class ContainerNoQueryActivity extends AppCompatActivity {
                 @Override
                 public boolean onQueryTextChange(String newText) {
 
-                    if (TextUtils.isEmpty(newText)){
+                    if (TextUtils.isEmpty(newText)) {
                         listView.setAdapter(null);
                     }
                     return false;
@@ -162,7 +162,7 @@ public class ContainerNoQueryActivity extends AppCompatActivity {
     /**
      * 初始化数据
      */
-    private void initData(){
+    private void initData() {
 
         loadData();
 
@@ -170,7 +170,6 @@ public class ContainerNoQueryActivity extends AppCompatActivity {
 
     /**
      * 加载数据
-     *
      */
     private void loadData() {
 
@@ -181,10 +180,9 @@ public class ContainerNoQueryActivity extends AppCompatActivity {
                 (ship_id, this.query);
         Log.i(LOG_TAG + "loadData", "list count is " + list.size());
 
-        if (list.size() == 0){
+        if (list.size() == 0) {
 
-            makeText(this, R.string.not_search_container_no, Toast.LENGTH_SHORT)
-                    .show();
+            makeText(this, R.string.not_search_container_no, Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -194,6 +192,14 @@ public class ContainerNoQueryActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                List<ShipImage> shipImageList = shipImageListFunction
+                        .onLoadgetShipImageListFromDataBase(list.get(position));
+                if (shipImageList.get(0).getSize_con().equals("40") && shipImageList.size() < 2) {
+                    Toast.makeText(getApplication(), R.string.error_container_no_and_bay, Toast
+                            .LENGTH_SHORT).show();
+                    return;
+                }
 
                 Intent intent = new Intent();
                 intent.putExtra(StaticValue.IntentTag.CONTAINER_NO_TAG, list.get(position));

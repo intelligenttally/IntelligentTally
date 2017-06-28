@@ -476,6 +476,11 @@ public class ShipImageListFunction {
             return String.format(bayno2 + "贝位号不存在");
         }
 
+        //校验输入实际贝位和原实际贝位是否一致
+        if (bayno2.equals(b1.getBayno())){
+            return String.format(bayno2 + "贝位号与源贝位号重复");
+        }
+
         //校验输入实际贝位号和箱子尺寸是否匹配
         String baynum2 = bayno2.substring(0, 2);
         String baycol2 = bayno2.substring(2, 4);
@@ -1019,7 +1024,7 @@ public class ShipImageListFunction {
      *
      * @return 数据对象
      */
-    public ShipImage onLoadgetShipImageListFromDataBase(String container_no) {
+    public List<ShipImage> onLoadgetShipImageListFromDataBase(String container_no) {
         if (operator == null || operator.isEmpty()) {
             Log.i(LOG_TAG + "onLoadFromDataBase", "database null");
             return null;
@@ -1027,7 +1032,7 @@ public class ShipImageListFunction {
         Log.i(LOG_TAG + "onLoadgetShipImageListFromDataBase",
                 "onLoadgetShipImageListFromDataBase" + " is invoked");
 
-        return operator.getShipImageListByContainerNo(container_no).get(0);
+        return operator.getShipImageListByContainerNo(container_no);
 
     }
 

@@ -20,7 +20,12 @@
     <string name="refresh_bay">刷新</string>
     <string name="query_Container_no">查询</string>
     <string name="search_title">搜索</string>
+    <string name="double_lift">双吊</string>
+    <string name="move_bay">调贝</string>
     <string name="search_hint">输入查询箱号</string>
+    <string name="search_hint1">输入查询箱号1</string>
+    <string name="search_hint2">输入查询箱号2</string>
+    <string name="search_hint_bayno">输入目标贝位号</string>
 
     <string name="data_loading">数据下载中...</string>
     <string name="not_selected">未选中</string>
@@ -33,8 +38,15 @@
     <string name="not_upload_complete">未上传完整</string>
     <string name="not_move">无移贝操作</string>
 
+    <string name="end_bay_number_text">目标贝号</string>
+    <string name="hint_input_end_bay_number_text">输入目标贝号</string>
 
-    <string name="error_bayno">此贝位号不存在</string>
+    <string name="mismatching_container_bayno">目标贝位号与待调箱子尺寸不匹配</string>
+    <string name="mismatching_container_size_con">待调箱子尺寸不匹配</string>
+    <string name="repeat_bayno">目标贝位号与源贝位号重复</string>
+    <string name="error_bayno">错误贝位号</string>
+    <string name="repeat_container_no">重复箱号</string>
+    <string name="error_container_no">错误箱号</string>
     <string name="exist_container">已存在箱子</string>
     <string name="not_match_container">箱子尺寸不匹配</string>
     <string name="name_wait_move_bay_text">待移动贝位信息</string>
@@ -49,4 +61,8 @@
     <string name="upload_error_field_required">上传失败，请检查网络</string>
     <string name="download_error_field_required">下载失败，请检查网络</string>
     <string name="not_search_container_no">未找到相关箱号</string>
+    <string name="error_container_no_and_bay">此箱号船图数据有误，请重新下载航次</string>
+
+    <string name="button_submit">提交</string>
+    <string name="info_incomplete">信息不完整</string>
 </resources>

@@ -2,16 +2,27 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <!--<item-->
+        <!--android:id="@+id/menu_query_container_no"-->
+        <!--android:icon="@mipmap/query"-->
+        <!--android:title="@string/query_Container_no"-->
+        <!--app:showAsAction="always"/>-->
+
     <item
-        android:id="@+id/menu_query_container_no"
-        android:icon="@mipmap/query"
-        android:title="@string/query_Container_no"
+        android:id="@+id/menu_move_bay"
+        android:title="@string/move_bay"
+        android:icon="@mipmap/move"
         app:showAsAction="always"/>
+    <item
+    android:id="@+id/menu_double_lift"
+    android:title="@string/double_lift"
+    android:icon="@mipmap/two"
+    app:showAsAction="always"/>
     <item
         android:id="@+id/menu_refresh_bay"
         android:icon="@mipmap/refresh"
         android:title="@string/refresh_bay"
-        app:showAsAction="always"/>
+        app:showAsAction="never|withText"/>
     <item
         android:id="@+id/menu_up_bay"
         android:icon="@mipmap/up"

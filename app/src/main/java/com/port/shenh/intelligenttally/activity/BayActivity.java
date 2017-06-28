@@ -80,6 +80,11 @@ public class BayActivity extends AppCompatActivity {
     private String shipId = null;
 
     /**
+     * 船舶ID
+     */
+    private String v_id = null;
+
+    /**
      * 标题文本框
      */
     private TextView titleTextView = null;
@@ -215,6 +220,12 @@ public class BayActivity extends AppCompatActivity {
         return super.onKeyDown(keyCode, event);
     }
 
+    @Override
+    protected void onResume() {
+        doRefresh_bay(false);
+        super.onResume();
+    }
+
     /**
      * 初始化控件集
      */
@@ -232,6 +243,7 @@ public class BayActivity extends AppCompatActivity {
         function = new ShipImageListFunction(this);
         Intent intent = getIntent();
         shipId = intent.getStringExtra(StaticValue.IntentTag.VOYAGE_TAG);
+        v_id = intent.getStringExtra(StaticValue.IntentTag.V_ID_TAG);
         bayNumberPosition = intent.getIntExtra(StaticValue.IntentTag.BAYNUM_SELECT_TAG, 0);
 
     }
@@ -532,13 +544,21 @@ public class BayActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
-            case R.id.menu_query_container_no:
-                //查询
-                doQuery_Container_No();
+//            case R.id.menu_query_container_no:
+//                //查询
+//                doQuery_Container_No();
+//                break;
+            case R.id.menu_move_bay:
+                //调贝
+                doMoveBay();
+                break;
+            case R.id.menu_double_lift:
+                //双吊
+                doDoubleLift();
                 break;
             case R.id.menu_refresh_bay:
                 //刷新
-                doRefresh_bay(true);
+                doRefresh_bay(false);
                 break;
             //            case R.id.menu_last_bay:
             //                // 上一贝
@@ -564,12 +584,12 @@ public class BayActivity extends AppCompatActivity {
         return true;
     }
 
+
     /**
-     * 刷新贝
+     * 刷新航次
      *
-     * @param isJointRefresh 表示是否通贝刷新，ture表示通贝刷新
      */
-    public void doRefresh_bay(boolean isJointRefresh) {
+    public void doRefresh_Ship() {
         operator.onBack();
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -578,76 +598,126 @@ public class BayActivity extends AppCompatActivity {
         progressDialog.setCancelable(false);
         progressDialog.show();
 
-        final AtomicInteger count = new AtomicInteger(1);
-
-        String bayNumber = bayNumberList.get(bayNumberPosition);
-
 
         function.setOnLoadEndListener(new ShipImageListFunction.OnLoadEndListener() {
             @Override
             public void OnLoadEnd(boolean state) {
 
-                Log.i(LOG_TAG + "OnLoadEnd", "count is " + count.get());
+                if (state) {
 
-                if (state){
-                    if (count.decrementAndGet() == 0) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            loadBay();
+                            progressDialog.dismiss();
+                            Toast.makeText(getBaseContext(), R.string.download_success, Toast
+                                    .LENGTH_SHORT).show();
+                        }
+                    });
 
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                loadBay();
-                                progressDialog.dismiss();
-                                Toast.makeText(getBaseContext(), R.string.download_success, Toast
-                                        .LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                }else {
-
-                    Log.i(LOG_TAG + "OnLoadEnd", "makeText is invoked");
+                } else {
 
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             progressDialog.dismiss();
-                            Toast.makeText(getBaseContext(), R.string.download_error_field_required, Toast
-                                    .LENGTH_SHORT).show();
+                            Toast.makeText(getBaseContext(), R.string
+                                    .download_error_field_required, Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
             }
         });
 
-
-        count.incrementAndGet();
-        function.onUpdate(shipId, bayNumber);
-
-        if (isJointRefresh) {
-            String bayNumberNext = null;
-            if ((Integer.parseInt(bayNumber) + 2) < 10) {
-
-                bayNumberNext = "0" + Integer.toString(Integer.parseInt(bayNumber) + 2);
-
-            } else {
-
-                bayNumberNext = Integer.toString(Integer.parseInt(bayNumber) + 2);
-
-            }
-
-            if (function.isJoint(shipId, bayNumber) && (function.onLoadBayNumListFromDataBase
-                    (shipId).indexOf(bayNumberNext) != -1)) {
-
-                count.incrementAndGet();
-
-                function.onUpdate(shipId, bayNumberNext);
-
-            }
-        }
-
-
-        count.decrementAndGet();
-
+        function.onUpdate(shipId);
     }
+
+        /**
+         * 刷新贝
+         *
+         * @param isJointRefresh 表示是否通贝刷新，ture表示通贝刷新
+         */
+        public void doRefresh_bay(boolean isJointRefresh) {
+            operator.onBack();
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            // 设置提醒
+            progressDialog.setMessage("数据正在下载中....");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+
+            final AtomicInteger count = new AtomicInteger(1);
+
+            String bayNumber = bayNumberList.get(bayNumberPosition);
+
+
+            function.setOnLoadEndListener(new ShipImageListFunction.OnLoadEndListener() {
+                @Override
+                public void OnLoadEnd(boolean state) {
+
+                    Log.i(LOG_TAG + "OnLoadEnd", "count is " + count.get());
+
+                    if (state) {
+                        if (count.decrementAndGet() == 0) {
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    loadBay();
+                                    progressDialog.dismiss();
+                                    Toast.makeText(getBaseContext(), R.string.download_success,
+     Toast
+                                            .LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    } else {
+
+                        Log.i(LOG_TAG + "OnLoadEnd", "makeText is invoked");
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                progressDialog.dismiss();
+                                Toast.makeText(getBaseContext(), R.string
+                                        .download_error_field_required, Toast.LENGTH_SHORT)
+     .show();
+                            }
+                        });
+                    }
+                }
+            });
+
+
+            count.incrementAndGet();
+            function.onUpdate(shipId, bayNumber);
+
+            if (isJointRefresh) {
+                String bayNumberNext = null;
+                if ((Integer.parseInt(bayNumber) + 2) < 10) {
+
+                    bayNumberNext = "0" + Integer.toString(Integer.parseInt(bayNumber) + 2);
+
+                } else {
+
+                    bayNumberNext = Integer.toString(Integer.parseInt(bayNumber) + 2);
+
+                }
+
+                if (function.isJoint(shipId, bayNumber) && (function.onLoadBayNumListFromDataBase
+                        (shipId).indexOf(bayNumberNext) != -1)) {
+
+                    count.incrementAndGet();
+
+                    function.onUpdate(shipId, bayNumberNext);
+
+                }
+            }
+
+
+            count.decrementAndGet();
+
+        }
 
     /**
      * 上一贝
@@ -742,6 +812,35 @@ public class BayActivity extends AppCompatActivity {
 
     }
 
+
+    /**
+     * 调贝
+     */
+    private void doMoveBay(){
+        if (isBottomShow) {
+            operator.onBack();
+        }
+
+        Intent intent = new Intent(BayActivity.this, MoveBayActivity.class);
+        intent.putExtra(StaticValue.IntentTag.VOYAGE_TAG, shipId);
+        intent.putExtra(StaticValue.IntentTag.V_ID_TAG, v_id);
+        startActivity(intent);
+    }
+
+    /**
+     * 双吊
+     */
+    private void doDoubleLift() {
+        if (isBottomShow) {
+            operator.onBack();
+        }
+
+        Intent intent = new Intent(BayActivity.this, DoubleLiftActivity.class);
+        intent.putExtra(StaticValue.IntentTag.VOYAGE_TAG, shipId);
+        intent.putExtra(StaticValue.IntentTag.V_ID_TAG, v_id);
+        startActivity(intent);
+    }
+
     /**
      * 显示布局
      */
@@ -834,10 +933,34 @@ public class BayActivity extends AppCompatActivity {
                                 });
                             }
 
-                            ShipImage shipImage = function.onLoadgetShipImageListFromDataBase
-                                    (container_no);
+                            List<ShipImage> shipImageList = function
+                                    .onLoadgetShipImageListFromDataBase(container_no);
+                            ShipImage shipImage = null;
+                            if (shipImageList.get(0).getSize_con().equals("40")) {
+                                if (shipImageList.size() < 2) {
+                                    return;
+                                }
+
+                                shipImage = shipImageList.get(0);
+                                Log.i(LOG_TAG + "onActivityResult", "shipImageList.get(0)" +
+                                        ".getBay_num() is " + shipImageList.get(0).getBay_num());
+                                Log.i(LOG_TAG + "onActivityResult", "shipImageList.get(1)" +
+                                        ".getBay_num() is " + shipImageList.get(1).getBay_num());
+                                if (Integer.parseInt(shipImage.getBay_num()) > Integer.parseInt
+                                        (shipImageList.get(1).getBay_num())) {
+                                    shipImage = shipImageList.get(1);
+                                }
+                            } else {
+                                shipImage = shipImageList.get(0);
+                            }
+
+                            Log.i(LOG_TAG + "onActivityResult", "shipImage.getBay_num() is " +
+                                    shipImage.getBay_num());
+
                             Log.i(LOG_TAG + "onActivityResult", "onActivityResult is " + "invoked");
                             Log.i(LOG_TAG + "onActivityResult", "bayno is " + shipImage.getBayno());
+                            Log.i(LOG_TAG + "onActivityResult", "sbayno is " + shipImage
+                                    .getSbayno());
                             Log.i(LOG_TAG + "onActivityResult", "container_no is " + shipImage
                                     .getContainer_no());
                             moveBottomFragment.setBayData(shipImage);

@@ -21,7 +21,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="invisible">
 
         <LinearLayout
             android:id="@+id/fragment_bottom_sheet_normal_move_bay_layout"

@@ -34,9 +34,14 @@ public interface StaticValue {
         String BAYNUM_SELECT_TAG = "baynum_select_tag";
 
         /**
-         * 航次
+         * 航次ID
          */
         String VOYAGE_TAG = "voyage_tag";
+
+        /**
+         * 航船ID
+         */
+        String V_ID_TAG = "v_id_tag";
 
         /**
          * 最大贝号
@@ -71,8 +76,7 @@ public interface StaticValue {
         /**
          * 获取航次（在港）
          */
-        String HTTP_VOYAGE_LIST_OF_IN_PORT_URL = "M_Znlh/Voyage/GetVoyageOfInPort" +
-                ".aspx";
+        String HTTP_VOYAGE_LIST_OF_IN_PORT_URL = "M_Znlh/Voyage/GetVoyageOfInPort" + ".aspx";
 
 
         /**
@@ -103,28 +107,55 @@ public interface StaticValue {
         /**
          * 获取捣箱全统计数据
          */
-        String HTTP_MOVED_FULL_STATISTICS_URL = "M_Znlh/Statistics/GetMovedFullStatisticsOfVoyage.aspx";
+        String HTTP_MOVED_FULL_STATISTICS_URL = "M_Znlh/Statistics/GetMovedFullStatisticsOfVoyage" +
+                ".aspx";
 
 
         /**
          * 获取普通个统计理货员数据
          */
-        String HTTP_SINGLE_STATISTICS_TALLY_URL = "M_Znlh/Statistics/GetSingleStatisticsTallyOfVoyage.aspx";
+        String HTTP_SINGLE_STATISTICS_TALLY_URL =
+                "M_Znlh/Statistics/GetSingleStatisticsTallyOfVoyage.aspx";
 
         /**
          * 获取普通个统计操作员数据
          */
-        String HTTP_SINGLE_STATISTICS_OPERATE_URL = "M_Znlh/Statistics/GetSingleStatisticsOperateOfVoyage.aspx";
+        String HTTP_SINGLE_STATISTICS_OPERATE_URL =
+                "M_Znlh/Statistics/GetSingleStatisticsOperateOfVoyage.aspx";
 
         /**
          * 获取捣箱个统计理货员数据
          */
-        String HTTP_MOVED_SINGLE_STATISTICS_TALLY_URL = "M_Znlh/Statistics/GetMovedSingleStatisticsTallyOfVoyage.aspx";
+        String HTTP_MOVED_SINGLE_STATISTICS_TALLY_URL =
+                "M_Znlh/Statistics/GetMovedSingleStatisticsTallyOfVoyage.aspx";
 
         /**
          * 获取捣箱个统计操作员数据
          */
-        String HTTP_MOVED_SINGLE_STATISTICS_OPERATE_URL = "M_Znlh/Statistics/GetMoveSingleStatisticsOperateOfVoyage.aspx";
+        String HTTP_MOVED_SINGLE_STATISTICS_OPERATE_URL =
+                "M_Znlh/Statistics/GetMoveSingleStatisticsOperateOfVoyage.aspx";
+
+
+        /**
+         * 通过关键字获取匹配的集装箱列表
+         */
+        String HTTP_CONTAINER_NO_LIST_URL = "M_Znlh/Container/GetContainerNoListByKeyword.aspx";
+
+        /**
+         * 集装箱信息
+         */
+        String HTTP_CONTAINER_INFO_URL = "M_Znlh/Container/GetContainerInfo.aspx";
+
+
+        /**
+         * 移贝
+         */
+        String HTTP_MOVE_BAY_URL = "M_Znlh/Move/MoveBay.aspx";
+
+        /**
+         * 双吊
+         */
+        String HTTP_DOUBLE_LIFT_URL = "M_Znlh/Move/DoubleLift.aspx";
 
     }
 
