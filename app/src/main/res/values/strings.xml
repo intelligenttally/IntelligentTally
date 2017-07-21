@@ -65,4 +65,6 @@
 
     <string name="button_submit">提交</string>
     <string name="info_incomplete">信息不完整</string>
+
+    <string name="refuse_pmission">你拒绝了此权限，如需安装更新请打开此权限</string>
 </resources>

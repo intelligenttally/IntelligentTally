@@ -136,6 +136,11 @@ public class DoubleLiftActivity extends AppCompatActivity {
      */
     Button button = null;
 
+    /**
+     * 警告
+     */
+    private static final String WARNING = "无法调贝：";
+
 
     @Override
     public void onBackPressed() {
@@ -456,31 +461,31 @@ public class DoubleLiftActivity extends AppCompatActivity {
         Log.i(LOG_TAG + "endBayno", "query param is " + endBayno);
 
         if (container_no1.length() == 0 || container_no2.length() == 0 ||endBayno.length() == 0) {
-            Toast.makeText(this, R.string.info_incomplete, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, WARNING + getResources().getString(R.string.info_incomplete), Toast.LENGTH_LONG).show();
             return;
         }
 
         //校验箱号是否存在
         if (shipImage1 == null || shipImage2 == null){
-            Toast.makeText(this, R.string.error_container_no, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, WARNING + getResources().getString(R.string.error_container_no), Toast.LENGTH_LONG).show();
             return;
         }
 
         //校验箱号尺寸
         if ((!shipImage1.getSize_con().equals("20") )|| (!shipImage2.getSize_con().equals("20"))){
-            Toast.makeText(this, R.string.mismatching_container_size_con, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, WARNING + getResources().getString(R.string.mismatching_container_size_con), Toast.LENGTH_LONG).show();
             return;
         }
 
         //校验箱号是否重复
         if (container_no1.equals(container_no2)){
-            Toast.makeText(this, R.string.repeat_container_no, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, WARNING + getResources().getString(R.string.repeat_container_no), Toast.LENGTH_LONG).show();
             return;
         }
 
         //校验目标贝位号是否输入正确
         if (endBayno.length()!=6){
-            Toast.makeText(this, R.string.error_bayno, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, WARNING + getResources().getString(R.string.error_bayno), Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -488,7 +493,7 @@ public class DoubleLiftActivity extends AppCompatActivity {
         Log.i(LOG_TAG + "onMoveBay", "endBaynum is " + endBaynum);
 
         if (Integer.parseInt(endBaynum) % 2 == 0) {
-            Toast.makeText(this, R.string.error_bayno, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, WARNING + getResources().getString(R.string.error_bayno), Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -504,7 +509,7 @@ public class DoubleLiftActivity extends AppCompatActivity {
                                 .upload_success, Toast.LENGTH_SHORT).show();
                         return;
                     }else {
-                        Toast.makeText(DoubleLiftActivity.this, message, Toast
+                        Toast.makeText(DoubleLiftActivity.this, WARNING + message, Toast
                                 .LENGTH_LONG).show();
                         return;
                     }

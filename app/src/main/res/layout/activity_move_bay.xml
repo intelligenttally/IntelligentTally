@@ -55,6 +55,7 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_view_default_text_size"/>
 
+
             <EditText
                 android:id="@+id/activity_move_bay_end_bayno_edit"
                 android:layout_width="0dp"

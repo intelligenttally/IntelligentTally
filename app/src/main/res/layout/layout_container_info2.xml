@@ -17,7 +17,8 @@
             android:id="@+id/layout_container_info_bay_textView2"
             android:layout_width="50dp"
             android:text=" "
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:textColor="@color/red"/>
 
         <TextView
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
@@ -87,7 +88,8 @@
         <TextView
             android:id="@+id/layout_container_info_unload_textView2"
             android:text=" "
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:textColor="@color/red"/>
 
 
     </TableRow>

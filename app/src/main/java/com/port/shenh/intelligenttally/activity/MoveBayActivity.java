@@ -110,6 +110,11 @@ public class MoveBayActivity extends AppCompatActivity {
      */
     Button button = null;
 
+    /**
+     * 警告
+     */
+    private static final String WARNING = "无法调贝：";
+
 
     @Override
     public void onBackPressed() {
@@ -337,25 +342,25 @@ public class MoveBayActivity extends AppCompatActivity {
 
         //校验信息是否完整
         if (container_no.length() == 0 || endBayno.length() == 0) {
-            Toast.makeText(this, R.string.info_incomplete, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, WARNING + getResources().getString(R.string.info_incomplete), Toast.LENGTH_LONG).show();
             return;
         }
 
         //校验箱号是否存在
         if (shipImage == null){
-            Toast.makeText(this, R.string.error_container_no, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, WARNING + getResources().getString(R.string.error_container_no), Toast.LENGTH_LONG).show();
             return;
         }
 
         //校验目标贝位号是否输入正确
         if (endBayno.length()!=6){
-            Toast.makeText(this, R.string.error_bayno, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, WARNING + getResources().getString(R.string.error_bayno), Toast.LENGTH_LONG).show();
             return;
         }
 
         //校验输入集装箱对应的源贝位和目标贝位是否一致
         if (endBayno.equals(shipImage.getBayno())){
-            Toast.makeText(this, R.string.repeat_bayno, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, WARNING + getResources().getString(R.string.repeat_bayno), Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -364,11 +369,11 @@ public class MoveBayActivity extends AppCompatActivity {
         Log.i(LOG_TAG + "onMoveBay", "endBaynum is " + endBaynum);
 
         if (Integer.parseInt(endBaynum) % 2 == 0 && shipImage.getSize_con().equals("20")) {
-            Toast.makeText(this, R.string.mismatching_container_bayno, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, WARNING + getResources().getString(R.string.mismatching_container_bayno), Toast.LENGTH_LONG).show();
             return;
 
         } else if (Integer.parseInt(endBaynum) % 2 != 0 && !shipImage.getSize_con().equals("20")) {
-            Toast.makeText(this, R.string.mismatching_container_bayno, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, WARNING + getResources().getString(R.string.mismatching_container_bayno), Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -384,7 +389,7 @@ public class MoveBayActivity extends AppCompatActivity {
                                 .upload_success, Toast.LENGTH_SHORT).show();
                         return;
                     }else {
-                        Toast.makeText(MoveBayActivity.this, message, Toast
+                        Toast.makeText(MoveBayActivity.this, WARNING + message, Toast
                                 .LENGTH_LONG).show();
                         return;
                     }

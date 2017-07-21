@@ -1,8 +1,13 @@
 package com.port.shenh.intelligenttally.activity;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -80,12 +85,15 @@ public class MainActivity extends AppCompatActivity {
      */
     private void initView() {
         // 初始化Toolbar
-        ToolbarInitialize.initToolbar(this, R.string.app_name, true, false );
+        ToolbarInitialize.initToolbar(this, R.string.app_name, true, false);
         TextView titleTextView = (TextView) findViewById(R.id.toolbar_title);
         titleTextView.setText("理货员" + Global.getApplicationConfig().getUserName());
 
         // 初始化功能布局
         initGridView();
+
+        //执行检查权限
+        checkPermission();
 
         // 执行检查更新
         checkUpdate();
@@ -95,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * 初始化控件引用
      */
-    private void initViewHolder(){
+    private void initViewHolder() {
 
         shipImageListFunction = new ShipImageListFunction(getApplication());
         voyageListFunction = new VoyageListFunction(getApplication());
@@ -111,6 +119,31 @@ public class MainActivity extends AppCompatActivity {
         CheckUpdate checkUpdate = new CheckUpdate(this);
         // 执行检查
         checkUpdate.checkInBackground();
+    }
+
+    /**
+     * 检查权限
+     */
+    private void checkPermission() {
+
+        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission
+                .WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 1:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                } else {
+                    Toast.makeText(this, R.string.refuse_pmission, Toast.LENGTH_LONG).show();
+                }
+                break;
+            default:
+        }
     }
 
     /**
@@ -181,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
                 // 退出操作
                 doLogout();
                 break;
-            case  R.id.menu_clear_cache:
+            case R.id.menu_clear_cache:
                 //清楚缓存
                 doClearCache();
                 break;
@@ -211,14 +244,16 @@ public class MainActivity extends AppCompatActivity {
      */
     private void doClearCache() {
 
-//        startProgressDialog();
-//        shipImageListFunction.setOnClearEndListener(new ShipImageListFunction.OnClearEndListener() {
-//            @Override
-//            public void OnClearEnd() {
-//                stopProgressDialog();
-//                Toast.makeText(getApplication(), R.string.clear_success, Toast.LENGTH_SHORT).show();
-//            }
-//        });
+        //        startProgressDialog();
+        //        shipImageListFunction.setOnClearEndListener(new ShipImageListFunction
+        // .OnClearEndListener() {
+        //            @Override
+        //            public void OnClearEnd() {
+        //                stopProgressDialog();
+        //                Toast.makeText(getApplication(), R.string.clear_success, Toast
+        // .LENGTH_SHORT).show();
+        //            }
+        //        });
         shipImageListFunction.onClear();
         voyageListFunction.onClear();
 
