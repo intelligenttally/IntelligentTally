@@ -235,6 +235,7 @@ public class BayActivity extends AppCompatActivity {
 
         layout = (TableLayout) findViewById(R.id.activity_bay_content_layout);
 
+        //此处注释
 
         // 弹出窗口布局
         cardView = (CardView) LayoutInflater.from(this).inflate(R.layout.layout_popup_window, null);
